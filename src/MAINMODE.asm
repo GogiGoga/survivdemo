@@ -1,5 +1,5 @@
 ;+++++++++++++++ MAINMODE.H ++++++++++++++
-;основной игровой режим
+;РѕСЃРЅРѕРІРЅРѕР№ РёРіСЂРѕРІРѕР№ СЂРµР¶РёРј
 
                 MAIN "GAME.H",#C0
 
@@ -11,14 +11,14 @@ MAIN_MODE       LD A,#FF
                 XOR A
                 LD (INIT_MAP_FIRST),A
 
-;инициируем полную перерисовку
+;РёРЅРёС†РёРёСЂСѓРµРј РїРѕР»РЅСѓСЋ РїРµСЂРµСЂРёСЃРѕРІРєСѓ
                 CALL REDRAW_ALL
 
-;начало игрового цикла
+;РЅР°С‡Р°Р»Рѕ РёРіСЂРѕРІРѕРіРѕ С†РёРєР»Р°
 MAIN_MODE10     XOR A
                 LD (FRAME_COUNTER),A
 
-;скролл карты
+;СЃРєСЂРѕР»Р» РєР°СЂС‚С‹
                 LD A,(FRAME_CURRENT)
                 LD B,A
                 LD A,(MAP_SCRCNTR)
@@ -31,7 +31,7 @@ MAIN_MODE10     XOR A
                 CALL MAP_DRAW
                 CALL OBJ_MANAGER
 
-;работа с объектами
+;СЂР°Р±РѕС‚Р° СЃ РѕР±СЉРµРєС‚Р°РјРё
 
                 LD IX,DISCRIPTORS
                 LD A,OBJECT_MAX
@@ -46,7 +46,7 @@ MAIN_MODE50     LD A,(IX+XCRD)
                 ;LD A,1
                 LD (ACTION_POINT),A
 
-;проверка, есть ли новый приказ
+;РїСЂРѕРІРµСЂРєР°, РµСЃС‚СЊ Р»Рё РЅРѕРІС‹Р№ РїСЂРёРєР°Р·
 MAIN_MODE51     LD A,(IX+CNTR)
                 OR A
                 JR NZ,MAIN_MODE52
@@ -58,7 +58,7 @@ MAIN_MODE51     LD A,(IX+CNTR)
                 LD (IX+FAZE),A
                 LD (IX+NEWORDER),A
 
-;-------- проверка типов приказов --------
+;-------- РїСЂРѕРІРµСЂРєР° С‚РёРїРѕРІ РїСЂРёРєР°Р·РѕРІ --------
 MAIN_MODE52     LD A,(IX+ORDER)
                 OR A
                 JP NZ,MAIN_MODE53
@@ -67,35 +67,35 @@ MAIN_MODE52     LD A,(IX+ORDER)
                 JP MAIN_MODE190
 
 ;-----------------------------------------
-;приказ 1 (идти до координаты XY_TAG)
+;РїСЂРёРєР°Р· 1 (РёРґС‚Рё РґРѕ РєРѕРѕСЂРґРёРЅР°С‚С‹ XY_TAG)
 ;-----------------------------------------
 MAIN_MODE53     CP 1
                 JP NZ,MAIN_MODE90
 
 ;-----------------------------------------
-;фаза 0 - трассировка
+;С„Р°Р·Р° 0 - С‚СЂР°СЃСЃРёСЂРѕРІРєР°
 ;-----------------------------------------
                 LD A,(IX+FAZE)
                 OR A
                 JP NZ,MAIN_MODE60
 
-;трассировка
+;С‚СЂР°СЃСЃРёСЂРѕРІРєР°
                 CALL TRACE_MAP
                 CP 1
                 JR Z,MAIN_MODE55
 
-;трассер не нашел маршрут
+;С‚СЂР°СЃСЃРµСЂ РЅРµ РЅР°С€РµР» РјР°СЂС€СЂСѓС‚
                 LD A,9
                 LD (CURSOR_TYPE),A
                 LD A,20
                 LD (CURSOR_CNTR),A
 
-;ошибка трассера, конец движения
+;РѕС€РёР±РєР° С‚СЂР°СЃСЃРµСЂР°, РєРѕРЅРµС† РґРІРёР¶РµРЅРёСЏ
                 LD A,(IX+TRACEADR)
                 OR A
                 JP Z,MAIN_MODE80
 
-;продолжаем движение по старому маршруту
+;РїСЂРѕРґРѕР»Р¶Р°РµРј РґРІРёР¶РµРЅРёРµ РїРѕ СЃС‚Р°СЂРѕРјСѓ РјР°СЂС€СЂСѓС‚Сѓ
                 LD (IX+FAZE),1
                 LD A,(IX+XLTAG)
                 LD (IX+XTAG),A
@@ -103,13 +103,13 @@ MAIN_MODE53     CP 1
                 LD (IX+YTAG),A
                 JP MAIN_MODE60
 
-;маршрут найден
+;РјР°СЂС€СЂСѓС‚ РЅР°Р№РґРµРЅ
 MAIN_MODE55     LD HL,TRACE_TAB+18
                 LD DE,MAIN_TRACE+18
                 LD BC,204
 MAIN_MODE56     DUP 16
-                LDI 
-                EDUP 
+                LDI
+                EDUP
                 INC L,L
                 LD E,L
                 DNZ C,MAIN_MODE56
@@ -125,23 +125,23 @@ MAIN_MODE56     DUP 16
                 JP MAIN_MODE190
 
 ;-----------------------------------------
-;фаза 1 - разворот
+;С„Р°Р·Р° 1 - СЂР°Р·РІРѕСЂРѕС‚
 ;-----------------------------------------
 MAIN_MODE60     LD A,(IX+FAZE)
                 CP 1
                 JP NZ,MAIN_MODE70
 
-;проверка на завершение трасы
+;РїСЂРѕРІРµСЂРєР° РЅР° Р·Р°РІРµСЂС€РµРЅРёРµ С‚СЂР°СЃС‹
                 LD H,'MAIN_TRACE
                 LD L,(IX+TRACEADR)
                 LD A,(HL)
                 DUP 4
-                RRCA 
-                EDUP 
+                RRCA
+                EDUP
                 AND #0F
                 CP #0F
                 JP Z,MAIN_MODE80
-;разворот
+;СЂР°Р·РІРѕСЂРѕС‚
                 DEC A
                 SUB 4
                 AND 7
@@ -153,7 +153,7 @@ MAIN_MODE60     LD A,(IX+FAZE)
                 JP Z,MAIN_MODE190
 
 ;-----------------------------------------
-;фаза 2 - проходим клетку
+;С„Р°Р·Р° 2 - РїСЂРѕС…РѕРґРёРј РєР»РµС‚РєСѓ
 ;-----------------------------------------
 MAIN_MODE70     LD A,(IX+FAZE)
                 CP 2
@@ -162,7 +162,7 @@ MAIN_MODE70     LD A,(IX+FAZE)
                 OR A
                 JR NZ,MAIN_MODE75
 
-;проверяем на наличие других объектов
+;РїСЂРѕРІРµСЂСЏРµРј РЅР° РЅР°Р»РёС‡РёРµ РґСЂСѓРіРёС… РѕР±СЉРµРєС‚РѕРІ
                 LD A,(IX+DIRECT)
                 LD H,(IX+XCRD)
                 LD L,(IX+YCRD)
@@ -186,7 +186,7 @@ MAIN_MODE75     CALL GOTO_DIRECT
                 JP MAIN_MODE190
 
 ;-----------------------------------------
-;фаза 3 - завершение движения
+;С„Р°Р·Р° 3 - Р·Р°РІРµСЂС€РµРЅРёРµ РґРІРёР¶РµРЅРёСЏ
 ;-----------------------------------------
 MAIN_MODE80     LD A,(IX+BASEORDER)
                 LD (IX+ORDER),A
@@ -205,23 +205,23 @@ MAIN_MODE80     LD A,(IX+BASEORDER)
 
 
 ;-----------------------------------------
-;приказ 2 (стрелять по объекту NUMINT)
+;РїСЂРёРєР°Р· 2 (СЃС‚СЂРµР»СЏС‚СЊ РїРѕ РѕР±СЉРµРєС‚Сѓ NUMINT)
 ;-----------------------------------------
 MAIN_MODE90     CP 2
                 JP NZ,MAIN_MODE100
 
 ;-----------------------------------------
-;фаза 0 - разворот
+;С„Р°Р·Р° 0 - СЂР°Р·РІРѕСЂРѕС‚
 ;-----------------------------------------
                 LD A,(IX+FAZE)
                 OR A
                 JP NZ,MAIN_MODE93
 
-;находим объект по номеру
+;РЅР°С…РѕРґРёРј РѕР±СЉРµРєС‚ РїРѕ РЅРѕРјРµСЂСѓ
                 LD A,(IX+NUMINT)
                 CALL GET_DISCRIPTOR
 
-;находим направление для стрельбы
+;РЅР°С…РѕРґРёРј РЅР°РїСЂР°РІР»РµРЅРёРµ РґР»СЏ СЃС‚СЂРµР»СЊР±С‹
                 LD H,(IX+XCRD)
                 LD L,(IX+YCRD)
                 LD D,(IY+XCRD)
@@ -236,18 +236,18 @@ MAIN_MODE90     CP 2
                 JP Z,MAIN_MODE190
 
 ;-----------------------------------------
-;фаза 1 - выстрел
+;С„Р°Р·Р° 1 - РІС‹СЃС‚СЂРµР»
 ;-----------------------------------------
 MAIN_MODE93     LD A,(IX+CNTR)
                 OR A
                 JR NZ,MAIN_MODE98
 
-;проверка кол-ва патронов
+;РїСЂРѕРІРµСЂРєР° РєРѕР»-РІР° РїР°С‚СЂРѕРЅРѕРІ
                 LD A,(IX+BULLET)
                 OR A
                 JR NZ,MAIN_MODE94
 
-;патронов нет
+;РїР°С‚СЂРѕРЅРѕРІ РЅРµС‚
                 XOR A
                 LD (IX+ORDER),A
                 LD (IX+FAZE),A
@@ -264,7 +264,7 @@ MAIN_MODE94     DEC (IX+BULLET)
                 ADD A,40
                 LD (IX+SPRT),A
 
-;наносим урон вражескому объекту
+;РЅР°РЅРѕСЃРёРј СѓСЂРѕРЅ РІСЂР°Р¶РµСЃРєРѕРјСѓ РѕР±СЉРµРєС‚Сѓ
                 RAMPAGE 0
                 LD H,(IX+XCRD)
                 LD L,(IX+YCRD)
@@ -286,7 +286,7 @@ MAIN_MODE96     LD (IY+NEWORDER),3
 MAIN_MODE97     LD (IY+DAMAGE),A
                 JP MAIN_MODE190
 
-;пауза после выстрела
+;РїР°СѓР·Р° РїРѕСЃР»Рµ РІС‹СЃС‚СЂРµР»Р°
 MAIN_MODE98     LD A,(ACTION_POINT)
                 DEC A
                 LD (ACTION_POINT),A
@@ -302,7 +302,7 @@ MAIN_MODE98     LD A,(ACTION_POINT)
                 JP MAIN_MODE190
 
 ;-----------------------------------------
-;приказ 3 (объект получает урон)
+;РїСЂРёРєР°Р· 3 (РѕР±СЉРµРєС‚ РїРѕР»СѓС‡Р°РµС‚ СѓСЂРѕРЅ)
 ;-----------------------------------------
 MAIN_MODE100    CP 3
                 JP NZ,MAIN_MODE110
@@ -333,7 +333,7 @@ MAIN_MODE101    LD A,(ACTION_POINT)
                 LD (IX+SPRT),A
                 JP MAIN_MODE190
 
-;смерть объекта
+;СЃРјРµСЂС‚СЊ РѕР±СЉРµРєС‚Р°
 MAIN_MODE102    LD (IX+LIFE),0
                 LD A,(IX+DIRECT)
                 ADD A,56
@@ -342,19 +342,19 @@ MAIN_MODE102    LD (IX+LIFE),0
                 JP MAIN_MODE190
 
 ;-----------------------------------------
-;приказ 4 (рандом для животных)
+;РїСЂРёРєР°Р· 4 (СЂР°РЅРґРѕРј РґР»СЏ Р¶РёРІРѕС‚РЅС‹С…)
 ;-----------------------------------------
 MAIN_MODE110    CP 4
                 JP NZ,MAIN_MODE140
 
 ;-----------------------------------------
-;фаза 0 - определяем действие
+;С„Р°Р·Р° 0 - РѕРїСЂРµРґРµР»СЏРµРј РґРµР№СЃС‚РІРёРµ
 ;-----------------------------------------
                 LD A,(IX+FAZE)
                 OR A
                 JP NZ,MAIN_MODE120
 
-;проверяем на ближайших врагов
+;РїСЂРѕРІРµСЂСЏРµРј РЅР° Р±Р»РёР¶Р°Р№С€РёС… РІСЂР°РіРѕРІ
                 LD (ACTION_POINT),A
                 CALL TEST_ENEMY
                 JR NZ,MAIN_MODE111
@@ -365,7 +365,7 @@ MAIN_MODE110    CP 4
                 CALL TEST_WAY
                 JR NZ,MAIN_MODE111
 
-;идем к врагу
+;РёРґРµРј Рє РІСЂР°РіСѓ
                 LD A,(IY+XCRD)
                 LD (IX+XTAG),A
                 LD A,(IY+YCRD)
@@ -374,7 +374,7 @@ MAIN_MODE110    CP 4
                 LD (IX+CNTR),0
                 JP MAIN_MODE190
 
-;находим случайную координату
+;РЅР°С…РѕРґРёРј СЃР»СѓС‡Р°Р№РЅСѓСЋ РєРѕРѕСЂРґРёРЅР°С‚Сѓ
 MAIN_MODE111    CALL RND
                 AND 15
                 SUB 7
@@ -398,7 +398,7 @@ MAIN_MODE111    CALL RND
                 JP MAIN_MODE190
 
 ;-----------------------------------------
-;фаза 1 - разворот на цель
+;С„Р°Р·Р° 1 - СЂР°Р·РІРѕСЂРѕС‚ РЅР° С†РµР»СЊ
 ;-----------------------------------------
 MAIN_MODE120    LD A,(IX+FAZE)
                 CP 1
@@ -409,7 +409,7 @@ MAIN_MODE120    LD A,(IX+FAZE)
                 LD D,(IX+XTAG)
                 LD E,(IX+YTAG)
 
-;проверяем на достижение цели
+;РїСЂРѕРІРµСЂСЏРµРј РЅР° РґРѕСЃС‚РёР¶РµРЅРёРµ С†РµР»Рё
                 PUSH HL
                 OR A
                 SBC HL,DE
@@ -418,7 +418,7 @@ MAIN_MODE120    LD A,(IX+FAZE)
 
                 CALL FIND_DIRECT
 
-;проверка на препятствия
+;РїСЂРѕРІРµСЂРєР° РЅР° РїСЂРµРїСЏС‚СЃС‚РІРёСЏ
                 CALL TEST_DIRECT
                 JR Z,MAIN_MODE121
                 INC A
@@ -438,7 +438,7 @@ MAIN_MODE121    CALL TURN_DIRECT
                 JP Z,MAIN_MODE190
 
 ;-----------------------------------------
-;фаза 2 - проходим клетку
+;С„Р°Р·Р° 2 - РїСЂРѕС…РѕРґРёРј РєР»РµС‚РєСѓ
 ;-----------------------------------------
 MAIN_MODE125    LD A,(IX+FAZE)
                 CP 2
@@ -447,38 +447,38 @@ MAIN_MODE125    LD A,(IX+FAZE)
                 OR A
                 JR NZ,MAIN_MODE129
 
-;проверяем на наличие других объектов
+;РїСЂРѕРІРµСЂСЏРµРј РЅР° РЅР°Р»РёС‡РёРµ РґСЂСѓРіРёС… РѕР±СЉРµРєС‚РѕРІ
                 LD A,(IX+DIRECT)
                 LD H,(IX+XCRD)
                 LD L,(IX+YCRD)
                 CALL SEACH_DIRECT
                 JR NZ,MAIN_MODE129
 
-;инициализируем атаку
+;РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј Р°С‚Р°РєСѓ
                 LD A,(IY+ENEMY)
                 CP (IX+ENEMY)
                 JR NZ,MAIN_MODE127
 
-;случайная атака "своего"
+;СЃР»СѓС‡Р°Р№РЅР°СЏ Р°С‚Р°РєР° "СЃРІРѕРµРіРѕ"
                 CALL RND
                 AND 7
                 JR Z,MAIN_MODE127
 
-;определение действия
+;РѕРїСЂРµРґРµР»РµРЅРёРµ РґРµР№СЃС‚РІРёСЏ
 MAIN_MODE126    XOR A
                 LD (IX+FAZE),A
                 LD (IX+CNTR),A
                 LD (ACTION_POINT),A
                 JP MAIN_MODE190
 
-;атака
+;Р°С‚Р°РєР°
 MAIN_MODE127    LD A,(IY+NUM)
                 LD (IX+NUMINT),A
                 LD A,3
                 LD (IX+FAZE),A
                 JP MAIN_MODE130
 
-;идем через клетку
+;РёРґРµРј С‡РµСЂРµР· РєР»РµС‚РєСѓ
 MAIN_MODE129    CALL GOTO_DIRECT
                 JP Z,MAIN_MODE190
                 LD (IX+CNTR),0
@@ -486,7 +486,7 @@ MAIN_MODE129    CALL GOTO_DIRECT
                 JP MAIN_MODE190
 
 ;-----------------------------------------
-;фаза 3 - атака
+;С„Р°Р·Р° 3 - Р°С‚Р°РєР°
 ;-----------------------------------------
 MAIN_MODE130    CP 3
                 JP NZ,MAIN_MODE190
@@ -522,7 +522,7 @@ MAIN_MODE132    LD A,C
                 CP (IX+ENEMY)
                 JP Z,MAIN_MODE190
 
-;наносим врагу урон
+;РЅР°РЅРѕСЃРёРј РІСЂР°РіСѓ СѓСЂРѕРЅ
                 LD A,(IX+HIT)
                 ADD A,(IY+DAMAGE)
                 JR NC,MAIN_MODE133
@@ -532,7 +532,7 @@ MAIN_MODE133    LD (IY+DAMAGE),A
 
 
 ;-----------------------------------------
-;приказ 5 (объект умер)
+;РїСЂРёРєР°Р· 5 (РѕР±СЉРµРєС‚ СѓРјРµСЂ)
 ;-----------------------------------------
 MAIN_MODE140    CP 5
                 JP NZ,MAIN_MODE190
@@ -542,7 +542,7 @@ MAIN_MODE140    CP 5
                 JP MAIN_MODE190
 
 
-;проверка остатка ACTION_POINT
+;РїСЂРѕРІРµСЂРєР° РѕСЃС‚Р°С‚РєР° ACTION_POINT
 MAIN_MODE190    LD A,(ACTION_POINT)
                 OR A
                 JP NZ,MAIN_MODE51
@@ -563,10 +563,10 @@ MAIN_MODEOC     LD A,0
                 CALL SHOW_OBJECT
                 CALL SHOW_CLUSTER
 
-;приказы для главного героя
+;РїСЂРёРєР°Р·С‹ РґР»СЏ РіР»Р°РІРЅРѕРіРѕ РіРµСЂРѕСЏ
 MAIN_MODE200    LD IX,DISCRIPTORS
 
-;проверка глав. героя на видимость
+;РїСЂРѕРІРµСЂРєР° РіР»Р°РІ. РіРµСЂРѕСЏ РЅР° РІРёРґРёРјРѕСЃС‚СЊ
                 LD HL,(MAP_XY)
                 INC L
                 LD A,(IX+XCRD)
@@ -592,7 +592,7 @@ MAIN_MODE204    LD A,(IX+ORDER)
                 CALL CENTER_MOVE
                 CALL REDRAW_ALL
 
-;проверяем, жив-ли герой
+;РїСЂРѕРІРµСЂСЏРµРј, Р¶РёРІ-Р»Рё РіРµСЂРѕР№
 MAIN_MODE205    LD A,(IX+LIFE)
                 OR A
                 RET Z
@@ -602,7 +602,7 @@ MAIN_MODE205    LD A,(IX+LIFE)
                 JP Z,MAIN_MODE210
                 LD HL,(INPUT_Y)
 
-;корректировка коорд. курсора
+;РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєР° РєРѕРѕСЂРґ. РєСѓСЂСЃРѕСЂР°
                 ;LD A,H
                 ;SUB 8
                 ;LD H,A
@@ -611,11 +611,11 @@ MAIN_MODE205    LD A,(IX+LIFE)
 
                 RAMPAGE 0
 
-;проверка верхнего и правого отступа
+;РїСЂРѕРІРµСЂРєР° РІРµСЂС…РЅРµРіРѕ Рё РїСЂР°РІРѕРіРѕ РѕС‚СЃС‚СѓРїР°
                 LD A,L
                 DUP 4
-                RRCA 
-                EDUP 
+                RRCA
+                EDUP
                 AND #0F
                 JR NZ,$+3
                 INC A
@@ -623,8 +623,8 @@ MAIN_MODE205    LD A,(IX+LIFE)
 
                 LD A,H
                 DUP 4
-                RRCA 
-                EDUP 
+                RRCA
+                EDUP
                 AND #0F
                 CP 15
                 JR NZ,$+3
@@ -640,7 +640,7 @@ MAIN_MODE205    LD A,(IX+LIFE)
                 JR Z,MAIN_MODE202
                 INC H
 
-;запрещающий курсор
+;Р·Р°РїСЂРµС‰Р°СЋС‰РёР№ РєСѓСЂСЃРѕСЂ
                 LD A,9
                 LD (CURSOR_TYPE),A
                 LD A,20
@@ -653,7 +653,7 @@ MAIN_MODE202    LD A,(IX+XCRD)
                 LD A,(IX+YCRD)
                 CP L
                 JP Z,MAIN_MODE210
-;тип действия
+;С‚РёРї РґРµР№СЃС‚РІРёСЏ
 MAIN_MODE203    CALL SEARCH_OBJECT
                 JR NZ,MAIN_MODE212
                 LD A,(IX+NUM)
@@ -662,7 +662,7 @@ MAIN_MODE203    CALL SEARCH_OBJECT
                 JR MAIN_MODE211
 
 
-;идти к координате
+;РёРґС‚Рё Рє РєРѕРѕСЂРґРёРЅР°С‚Рµ
 MAIN_MODE212    LD (IX+XTAG),H
                 LD (IX+YTAG),L
                 LD (IX+NEWORDER),1
@@ -671,7 +671,7 @@ MAIN_MODE212    LD (IX+XTAG),H
                 LD (PLACE_CNTR),A
                 JR MAIN_MODE220
 
-;стрелять по координате
+;СЃС‚СЂРµР»СЏС‚СЊ РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Рµ
 MAIN_MODE210    LD A,(INPUT_BUTTON)
                 AND 1
                 JR Z,MAIN_MODE220
@@ -684,7 +684,7 @@ MAIN_MODE211    LD A,(IY+ENEMY)
                 LD A,(IY+NUM)
                 LD (IX+NUMINT),A
 
-;проверка на вхождение в скрипт
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС…РѕР¶РґРµРЅРёРµ РІ СЃРєСЂРёРїС‚
 MAIN_MODE220    RAMPAGE 0
                 LD HL,MAP_PROPERTY+8
                 LD B,15
@@ -715,12 +715,12 @@ MAIN_MODE222    POP HL
                 LD L,A
                 DJNZ MAIN_MODE221
                 JR MAIN_MODE230
-;тип скрипта
+;С‚РёРї СЃРєСЂРёРїС‚Р°
 MAIN_MODE223    INC SP,SP,L
                 LD A,(HL)
                 OR A
                 JR NZ,MAIN_MODE230
-;портал
+;РїРѕСЂС‚Р°Р»
                 INC L
                 LD B,(HL)
                 INC L
@@ -752,13 +752,13 @@ MAIN_MODE223    INC SP,SP,L
 
 
 
-;завершение игрового такта
+;Р·Р°РІРµСЂС€РµРЅРёРµ РёРіСЂРѕРІРѕРіРѕ С‚Р°РєС‚Р°
 MAIN_MODE230    XOR A
                 LD (INPUT_KEY),A
 
                 RAMPAGE 7
                 CALL SHOW_STATISTIC
-;вывод FPS
+;РІС‹РІРѕРґ FPS
                 LD A,(FRAME_CURRENT)
                 LD L,A,H,50
                 CALL DIV_BYTE
@@ -789,14 +789,14 @@ MAIN_MODE230    XOR A
                 LD A,(INPUT_KEY)
                 AND 2
                 JP Z,MAIN_MODE10
-                RET 
+                RET
 FPS_TEXT        DB "fps",0
 
 
-;проверка на врагов в радиусе 12 клеток
-;вх  - IX - описатель объекта
-;вых - NZ - нет врагов, Z - есть
-;      IY - описатель врага
+;РїСЂРѕРІРµСЂРєР° РЅР° РІСЂР°РіРѕРІ РІ СЂР°РґРёСѓСЃРµ 12 РєР»РµС‚РѕРє
+;РІС…  - IX - РѕРїРёСЃР°С‚РµР»СЊ РѕР±СЉРµРєС‚Р°
+;РІС‹С… - NZ - РЅРµС‚ РІСЂР°РіРѕРІ, Z - РµСЃС‚СЊ
+;      IY - РѕРїРёСЃР°С‚РµР»СЊ РІСЂР°РіР°
 
 TEST_ENEMY      PUSH BC,DE,HL
 
@@ -822,13 +822,13 @@ TEST_ENEMY3     LD A,(IY+NUM)
                 LD A,(IY+XCRD)
                 SUB H
                 JR NC,$+4
-                NEG 
+                NEG
                 CP 13
                 JR NC,TEST_ENEMY4
                 LD A,(IY+YCRD)
                 SUB L
                 JR NC,$+4
-                NEG 
+                NEG
                 CP 13
                 JR NC,TEST_ENEMY4
                 XOR A
@@ -841,13 +841,13 @@ TEST_ENEMY4     ADD IY,DE
 
 TEST_ENEMY5     LD A,C
                 POP HL,DE,BC
-                RET 
+                RET
 
 
-;менеджер объектов карты
+;РјРµРЅРµРґР¶РµСЂ РѕР±СЉРµРєС‚РѕРІ РєР°СЂС‚С‹
 OBJ_MANAGER
 
-;распаковка объектов
+;СЂР°СЃРїР°РєРѕРІРєР° РѕР±СЉРµРєС‚РѕРІ
                 LD HL,MAP_OBJECTS
                 LD BC,(MAP_XY)
                 LD A,B
@@ -855,7 +855,7 @@ OBJ_MANAGER
                 ADC A,0
                 LD B,A
 
-;проверяем возможность создания
+;РїСЂРѕРІРµСЂСЏРµРј РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ СЃРѕР·РґР°РЅРёСЏ
 OBJ_MAN10       PUSH BC,HL
 
                 LD A,(HL)
@@ -866,26 +866,26 @@ OBJ_MAN10       PUSH BC,HL
                 LD D,(HL)
                 DEC H
 
-;есть-ли объект по этим координатам
+;РµСЃС‚СЊ-Р»Рё РѕР±СЉРµРєС‚ РїРѕ СЌС‚РёРј РєРѕРѕСЂРґРёРЅР°С‚Р°Рј
                 EX DE,HL
                 ;CALL SEARCH_CRD
                 ;JP Z,OBJ_MAN40
 
-;проверка на растояние от глав. героя
+;РїСЂРѕРІРµСЂРєР° РЅР° СЂР°СЃС‚РѕСЏРЅРёРµ РѕС‚ РіР»Р°РІ. РіРµСЂРѕСЏ
                 LD A,(DISCRIPTORS+XCRD)
                 SUB H
                 JP NC,$+5
-                NEG 
+                NEG
                 CP 17
                 JP NC,OBJ_MAN40
                 LD A,(DISCRIPTORS+YCRD)
                 SUB L
                 JP NC,$+5
-                NEG 
+                NEG
                 CP 13
                 JP NC,OBJ_MAN40
 
-;проверка на край видимости окна карты
+;РїСЂРѕРІРµСЂРєР° РЅР° РєСЂР°Р№ РІРёРґРёРјРѕСЃС‚Рё РѕРєРЅР° РєР°СЂС‚С‹
                 LD A,H
                 CP B
                 JP C,OBJ_MAN20
@@ -901,7 +901,7 @@ OBJ_MAN10       PUSH BC,HL
                 CP L
                 JP NC,OBJ_MAN40
 
-;ищем свободный дискриптор
+;РёС‰РµРј СЃРІРѕР±РѕРґРЅС‹Р№ РґРёСЃРєСЂРёРїС‚РѕСЂ
 OBJ_MAN20       LD C,E
                 EX DE,HL
                 LD HL,DISCRIPTORS+1+DISCR_LEN
@@ -919,7 +919,7 @@ OBJ_MAN21       LD A,(HL)
                 DJNZ OBJ_MAN21
                 JP OBJ_MAN40
 
-;создаем объект
+;СЃРѕР·РґР°РµРј РѕР±СЉРµРєС‚
 OBJ_MAN30       DEC L,L
                 PUSH HL
                 POP IX
@@ -937,7 +937,7 @@ OBJ_MAN30       DEC L,L
                 LD B,'MAP_PROPERTY
                 LD A,(BC)
 
-;тут будет выбор типа объекта
+;С‚СѓС‚ Р±СѓРґРµС‚ РІС‹Р±РѕСЂ С‚РёРїР° РѕР±СЉРµРєС‚Р°
                 LD (IX+NUM),D       ;0
                 LD (IX+XCRD),H      ;1
                 LD (IX+YCRD),L      ;2
@@ -966,7 +966,7 @@ OBJ_MAN40       POP HL,BC
                 INC L
                 JP NZ,OBJ_MAN10
 
-;упаковка объектов
+;СѓРїР°РєРѕРІРєР° РѕР±СЉРµРєС‚РѕРІ
                 LD A,(DISCRIPTORS+XCRD)
                 LD D,A
                 LD A,(DISCRIPTORS+YCRD)
@@ -974,7 +974,7 @@ OBJ_MAN40       POP HL,BC
                 LD HL,DISCRIPTORS+1+DISCR_LEN
                 LD B,OBJECT_MAX-1
 
-;ищем сильно удаленные объекты
+;РёС‰РµРј СЃРёР»СЊРЅРѕ СѓРґР°Р»РµРЅРЅС‹Рµ РѕР±СЉРµРєС‚С‹
 OBJ_MAN50       PUSH DE,HL
                 LD A,(HL);        XCRD
                 LD C,A
@@ -984,13 +984,13 @@ OBJ_MAN50       PUSH DE,HL
                 LD A,(HL);        YCRD
                 SUB E
                 JP NC,$+5
-                NEG 
+                NEG
                 CP 15
                 JP NC,OBJ_MAN51
                 LD A,C;           XCRD
                 SUB D
                 JP NC,$+5
-                NEG 
+                NEG
                 CP 19
                 JP C,OBJ_MAN80
 
@@ -1000,7 +1000,7 @@ OBJ_MAN51       LD (OBJ_MAN61+1),HL
                 OR A
                 JR Z,OBJ_MAN70
 
-;ищем свободный слот для объекта
+;РёС‰РµРј СЃРІРѕР±РѕРґРЅС‹Р№ СЃР»РѕС‚ РґР»СЏ РѕР±СЉРµРєС‚Р°
                 LD HL,MAP_OBJECTS
                 XOR A
 OBJ_MAN60       CP (HL)
@@ -1009,7 +1009,7 @@ OBJ_MAN60       CP (HL)
                 JP NZ,OBJ_MAN60
                 JP OBJ_MAN70
 
-;упаковываем объект
+;СѓРїР°РєРѕРІС‹РІР°РµРј РѕР±СЉРµРєС‚
 OBJ_MAN61       LD DE,0
                 EX DE,HL
                 LD A,(HL);        YCRD
@@ -1023,7 +1023,7 @@ OBJ_MAN61       LD DE,0
                 LD (DE),A
                 INC D
 
-;поиск номера спрайтсета
+;РїРѕРёСЃРє РЅРѕРјРµСЂР° СЃРїСЂР°Р№С‚СЃРµС‚Р°
                 INC L,L,L
                 LD C,(HL);        TYPE
                 RAMPAGE 0
@@ -1040,7 +1040,7 @@ OBJ_MAN63       LD A,2
                 LD (DE),A
                 POP HL,BC
 
-;освобождаем объект
+;РѕСЃРІРѕР±РѕР¶РґР°РµРј РѕР±СЉРµРєС‚
 OBJ_MAN70       LD HL,(OBJ_MAN61+1)
                 XOR A
                 LD (HL),A;        YCRD
@@ -1052,12 +1052,12 @@ OBJ_MAN80       POP HL
                 ADD HL,DE
                 POP DE
                 DJNZ OBJ_MAN50
-                RET 
+                RET
 
 
-;заполнение карты родственными объектами
-;вх  - IX - описатель опорного объекта
-;вых - нет
+;Р·Р°РїРѕР»РЅРµРЅРёРµ РєР°СЂС‚С‹ СЂРѕРґСЃС‚РІРµРЅРЅС‹РјРё РѕР±СЉРµРєС‚Р°РјРё
+;РІС…  - IX - РѕРїРёСЃР°С‚РµР»СЊ РѕРїРѕСЂРЅРѕРіРѕ РѕР±СЉРµРєС‚Р°
+;РІС‹С… - РЅРµС‚
 
 PUT_OBJECT      PUSH AF,BC,DE,HL,IX
 
@@ -1083,7 +1083,7 @@ PUT_OBJE        CP 0
                 OR E
                 JR Z,PUT_OBJ2
 
-                GETMAPADR DEC 
+                GETMAPADR DEC
                 LD (HL),E
                 INC L
                 LD (HL),D
@@ -1102,11 +1102,11 @@ PUT_OBJ2        LD DE,DISCR_LEN
                 LD (REST_OBJL+1),A
 
                 POP IX,HL,DE,BC,AF
-                RET 
+                RET
 
-;восстановление карты
-;вх  - нет
-;вых - нет
+;РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РєР°СЂС‚С‹
+;РІС…  - РЅРµС‚
+;РІС‹С… - РЅРµС‚
 
 REST_OBJECT     PUSH AF,BC,DE,HL
 
@@ -1125,12 +1125,12 @@ REST_OBJ1       DEC L
                 JR REST_OBJ1
 
 REST_OBJ2       POP HL,DE,BC,AF
-                RET 
+                RET
 
-;разворот по направлению
-;вх  - IX - описатель объекта
-;      A - направление
-;вых - NZ - завершен, Z - незавершен
+;СЂР°Р·РІРѕСЂРѕС‚ РїРѕ РЅР°РїСЂР°РІР»РµРЅРёСЋ
+;РІС…  - IX - РѕРїРёСЃР°С‚РµР»СЊ РѕР±СЉРµРєС‚Р°
+;      A - РЅР°РїСЂР°РІР»РµРЅРёРµ
+;РІС‹С… - NZ - Р·Р°РІРµСЂС€РµРЅ, Z - РЅРµР·Р°РІРµСЂС€РµРЅ
 
 TURN_DIRECT     PUSH BC,DE,HL
                 LD C,A
@@ -1143,7 +1143,7 @@ TURN_DIR1       LD A,(IX+CNTR)
                 SUB (IX+DIRECT)
                 JR Z,TURN_DIR5
 
-;разворот на 45' по направлению
+;СЂР°Р·РІРѕСЂРѕС‚ РЅР° 45' РїРѕ РЅР°РїСЂР°РІР»РµРЅРёСЋ
                 AND 7
                 CP 4
                 JP NC,TURN_DIR2
@@ -1156,7 +1156,7 @@ TURN_DIR3       AND 7
                 LD (IX+DIRECT),A
                 LD (IX+CNTR),4
 
-;отсчет
+;РѕС‚СЃС‡РµС‚
 TURN_DIR4       DEC (IX+CNTR)
                 LD A,(ACTION_POINT)
                 DEC A
@@ -1168,6 +1168,4 @@ TURN_DIR5       DEC A
                 LD (IX+SPRT),A
                 LD A,C
                 POP HL,DE,BC
-                RET 
-
-
+                RET

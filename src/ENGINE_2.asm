@@ -1,11 +1,11 @@
 ;++++++++++++++++ ENGINE_2.H +++++++++++++
-;движок игры
+;РґРІРёР¶РѕРє РёРіСЂС‹
 
                 MAIN "GAME.H",#C0
 
-;драйвер мышки
-;вх  - нет
-;вых - нет
+;РґСЂР°Р№РІРµСЂ РјС‹С€РєРё
+;РІС…  - РЅРµС‚
+;РІС‹С… - РЅРµС‚
 
 MOUSE           PUSH AF,BC,DE,HL
                 LD BC,#FADF
@@ -50,7 +50,7 @@ MOUSE_XR        CP 128
 MOUSE_XR0       LD A,251
 MOUSE_XR1       LD B,A
                 JP MOUSE_YCRD
-MOUSE_XR2       NEG 
+MOUSE_XR2       NEG
                 CALL MOUSE_SCAL
                 LD H,A
                 LD A,B
@@ -60,7 +60,7 @@ MOUSE_XR2       NEG
 MOUSE_XR3       LD B,A
                 JP MOUSE_YCRD
 
-MOUSE_XL        NEG 
+MOUSE_XL        NEG
                 CP 128
                 JR NC,MOUSE_XL2
                 CALL MOUSE_SCAL
@@ -71,7 +71,7 @@ MOUSE_XL        NEG
                 XOR A
 MOUSE_XL1       LD B,A
                 JP MOUSE_YCRD
-MOUSE_XL2       NEG 
+MOUSE_XL2       NEG
                 CALL MOUSE_SCAL
                 ADD A,B
                 JR C,MOUSE_XL21
@@ -93,7 +93,7 @@ MOUSE_YR        CP 128
                 LD A,191
 MOUSE_YR1       LD C,A
                 JP MOUSE_END
-MOUSE_YR2       NEG 
+MOUSE_YR2       NEG
                 CALL MOUSE_SCAL
                 LD L,A
                 LD A,C
@@ -105,7 +105,7 @@ MOUSE_YR21      LD A,4
 MOUSE_YR3       LD C,A
                 JP MOUSE_END
 
-MOUSE_YL        NEG 
+MOUSE_YL        NEG
                 CP 128
                 JR NC,MOUSE_YL2
                 CALL MOUSE_SCAL
@@ -118,7 +118,7 @@ MOUSE_YL        NEG
 MOUSE_YL0       LD A,4
 MOUSE_YL1       LD C,A
                 JP MOUSE_END
-MOUSE_YL2       NEG 
+MOUSE_YL2       NEG
                 CALL MOUSE_SCAL
                 ADD A,C
                 CP 192
@@ -133,7 +133,7 @@ MOUSE_END       LD A,191
 
                 CALL KEYBOARD
 
-;проверка нажатия кнопок мыши
+;РїСЂРѕРІРµСЂРєР° РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРѕРє РјС‹С€Рё
                 LD A,(INPUT_LKEY)
                 LD B,A
                 LD A,(INPUT_KEY)
@@ -155,30 +155,30 @@ MOUSE_KEY2      LD A,C
                 LD (INPUT_LKEY),A
 
                 POP HL,DE,BC,AF
-                RET 
+                RET
 
-MOUSE_SCAL      RET 
+MOUSE_SCAL      RET
 
 MOUSE_LY        DB 0
 MOUSE_LX        DB 0
 INPUT_LKEY      DB 0
 
-;опрос клавиатуры
-;вх  - нет
-;вых - нет
+;РѕРїСЂРѕСЃ РєР»Р°РІРёР°С‚СѓСЂС‹
+;РІС…  - РЅРµС‚
+;РІС‹С… - РЅРµС‚
 
 KEYBOARD        PUSH AF,BC,DE,HL
 
                 LD A,(INPUT_KEYBSPD)
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND #3F
                 JR NZ,KEYBOARD_1
                 INC A
 KEYBOARD_1      LD D,A
                 LD L,0
 
-;вверх
+;РІРІРµСЂС…
                 LD A,(INPUT_Y)
                 LD H,A
                 LD BC,(KEY_UP)
@@ -199,7 +199,7 @@ KEYBOARD_1      LD D,A
                 LD (INPUT_OVER),A
                 JR KEYBOARD_4
 
-;вниз
+;РІРЅРёР·
 KEYBOARD_2      LD BC,(KEY_DOWN)
                 LD E,C
                 LD C,#FE
@@ -222,7 +222,7 @@ KEYBOARD_3      LD H,187
 KEYBOARD_4      LD A,H
                 LD (INPUT_Y),A
 
-;влево
+;РІР»РµРІРѕ
                 LD A,(INPUT_X)
                 LD H,A
                 LD BC,(KEY_LEFT)
@@ -243,7 +243,7 @@ KEYBOARD_4      LD A,H
                 LD (INPUT_OVER),A
                 JR KEYBOARD_7
 
-;вправо
+;РІРїСЂР°РІРѕ
 KEYBOARD_5      LD BC,(KEY_RIGHT)
                 LD E,C
                 LD C,#FE
@@ -266,7 +266,7 @@ KEYBOARD_6      LD H,251
 KEYBOARD_7      LD A,H
                 LD (INPUT_X),A
 
-;огонь
+;РѕРіРѕРЅСЊ
                 LD BC,(KEY_FIRE)
                 LD E,C
                 LD C,#FE
@@ -277,7 +277,7 @@ KEYBOARD_7      LD A,H
                 OR 1
                 LD (INPUT_BUTTON),A
 
-;отмена
+;РѕС‚РјРµРЅР°
 KEYBOARD_8      LD BC,(KEY_CANCEL)
                 LD E,C
                 LD C,#FE
@@ -310,17 +310,17 @@ KEYBOARD_21     XOR A
 
 
 KEYBOARD_E      POP HL,DE,BC,AF
-                RET 
+                RET
 
 
-;вывод курсора на экран
-;тип курсора из INPUT_ARROWTYPE
-;вх  - HL - координаты в пикселях
-;вых - нет
+;РІС‹РІРѕРґ РєСѓСЂСЃРѕСЂР° РЅР° СЌРєСЂР°РЅ
+;С‚РёРї РєСѓСЂСЃРѕСЂР° РёР· INPUT_ARROWTYPE
+;РІС…  - HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ РІ РїРёРєСЃРµР»СЏС…
+;РІС‹С… - РЅРµС‚
 
 PUT_CURSOR      PUSH AF,BC,DE,HL
 
-;пересчет координат
+;РїРµСЂРµСЃС‡РµС‚ РєРѕРѕСЂРґРёРЅР°С‚
                 LD A,(INPUT_ARROWCENT)
                 AND 1
                 JP Z,PUT_CURSV0
@@ -333,7 +333,7 @@ PUT_CURSOR      PUSH AF,BC,DE,HL
                 JP NC,PUT_CURSV0
                 LD H,0
 
-;сохраняем фон под курсором
+;СЃРѕС…СЂР°РЅСЏРµРј С„РѕРЅ РїРѕРґ РєСѓСЂСЃРѕСЂРѕРј
 PUT_CURSV0      LD B,16
                 LD A,L
                 CP 192
@@ -360,19 +360,19 @@ PUT_CURSV1      PUSH BC,HL
                 INC HL
                 EX DE,HL
                 LD C,#FF
-PUT_CURSV2      LDI 
-                LDI 
-                LDI 
+PUT_CURSV2      LDI
+                LDI
+                LDI
                 DEC HL,HL,HL
                 DOWN HL
                 DJNZ PUT_CURSV2
                 POP HL,BC
 
-;адрес спрайта курсора
+;Р°РґСЂРµСЃ СЃРїСЂР°Р№С‚Р° РєСѓСЂСЃРѕСЂР°
                 EX DE,HL
                 LD A,(INPUT_ARROWTYPE)
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 LD C,A
                 OR #3F
                 AND #C0
@@ -384,7 +384,7 @@ PUT_CURSV2      LDI
                 LD (PUT_CURSP+1),SP
                 LD SP,HL
 
-;экранный адрес
+;СЌРєСЂР°РЅРЅС‹Р№ Р°РґСЂРµСЃ
 PUT_CURA1       EX DE,HL
                 LD A,H
                 AND 7
@@ -396,22 +396,22 @@ PUT_CURA1       EX DE,HL
 
 PUT_CURA2       JR $
                 JP PUT_CURS0
-                NOP 
+                NOP
                 JP PUT_CURS1
-                NOP 
+                NOP
                 JP PUT_CURS2
-                NOP 
+                NOP
                 JP PUT_CURS3
-                NOP 
+                NOP
                 JP PUT_CURS4
-                NOP 
+                NOP
                 JP PUT_CURS5
-                NOP 
+                NOP
                 JP PUT_CURS6
-                NOP 
+                NOP
                 JP PUT_CURS7
 
-;подготовка смещение 0
+;РїРѕРґРіРѕС‚РѕРІРєР° СЃРјРµС‰РµРЅРёРµ 0
 PUT_CURS0       CP 31
                 LD A,#77; (LD (HL),A)
                 JR C,$+3
@@ -424,7 +424,7 @@ PUT_CURS0       CP 31
                 LD A,B
                 JP PUT_CUR0
 
-;подготовка смещение 1
+;РїРѕРґРіРѕС‚РѕРІРєР° СЃРјРµС‰РµРЅРёРµ 1
 PUT_CURS1       CP 30
                 LD A,#77; (LD (HL),A)
                 JR C,$+3
@@ -444,7 +444,7 @@ PUT_CURS1       CP 30
                 LD A,B
                 JP PUT_CUR1
 
-;подготовка смещение 2
+;РїРѕРґРіРѕС‚РѕРІРєР° СЃРјРµС‰РµРЅРёРµ 2
 PUT_CURS2       CP 30
                 LD A,#77; (LD (HL),A)
                 JR C,$+3
@@ -464,7 +464,7 @@ PUT_CURS2       CP 30
                 LD A,B
                 JP PUT_CUR2
 
-;подготовка смещение 3
+;РїРѕРґРіРѕС‚РѕРІРєР° СЃРјРµС‰РµРЅРёРµ 3
 PUT_CURS3       CP 30
                 LD A,#77; (LD (HL),A)
                 JR C,$+3
@@ -484,7 +484,7 @@ PUT_CURS3       CP 30
                 LD A,B
                 JP PUT_CUR3
 
-;подготовка смещение 4
+;РїРѕРґРіРѕС‚РѕРІРєР° СЃРјРµС‰РµРЅРёРµ 4
 PUT_CURS4       CP 30
                 LD A,#77; (LD (HL),A)
                 JR C,$+3
@@ -504,7 +504,7 @@ PUT_CURS4       CP 30
                 LD A,B
                 JP PUT_CUR4
 
-;подготовка смещение 5
+;РїРѕРґРіРѕС‚РѕРІРєР° СЃРјРµС‰РµРЅРёРµ 5
 PUT_CURS5       CP 30
                 LD A,#77; (LD (HL),A)
                 JR C,$+3
@@ -523,7 +523,7 @@ PUT_CURS5       CP 30
                 LD A,B
                 JP PUT_CUR5
 
-;подготовка смещение 6
+;РїРѕРґРіРѕС‚РѕРІРєР° СЃРјРµС‰РµРЅРёРµ 6
 PUT_CURS6       CP 30
                 LD A,#77; (LD (HL),A)
                 JR C,$+3
@@ -542,7 +542,7 @@ PUT_CURS6       CP 30
                 LD A,B
                 JP PUT_CUR6
 
-;подготовка смещение 7
+;РїРѕРґРіРѕС‚РѕРІРєР° СЃРјРµС‰РµРЅРёРµ 7
 PUT_CURS7       CP 30
                 LD A,#77; (LD (HL),A)
                 JR C,$+3
@@ -561,8 +561,8 @@ PUT_CURS7       CP 30
                 LD A,B
                 JP PUT_CUR7
 
-;вывод смещение 0
-PUT_CUR0        EXA 
+;РІС‹РІРѕРґ СЃРјРµС‰РµРЅРёРµ 0
+PUT_CUR0        EXA
                 INC L
                 POP BC
                 POP DE
@@ -576,26 +576,26 @@ PUT_CURV01      LD (HL),A
                 OR E
                 LD (HL),A
                 DOWN HL
-                EXA 
+                EXA
                 DNZ A,PUT_CUR0
                 JP PUT_CURSP
 
-;вывод смещение 1
-PUT_CUR1        EXA 
+;РІС‹РІРѕРґ СЃРјРµС‰РµРЅРёРµ 1
+PUT_CUR1        EXA
                 INC L,L
                 POP BC
                 XOR A
                 SUB 1
                 RR C
                 RR B
-                RRA 
+                RRA
                 AND (HL)
 PUT_CURV121     LD (HL),A
                 POP DE
                 XOR A
                 RR E
                 RR D
-                RRA 
+                RRA
                 OR (HL)
 PUT_CURV122     LD (HL),A
                 DEC L
@@ -609,12 +609,12 @@ PUT_CURV11      LD (HL),A
                 OR E
                 LD (HL),A
                 DOWN HL
-                EXA 
+                EXA
                 DNZ A,PUT_CUR1
                 JP PUT_CURSP
 
-;вывод смещение 2
-PUT_CUR2        EXA 
+;РІС‹РІРѕРґ СЃРјРµС‰РµРЅРёРµ 2
+PUT_CUR2        EXA
                 INC L,L
                 POP BC
                 XOR A
@@ -622,8 +622,8 @@ PUT_CUR2        EXA
                 DUP 2
                 RR C
                 RR B
-                RRA 
-                EDUP 
+                RRA
+                EDUP
                 AND (HL)
 PUT_CURV221     LD (HL),A
                 POP DE
@@ -631,8 +631,8 @@ PUT_CURV221     LD (HL),A
                 DUP 2
                 RR E
                 RR D
-                RRA 
-                EDUP 
+                RRA
+                EDUP
                 OR (HL)
 PUT_CURV222     LD (HL),A
                 DEC L
@@ -646,12 +646,12 @@ PUT_CURV21      LD (HL),A
                 OR E
                 LD (HL),A
                 DOWN HL
-                EXA 
+                EXA
                 DNZ A,PUT_CUR2
                 JP PUT_CURSP
 
-;вывод смещение 3
-PUT_CUR3        EXA 
+;РІС‹РІРѕРґ СЃРјРµС‰РµРЅРёРµ 3
+PUT_CUR3        EXA
                 INC L,L
                 POP BC
                 XOR A
@@ -659,8 +659,8 @@ PUT_CUR3        EXA
                 DUP 3
                 RR C
                 RR B
-                RRA 
-                EDUP 
+                RRA
+                EDUP
                 AND (HL)
 PUT_CURV321     LD (HL),A
                 POP DE
@@ -668,8 +668,8 @@ PUT_CURV321     LD (HL),A
                 DUP 3
                 RR E
                 RR D
-                RRA 
-                EDUP 
+                RRA
+                EDUP
                 OR (HL)
 PUT_CURV322     LD (HL),A
                 DEC L
@@ -683,12 +683,12 @@ PUT_CURV31      LD (HL),A
                 OR E
                 LD (HL),A
                 DOWN HL
-                EXA 
+                EXA
                 DNZ A,PUT_CUR3
                 JP PUT_CURSP
 
-;вывод смещение 4
-PUT_CUR4        EXA 
+;РІС‹РІРѕРґ СЃРјРµС‰РµРЅРёРµ 4
+PUT_CUR4        EXA
                 INC L,L
                 POP BC
                 XOR A
@@ -696,8 +696,8 @@ PUT_CUR4        EXA
                 DUP 4
                 RR C
                 RR B
-                RRA 
-                EDUP 
+                RRA
+                EDUP
                 AND (HL)
 PUT_CURV421     LD (HL),A
                 POP DE
@@ -705,8 +705,8 @@ PUT_CURV421     LD (HL),A
                 DUP 4
                 RR E
                 RR D
-                RRA 
-                EDUP 
+                RRA
+                EDUP
                 OR (HL)
 PUT_CURV422     LD (HL),A
                 DEC L
@@ -720,20 +720,20 @@ PUT_CURV41      LD (HL),A
                 OR E
                 LD (HL),A
                 DOWN HL
-                EXA 
+                EXA
                 DNZ A,PUT_CUR4
                 JP PUT_CURSP
 
-;вывод смещение 5
-PUT_CUR5        EXA 
+;РІС‹РІРѕРґ СЃРјРµС‰РµРЅРёРµ 5
+PUT_CUR5        EXA
                 POP BC
                 XOR A
                 SUB 1
                 DUP 3
                 RL B
                 RL C
-                RLA 
-                EDUP 
+                RLA
+                EDUP
                 AND (HL)
                 LD (HL),A
                 POP DE
@@ -741,8 +741,8 @@ PUT_CUR5        EXA
                 DUP 3
                 RL D
                 RL E
-                RLA 
-                EDUP 
+                RLA
+                EDUP
                 OR (HL)
                 LD (HL),A
                 INC L
@@ -757,20 +757,20 @@ PUT_CURV51      LD (HL),A
 PUT_CURV52      LD (HL),A
                 DEC L,L
                 DOWN HL
-                EXA 
+                EXA
                 DNZ A,PUT_CUR5
                 JP PUT_CURSP
 
-;вывод смещение 6
-PUT_CUR6        EXA 
+;РІС‹РІРѕРґ СЃРјРµС‰РµРЅРёРµ 6
+PUT_CUR6        EXA
                 POP BC
                 XOR A
                 SUB 1
                 DUP 2
                 RL B
                 RL C
-                RLA 
-                EDUP 
+                RLA
+                EDUP
                 AND (HL)
                 LD (HL),A
                 POP DE
@@ -778,8 +778,8 @@ PUT_CUR6        EXA
                 DUP 2
                 RL D
                 RL E
-                RLA 
-                EDUP 
+                RLA
+                EDUP
                 OR (HL)
                 LD (HL),A
                 INC L
@@ -794,25 +794,25 @@ PUT_CURV61      LD (HL),A
 PUT_CURV62      LD (HL),A
                 DEC L,L
                 DOWN HL
-                EXA 
+                EXA
                 DNZ A,PUT_CUR6
                 JP PUT_CURSP
 
-;вывод смещение 7
-PUT_CUR7        EXA 
+;РІС‹РІРѕРґ СЃРјРµС‰РµРЅРёРµ 7
+PUT_CUR7        EXA
                 POP BC
                 XOR A
                 SUB 1
                 RL B
                 RL C
-                RLA 
+                RLA
                 AND (HL)
                 LD (HL),A
                 POP DE
                 XOR A
                 RL D
                 RL E
-                RLA 
+                RLA
                 OR (HL)
                 LD (HL),A
                 INC L
@@ -827,17 +827,17 @@ PUT_CURV71      LD (HL),A
 PUT_CURV72      LD (HL),A
                 DEC L,L
                 DOWN HL
-                EXA 
+                EXA
                 DNZ A,PUT_CUR7
 
 PUT_CURSP       LD SP,0
                 POP HL,DE,BC,AF
-                RET 
+                RET
 
 
-;восстановление фона под курсором
-;вх  - нет
-;вых - нет
+;РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ С„РѕРЅР° РїРѕРґ РєСѓСЂСЃРѕСЂРѕРј
+;РІС…  - РЅРµС‚
+;РІС‹С… - РЅРµС‚
 
 REST_CURSOR     PUSH AF,BC,DE,HL
 
@@ -852,9 +852,9 @@ REST_CURSOR     PUSH AF,BC,DE,HL
                 OR D
                 JR Z,REST_CURE
                 LD C,#FF
-REST_CURL       LDI 
-                LDI 
-                LDI 
+REST_CURL       LDI
+                LDI
+                LDI
                 DEC DE,DE,DE
                 DOWN DE
                 DJNZ REST_CURL
@@ -866,13 +866,13 @@ REST_CURL       LDI
                 LD (HL),A
 
 REST_CURE       POP HL,DE,BC,AF
-                RET 
+                RET
 
 CURSOR_BUF      DS 51
 
-;ожидания нажатия любой клавиши
-;вх  - нет
-;вых - нет
+;РѕР¶РёРґР°РЅРёСЏ РЅР°Р¶Р°С‚РёСЏ Р»СЋР±РѕР№ РєР»Р°РІРёС€Рё
+;РІС…  - РЅРµС‚
+;РІС‹С… - РЅРµС‚
 
 ANYKEY          PUSH AF
 ANYKEY_1        XOR A
@@ -881,17 +881,17 @@ ANYKEY_1        XOR A
                 CP #1F
                 JP Z,ANYKEY_1
                 POP AF
-                RET 
+                RET
 
-;обработка скроллинга карты
-;вх  - нет
-;вых - нет
+;РѕР±СЂР°Р±РѕС‚РєР° СЃРєСЂРѕР»Р»РёРЅРіР° РєР°СЂС‚С‹
+;РІС…  - РЅРµС‚
+;РІС‹С… - РЅРµС‚
 
 MAP_SCROLL      LD DE,(INPUT_Y)
                 LD HL,(MAP_XY)
                 LD B,0
 
-;скролл влево
+;СЃРєСЂРѕР»Р» РІР»РµРІРѕ
                 LD A,(INPUT_KEYBUSE)
                 OR A
                 JR Z,MAP_SCROLL1
@@ -906,7 +906,7 @@ MAP_SCROLL2     LD A,H
                 OR A
                 JR Z,MAP_SCROLL5
 
-;проверка главгероя
+;РїСЂРѕРІРµСЂРєР° РіР»Р°РІРіРµСЂРѕСЏ
 
                 IF0 EDITOR
                   LD A,(DISCRIPTORS+XCRD)
@@ -914,7 +914,7 @@ MAP_SCROLL2     LD A,H
                   JR C,MAP_SCROLL4
                   CP 14
                   JR NC,MAP_SCROLL5
-                ENDIF 
+                ENDIF
 
 MAP_SCROLL4     DEC H
                 LD B,7
@@ -922,7 +922,7 @@ MAP_SCROLL4     DEC H
                 CALL REDRAW_ALL
                 JR MAP_SCROLL9
 
-;скролл вправо
+;СЃРєСЂРѕР»Р» РІРїСЂР°РІРѕ
 MAP_SCROLL5     LD A,(INPUT_KEYBUSE)
                 OR A
                 JR Z,MAP_SCROLL6
@@ -937,26 +937,26 @@ MAP_SCROLL7     LD A,H
 
                 IF0 EDITOR
                   CP 112
-                ELSE 
+                ELSE
                   CP 116
-                ENDIF 
+                ENDIF
                 JR NC,MAP_SCROLL9
 
-;проверка главгероя
+;РїСЂРѕРІРµСЂРєР° РіР»Р°РІРіРµСЂРѕСЏ
 
                 IF0 EDITOR
                   LD A,(DISCRIPTORS+XCRD)
                   SUB H
                   JR Z,MAP_SCROLL9
                   JR C,MAP_SCROLL9
-                ENDIF 
+                ENDIF
 
 MAP_SCROLL8     INC H
                 LD B,3
                 LD A,3,(MAP_SCRCNTR),A
                 CALL REDRAW_ALL
 
-;скролл вверх
+;СЃРєСЂРѕР»Р» РІРІРµСЂС…
 MAP_SCROLL9     LD A,(INPUT_KEYBUSE)
                 OR A
                 JR Z,MAP_SCROLL10
@@ -972,7 +972,7 @@ MAP_SCROLL11    LD A,L
                 JR Z,MAP_SCROLL16
 
 
-;проверка главгероя
+;РїСЂРѕРІРµСЂРєР° РіР»Р°РІРіРµСЂРѕСЏ
 
                 IF0 EDITOR
                   LD A,(DISCRIPTORS+YCRD)
@@ -980,7 +980,7 @@ MAP_SCROLL11    LD A,L
                   JR C,MAP_SCROLL13
                   CP 11
                   JR NC,MAP_SCROLL22
-                ENDIF 
+                ENDIF
 
 MAP_SCROLL13    DEC L
                 LD A,3,(MAP_SCRCNTR),A
@@ -997,7 +997,7 @@ MAP_SCROLL14    CP 3
 MAP_SCROLL15    LD B,8
                 JR MAP_SCROLL22
 
-;сколл вниз
+;СЃРєРѕР»Р» РІРЅРёР·
 MAP_SCROLL16    LD A,(INPUT_KEYBUSE)
                 OR A
                 JR Z,MAP_SCROLL17
@@ -1012,7 +1012,7 @@ MAP_SCROLL18    LD A,L
                 CP 112
                 JR NC,MAP_SCROLL22
 
-;проверка главгероя
+;РїСЂРѕРІРµСЂРєР° РіР»Р°РІРіРµСЂРѕСЏ
 
                 IF0 EDITOR
                   LD A,(DISCRIPTORS+YCRD)
@@ -1020,7 +1020,7 @@ MAP_SCROLL18    LD A,L
                   SUB L
                   JR Z,MAP_SCROLL22
                   JR C,MAP_SCROLL22
-                ENDIF 
+                ENDIF
 
 MAP_SCROLL19    INC L
                 LD A,3,(MAP_SCRCNTR),A
@@ -1044,21 +1044,21 @@ MAP_SCROLL22    XOR A
                 LD A,B
                 LD (CURSOR_TYPE),A
 MAP_SCROLL23    LD (MAP_XY),HL
-                RET 
+                RET
 MAP_SCRCNTR     DB 0
 
 
-;загрузка файла и его распаковка
-;(если упакован)
-;вх  - HL - адрес загрузки
-;      DE - указатель на имя файла
-;вых - нет
+;Р·Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р° Рё РµРіРѕ СЂР°СЃРїР°РєРѕРІРєР°
+;(РµСЃР»Рё СѓРїР°РєРѕРІР°РЅ)
+;РІС…  - HL - Р°РґСЂРµСЃ Р·Р°РіСЂСѓР·РєРё
+;      DE - СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РёРјСЏ С„Р°Р№Р»Р°
+;РІС‹С… - РЅРµС‚
 
-LOAD_FILE       EXA 
-                EXX 
+LOAD_FILE       EXA
+                EXX
                 PUSH AF,BC,DE,HL
-                EXA 
-                EXX 
+                EXA
+                EXX
                 PUSH AF,BC,DE,HL,IX,IY
 
                 PUSH HL
@@ -1079,17 +1079,17 @@ LOAD_FILE       EXA
                 CALL DEHRUST
 
                 POP  IY,IX,HL,DE,BC,AF
-                EXX 
-                EXA 
+                EXX
+                EXA
                 POP HL,DE,BC,AF
-                EXX 
-                EXA 
-                RET 
+                EXX
+                EXA
+                RET
 
 
-;проверка наличия файла на диске
-;вх  - DE - указатель на имя файла
-;вых - Z - файла нет, NZ - есть
+;РїСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ С„Р°Р№Р»Р° РЅР° РґРёСЃРєРµ
+;РІС…  - DE - СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РёРјСЏ С„Р°Р№Р»Р°
+;РІС‹С… - Z - С„Р°Р№Р»Р° РЅРµС‚, NZ - РµСЃС‚СЊ
 
 EXIST_FILE      PUSH BC,DE,HL,IX,IY
                 LD (EXIST_FILE1+1),A
@@ -1102,14 +1102,14 @@ EXIST_FILE      PUSH BC,DE,HL,IX,IY
                 CP #FF
 EXIST_FILE1     LD A,0
                 POP IY,IX,HL,DE,BC
-                RET 
+                RET
 
 
-;сохранение файла
-;вх  - HL - адрес файла
-;      BC - длинна файла
-;      DE - указатель на имя файла
-;вых - нет
+;СЃРѕС…СЂР°РЅРµРЅРёРµ С„Р°Р№Р»Р°
+;РІС…  - HL - Р°РґСЂРµСЃ С„Р°Р№Р»Р°
+;      BC - РґР»РёРЅРЅР° С„Р°Р№Р»Р°
+;      DE - СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РёРјСЏ С„Р°Р№Р»Р°
+;РІС‹С… - РЅРµС‚
 
 SAVE_FILE       PUSH AF,BC,DE,HL,IX,IY
                 PUSH BC,HL
@@ -1122,13 +1122,13 @@ SAVE_FILE       PUSH AF,BC,DE,HL,IX,IY
                 CP #FF
                 JR NZ,SAVE_FILE2
 
-;новый файл
+;РЅРѕРІС‹Р№ С„Р°Р№Р»
                 POP HL,DE
 SAVE_FILE1      LD C,#0B
                 CALL #3D13
                 JR SAVE_FILEE
 
-;перезапись файла
+;РїРµСЂРµР·Р°РїРёСЃСЊ С„Р°Р№Р»Р°
 SAVE_FILE2      LD C,#08
                 CALL #3D13
                 LD HL,SAVE_FILEB
@@ -1151,7 +1151,7 @@ SAVE_FILE2      LD C,#08
                 CALL #3D13
                 JR SAVE_FILEE
 
-;другой размер файла
+;РґСЂСѓРіРѕР№ СЂР°Р·РјРµСЂ С„Р°Р№Р»Р°
 SAVE_FILE3      PUSH DE,HL
                 LD C,#12
                 CALL #3D13
@@ -1159,24 +1159,24 @@ SAVE_FILE3      PUSH DE,HL
                 JR SAVE_FILE1
 
 SAVE_FILEE      POP  IY,IX,HL,DE,BC,AF
-                RET 
+                RET
 SAVE_FILEB      DS 16
 
 
-;сделать подготовленный экран видимым
+;СЃРґРµР»Р°С‚СЊ РїРѕРґРіРѕС‚РѕРІР»РµРЅРЅС‹Р№ СЌРєСЂР°РЅ РІРёРґРёРјС‹Рј
 
 SHOW_SCREEN     PUSH AF
                 LD A,#FF
                 LD (SCREEN_READY),A
-                EI 
-                HALT 
-                EI 
+                EI
+                HALT
+                EI
                 POP AF
-                RET 
+                RET
 
-;коорд. карты для центрования по HL
-;вх  - HL - текущие коорд.
-;вых - HL - новые коорд.
+;РєРѕРѕСЂРґ. РєР°СЂС‚С‹ РґР»СЏ С†РµРЅС‚СЂРѕРІР°РЅРёСЏ РїРѕ HL
+;РІС…  - HL - С‚РµРєСѓС‰РёРµ РєРѕРѕСЂРґ.
+;РІС‹С… - HL - РЅРѕРІС‹Рµ РєРѕРѕСЂРґ.
 
 CENTER_MAP      PUSH AF
                 LD A,H
@@ -1196,11 +1196,11 @@ CENTER_MAP      PUSH AF
                 LD A,112
                 LD L,A
                 POP AF
-                RET 
+                RET
 
-;пошаговое центрование карты
-;вх  - HL - координаты цели
-;вых - нет
+;РїРѕС€Р°РіРѕРІРѕРµ С†РµРЅС‚СЂРѕРІР°РЅРёРµ РєР°СЂС‚С‹
+;РІС…  - HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ С†РµР»Рё
+;РІС‹С… - РЅРµС‚
 
 CENTER_MOVE     PUSH AF,DE,HL
 
@@ -1223,25 +1223,25 @@ CENTER_MOVE3    INC E
 CENTER_MOVE4    LD (MAP_XY),DE
 
                 POP HL,DE,AF
-                RET 
+                RET
 
 
-;очистка прямоугольника и заполнение аттр
-;вх  - HL - координаты на экране
-;      BC - размеры
-;      A - значение аттрибута
-;вых - нет
+;РѕС‡РёСЃС‚РєР° РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР° Рё Р·Р°РїРѕР»РЅРµРЅРёРµ Р°С‚С‚СЂ
+;РІС…  - HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° СЌРєСЂР°РЅРµ
+;      BC - СЂР°Р·РјРµСЂС‹
+;      A - Р·РЅР°С‡РµРЅРёРµ Р°С‚С‚СЂРёР±СѓС‚Р°
+;РІС‹С… - РЅРµС‚
 
 CLEAR_RECT      PUSH AF,BC,DE,HL
 
-;очистка прямоугольника
+;РѕС‡РёСЃС‚РєР° РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєР°
                 PUSH AF,BC,HL
                 SCRADR HL
 
                 LD A,C
                 DUP 3
                 ADD A,A
-                EDUP 
+                EDUP
                 LD C,A
 
 CLEAR_RECT1     PUSH BC,HL
@@ -1253,7 +1253,7 @@ CLEAR_RECT2     LD (HL),0
                 DNZ C,CLEAR_RECT1
                 POP HL,BC,AF
 
-;заполнение аттрибутов
+;Р·Р°РїРѕР»РЅРµРЅРёРµ Р°С‚С‚СЂРёР±СѓС‚РѕРІ
 CLEAR_RECT_EXT  LD D,A
                 ATTRADR HL
 
@@ -1267,31 +1267,31 @@ CLEAR_RECT4     LD (HL),D
                 DNZ C,CLEAR_RECT3
 
                 POP HL,DE,BC,AF
-                RET 
+                RET
 
 
-;заливка аттрибутами области экрана
-;вх  - HL - координаты на экране
-;      BC - размеры
-;      A - значение аттрибута
-;вых - нет
+;Р·Р°Р»РёРІРєР° Р°С‚С‚СЂРёР±СѓС‚Р°РјРё РѕР±Р»Р°СЃС‚Рё СЌРєСЂР°РЅР°
+;РІС…  - HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° СЌРєСЂР°РЅРµ
+;      BC - СЂР°Р·РјРµСЂС‹
+;      A - Р·РЅР°С‡РµРЅРёРµ Р°С‚С‚СЂРёР±СѓС‚Р°
+;РІС‹С… - РЅРµС‚
 
 FILL_ATTR       PUSH AF,BC,DE,HL
                 JP CLEAR_RECT_EXT
 
 
-;вывод картинки на экран
-;вх  - H - коорд X (0..31)
-;      L - коорд Y (0..23)
-;      DE - адрес картинки
-;      BC - размеры в символах
-;      A - аттрибут фона
-;      (#00 - без аттрибутов)
-;      (#FF - аттрибуты свои)
+;РІС‹РІРѕРґ РєР°СЂС‚РёРЅРєРё РЅР° СЌРєСЂР°РЅ
+;РІС…  - H - РєРѕРѕСЂРґ X (0..31)
+;      L - РєРѕРѕСЂРґ Y (0..23)
+;      DE - Р°РґСЂРµСЃ РєР°СЂС‚РёРЅРєРё
+;      BC - СЂР°Р·РјРµСЂС‹ РІ СЃРёРјРІРѕР»Р°С…
+;      A - Р°С‚С‚СЂРёР±СѓС‚ С„РѕРЅР°
+;      (#00 - Р±РµР· Р°С‚С‚СЂРёР±СѓС‚РѕРІ)
+;      (#FF - Р°С‚С‚СЂРёР±СѓС‚С‹ СЃРІРѕРё)
 
 PUT_IMAGE       PUSH AF,BC,DE,HL
 
-;вывод картинки
+;РІС‹РІРѕРґ РєР°СЂС‚РёРЅРєРё
                 PUSH AF,BC,HL
                 SCRADR HL
                 LD A,C
@@ -1303,11 +1303,11 @@ PUT_IMAGE       PUSH AF,BC,DE,HL
                 IF0 EDITOR
 PUT_IMAGE1        PUSH BC,DE
                   LD B,0
-                  LDIR 
+                  LDIR
                   POP DE,BC
                   DOWN DE
                   DJNZ PUT_IMAGE1
-                ELSE 
+                ELSE
 PUT_IMAGE1        PUSH BC,DE
 PUT_IMAGE11       INC L
                   LD A,(HL)
@@ -1317,10 +1317,10 @@ PUT_IMAGE11       INC L
                   POP DE,BC
                   DOWN DE
                   DJNZ PUT_IMAGE1
-                ENDIF 
+                ENDIF
                 POP HL,BC,AF
 
-;проверка режима аттрибутов
+;РїСЂРѕРІРµСЂРєР° СЂРµР¶РёРјР° Р°С‚С‚СЂРёР±СѓС‚РѕРІ
                 OR A
                 JR Z,PUT_IMAGEE
                 CP #FF
@@ -1328,30 +1328,30 @@ PUT_IMAGE11       INC L
                 CALL FILL_ATTR
                 JR PUT_IMAGEE
 
-;вывод аттрибутов
+;РІС‹РІРѕРґ Р°С‚С‚СЂРёР±СѓС‚РѕРІ
 PUT_IMAGE2      ATTRADR HL
                 LD A,C,C,B,B,A
                 EX DE,HL
 PUT_IMAGE3      PUSH BC,DE
                 LD B,0
-                LDIR 
+                LDIR
                 POP DE,BC
                 ADDW DE,32
                 DJNZ PUT_IMAGE3
 
 PUT_IMAGEE      POP HL,DE,BC,AF
-                RET 
+                RET
 
 
-;распаковщик данных
+;СЂР°СЃРїР°РєРѕРІС‰РёРє РґР°РЅРЅС‹С…
 ;+--------------------+
 ;:Hrust Library v2.03 :
 ;: (C) Dmitry Pyankov :
 ;:   hrumer@mail.ru   :
 ;:      23.07.99      :
 ;+--------------------+
-;вх  - HL - источник
-;      DE - местоположение
+;РІС…  - HL - РёСЃС‚РѕС‡РЅРёРє
+;      DE - РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ
 
 DEHRUST         LD A,L
                 ADD A,8
@@ -1385,8 +1385,8 @@ DEHRUST         LD A,L
                 BIT 7,A
                 RET NZ
 
-                RRA 
-                EXA 
+                RRA
+                EXA
                 PUSH DE
                 LD C,(HL)
                 INC HL
@@ -1416,22 +1416,22 @@ DEHRUST         LD A,L
                 LD D,H
                 LD E,L
                 PUSH BC
-                LDDR 
+                LDDR
                 POP BC
 
                 EX DE,HL
-                EXA 
+                EXA
                 JR NC,DPCYES
                 POP DE
                 INC HL
-                LDIR 
-                RET 
+                LDIR
+                RET
 DPCYES
                 LD DE,7
                 ADD HL,DE
 
                 PUSH HL
-                EXX 
+                EXX
                 POP HL
                 POP DE
 
@@ -1442,16 +1442,16 @@ DPCYES
                 INC SP
                 DJNZ $-4
 
-                EXX 
+                EXX
                 LD DE,#1003
                 LD C,#80
 
 DPC1            LD A,(HL)
                 INC HL
-                EXX 
+                EXX
                 LD (DE),A
                 INC DE
-DPC0            EXX 
+DPC0            EXX
 DPC0A
                 SLA C
                 JR NZ,$+6
@@ -1468,7 +1468,7 @@ DPC2
                 LD C,(HL)
                 INC HL
                 RL C
-                RLA 
+                RLA
                 JR NC,DPC2
 
                 CP E;3
@@ -1482,10 +1482,10 @@ DPC3            ADD A,B
                 JR Z,DPC5;B<>1;B=4
                 ADC A,#FF
 DPC8A           CP 2
-DPC8            EXX 
+DPC8            EXX
                 LD C,A
                 LD H,#FF
-                EXX 
+                EXX
                 JR C,DPC9;B=1
 
                 JR Z,DPC12
@@ -1509,7 +1509,7 @@ DPC9B           SLA C
                 LD C,(HL)
                 INC HL
                 RL C
-                RLA 
+                RLA
                 DEC A
                 INC B
                 JR NZ,DPC9B
@@ -1518,27 +1518,27 @@ DPC9B           SLA C
                 LD A,(HL)
                 INC HL
 
-                EXX 
+                EXX
                 LD H,A
-                EXX 
+                EXX
 
 DPC12           LD A,(HL)
                 INC HL
-DPC11           EXX 
+DPC11           EXX
                 LD L,A
                 ADD HL,DE
-                LDIR 
+                LDIR
                 JR DPC0
 
 DPC5A2          ADD A,6
-                RLA 
+                RLA
                 LD B,A
 DPC5C           LD A,(HL)
                 INC HL
-                EXX 
+                EXX
                 LD (DE),A
                 INC DE
-                EXX 
+                EXX
                 DJNZ DPC5C
                 JR DPC0A
 
@@ -1559,9 +1559,9 @@ DPC5
                 OR A
                 JR Z,DPC6
 
-                EXX 
+                EXX
                 LD B,A
-                EXX 
+                EXX
                 LD A,(HL)
                 INC HL
                 JR DPC8
@@ -1575,22 +1575,19 @@ DPC10           SLA C
                 LD C,(HL)
                 INC HL
                 RL C
-                RLA 
+                RLA
                 JR NC,DPC10
                 DJNZ DPC9A2
                 JR DPC11
 
 DPC6            LD HL,#2758
-                EXX 
+                EXX
                 LD B,6
                 DEC SP
                 POP AF
                 LD (DE),A
                 INC DE
                 DJNZ $-4
-                RET 
+                RET
 
 DPCL            EQU $-DEHRUST
-
-
-

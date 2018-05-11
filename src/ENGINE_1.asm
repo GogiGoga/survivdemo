@@ -1,14 +1,14 @@
 ;++++++++++++++++ ENGINE_1.H +++++++++++++
-;движок игры
+;РґРІРёР¶РѕРє РёРіСЂС‹
 
                 MAIN "GAME.H",#C0
 
-;--------- расширение Ассемблера ---------
+;--------- СЂР°СЃС€РёСЂРµРЅРёРµ РђСЃСЃРµРјР±Р»РµСЂР° ---------
 ;(C) SaNcHeZ
 
-;сложить A и двухбайтный регистр
-;портит: A
-;пример: ADDA HL
+;СЃР»РѕР¶РёС‚СЊ A Рё РґРІСѓС…Р±Р°Р№С‚РЅС‹Р№ СЂРµРіРёСЃС‚СЂ
+;РїРѕСЂС‚РёС‚: A
+;РїСЂРёРјРµСЂ: ADDA HL
 
 MACRO           ADDA
                 ADD A,\N\C
@@ -16,11 +16,11 @@ MACRO           ADDA
                 LD A,\R\C
                 ADC A,0
                 LD \C,A
-ENDM 
+ENDM
 
-;сложить двухбайтный регистр и слово
-;портит: A
-;пример: ADDW HL,#C000
+;СЃР»РѕР¶РёС‚СЊ РґРІСѓС…Р±Р°Р№С‚РЅС‹Р№ СЂРµРіРёСЃС‚СЂ Рё СЃР»РѕРІРѕ
+;РїРѕСЂС‚РёС‚: A
+;РїСЂРёРјРµСЂ: ADDW HL,#C000
 
 MACRO           ADDW
                 LD A,\N\C
@@ -29,28 +29,28 @@ MACRO           ADDW
                 LD A,\R\C
                 ADC A,'\1
                 LD \C,A
-ENDM 
+ENDM
 
-;декремент регистра и переход если не 0
-;портит: нет
-;пример: DNZ C,label
+;РґРµРєСЂРµРјРµРЅС‚ СЂРµРіРёСЃС‚СЂР° Рё РїРµСЂРµС…РѕРґ РµСЃР»Рё РЅРµ 0
+;РїРѕСЂС‚РёС‚: РЅРµС‚
+;РїСЂРёРјРµСЂ: DNZ C,label
 
 MACRO           DNZ
                 DEC \0
                 JP NZ,\1
-ENDM 
+ENDM
 
 
-;-------------- переменные ---------------
-INPUT_Y         DB 80 ;коорд Y мышки
-INPUT_X         DB 8 ;коорд X мышки
-INPUT_OVER      DB 0 ;выход за пределы
-INPUT_KEY       DB 0 ;нажатие на кнопки
-INPUT_BUTTON    DB 0 ;кнопки мышки
-INPUT_ARROWTYPE DB 0 ;тип курсора
+;-------------- РїРµСЂРµРјРµРЅРЅС‹Рµ ---------------
+INPUT_Y         DB 80 ;РєРѕРѕСЂРґ Y РјС‹С€РєРё
+INPUT_X         DB 8 ;РєРѕРѕСЂРґ X РјС‹С€РєРё
+INPUT_OVER      DB 0 ;РІС‹С…РѕРґ Р·Р° РїСЂРµРґРµР»С‹
+INPUT_KEY       DB 0 ;РЅР°Р¶Р°С‚РёРµ РЅР° РєРЅРѕРїРєРё
+INPUT_BUTTON    DB 0 ;РєРЅРѕРїРєРё РјС‹С€РєРё
+INPUT_ARROWTYPE DB 0 ;С‚РёРї РєСѓСЂСЃРѕСЂР°
 INPUT_ARROWCENT DB 0 ;0-HOME,1-CENTER
-INPUT_KEYBSPD   DB 0 ;скорость для клав.
-INPUT_KEYBUSE   DB 0 ;признак исп. клав.
+INPUT_KEYBSPD   DB 0 ;СЃРєРѕСЂРѕСЃС‚СЊ РґР»СЏ РєР»Р°РІ.
+INPUT_KEYBUSE   DB 0 ;РїСЂРёР·РЅР°Рє РёСЃРї. РєР»Р°РІ.
 
 KEY_LEFT        DW #DF02
 KEY_RIGHT       DW #DF01
@@ -60,19 +60,19 @@ KEY_FIRE        DW #7F01
 KEY_CANCEL      DW #FB04
 
 
-;---------------- макросы ----------------
+;---------------- РјР°РєСЂРѕСЃС‹ ----------------
 
-;включить страницу памяти
+;РІРєР»СЋС‡РёС‚СЊ СЃС‚СЂР°РЅРёС†Сѓ РїР°РјСЏС‚Рё
 MACRO           RAMPAGE
                 IF0 \0
                   XOR A
-                ELSE 
+                ELSE
                   LD A,\0
-                ENDIF 
+                ENDIF
                 CALL RAM_SEL
-ENDM 
+ENDM
 
-;на одну строчку вниз
+;РЅР° РѕРґРЅСѓ СЃС‚СЂРѕС‡РєСѓ РІРЅРёР·
 MACRO           DOWN
                 INC \C
                 LD A,\C
@@ -88,9 +88,9 @@ MACRO           DOWN
                 LD A,\R\C
                 ADD A,8
                 LD \C,A
-                ENDM 
+                ENDM
 
-;на одну строчку вверх
+;РЅР° РѕРґРЅСѓ СЃС‚СЂРѕС‡РєСѓ РІРІРµСЂС…
 MACRO           UP
                 DEC \C
                 LD A,\C
@@ -107,14 +107,14 @@ MACRO           UP
                 LD A,\R\C
                 SUB 8
                 LD \C,A
-                ENDM 
+                ENDM
 
-;расчет адреса на экране в символах
+;СЂР°СЃС‡РµС‚ Р°РґСЂРµСЃР° РЅР° СЌРєСЂР°РЅРµ РІ СЃРёРјРІРѕР»Р°С…
 MACRO           SCRADR
                 LD A,\N\C
-                RRCA 
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
+                RRCA
                 AND #E0
                 OR \R\C
                 LD \C,A
@@ -125,21 +125,21 @@ MACRO           SCRADR
                 ADD A,\C
                 LD \C,\R\C
                 LD \C,A
-                ENDM 
+                ENDM
 
-;расчет адреса в аттрибутах в символах
+;СЂР°СЃС‡РµС‚ Р°РґСЂРµСЃР° РІ Р°С‚С‚СЂРёР±СѓС‚Р°С… РІ СЃРёРјРІРѕР»Р°С…
 MACRO           ATTRADR
                 LD A,\N\C
-                RRCA 
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
+                RRCA
                 AND #E0
                 OR \R\C
                 LD \C,A
                 LD A,\N\C
-                RRCA 
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
+                RRCA
                 AND #03
                 LD \C,A
                 LD A,(ACTIVE_SCREEN)
@@ -147,13 +147,13 @@ MACRO           ATTRADR
                 ADD A,\C
                 LD \C,\R\C
                 LD \C,A
-                ENDM 
+                ENDM
 
-;расчет э.адр. коорд Y в пикселях,портит C
+;СЂР°СЃС‡РµС‚ СЌ.Р°РґСЂ. РєРѕРѕСЂРґ Y РІ РїРёРєСЃРµР»СЏС…,РїРѕСЂС‚РёС‚ C
 MACRO           SCRADRPIX
                 LD A,\N\C
-                RLCA 
-                RLCA 
+                RLCA
+                RLCA
                 AND #E0
                 OR \R\C
                 LD \C,\N\C
@@ -162,23 +162,23 @@ MACRO           SCRADRPIX
                 AND 7
                 LD C,A
                 LD A,\C
-                RRCA 
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
+                RRCA
                 AND #18
                 OR C
                 LD \C,A
                 LD A,(ACTIVE_SCREEN)
                 ADD A,\C
                 LD \C,A
-                ENDM 
+                ENDM
 
-;вычисляем адрес на карте по координатам
-;пример использования - GETMAPADR HLC,
-;где HL - координаты, C - регистр портится
+;РІС‹С‡РёСЃР»СЏРµРј Р°РґСЂРµСЃ РЅР° РєР°СЂС‚Рµ РїРѕ РєРѕРѕСЂРґРёРЅР°С‚Р°Рј
+;РїСЂРёРјРµСЂ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ - GETMAPADR HLC,
+;РіРґРµ HL - РєРѕРѕСЂРґРёРЅР°С‚С‹, C - СЂРµРіРёСЃС‚СЂ РїРѕСЂС‚РёС‚СЃСЏ
 MACRO           GETMAPADR
                 LD A,\N\C
-                RRCA 
+                RRCA
                 LD \N\C,A
                 AND #80
                 ADD A,\R\C
@@ -187,20 +187,20 @@ MACRO           GETMAPADR
                 AND #3F
                 ADD A,'MAP
                 LD \R\C,A
-                ENDM 
+                ENDM
 
 ;-----------------------------------------
 
-;вывод спрайта на экран
-;вх  - H - коорд X (0..255)
-;      L - коорд Y (0..191)
-;      C - тип объекта
-;      A - D0-D5 номер спрайта
-;          D6 -  половина экрана (л/п)
+;РІС‹РІРѕРґ СЃРїСЂР°Р№С‚Р° РЅР° СЌРєСЂР°РЅ
+;РІС…  - H - РєРѕРѕСЂРґ X (0..255)
+;      L - РєРѕРѕСЂРґ Y (0..191)
+;      C - С‚РёРї РѕР±СЉРµРєС‚Р°
+;      A - D0-D5 РЅРѕРјРµСЂ СЃРїСЂР°Р№С‚Р°
+;          D6 -  РїРѕР»РѕРІРёРЅР° СЌРєСЂР°РЅР° (Р»/Рї)
 
-PUT_SPRITE      EXA 
+PUT_SPRITE      EXA
                 PUSH AF,BC,DE,HL
-                EXA 
+                EXA
                 PUSH AF,BC,DE,HL
 
                 LD (PUT_SPRHL+1),HL
@@ -217,7 +217,7 @@ PUT_SPRITE      EXA
                 LD H,(HL),L,A
                 LD (PUT_SPRSEL+1),HL
 
-;ищем страничку с нужным спрайтсетом
+;РёС‰РµРј СЃС‚СЂР°РЅРёС‡РєСѓ СЃ РЅСѓР¶РЅС‹Рј СЃРїСЂР°Р№С‚СЃРµС‚РѕРј
                 LD HL,SPRITE_TYPE
                 LD B,MAX_SPRSETS-1
 PUT_SPR1        LD A,(HL)
@@ -229,7 +229,7 @@ PUT_SPR2        INC HL
                 LD A,(HL)
                 CALL RAM_SEL
 
-;находим адрес спрайта, копируем в стек
+;РЅР°С…РѕРґРёРј Р°РґСЂРµСЃ СЃРїСЂР°Р№С‚Р°, РєРѕРїРёСЂСѓРµРј РІ СЃС‚РµРє
                 LD (PUT_SPRE+1),SP
                 LD A,D
                 AND #3F
@@ -242,9 +242,9 @@ PUT_SPR2        INC HL
                 LD E,(HL)
                 DEC L
                 PUSH DE
-                EDUP 
+                EDUP
 
-;обработка выхода за пределы экрана
+;РѕР±СЂР°Р±РѕС‚РєР° РІС‹С…РѕРґР° Р·Р° РїСЂРµРґРµР»С‹ СЌРєСЂР°РЅР°
                 XOR A
                 LD H,A,L,A
                 LD (PUT_SPRCL0),HL
@@ -260,17 +260,17 @@ PUT_SPRA        LD A,0
                 AND 64
                 JP NZ,PUT_SPR10
 
-;по горизонтали (левая половина экрана)
+;РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё (Р»РµРІР°СЏ РїРѕР»РѕРІРёРЅР° СЌРєСЂР°РЅР°)
                 LD A,D
                 IF0 EDITOR
                   CP 28
                   JR C,PUT_SPR5
-                ELSE 
+                ELSE
                   CP 20
                   JR C,PUT_SPR5
                   CP 28
                   JP C,PUT_SPRE
-                ENDIF 
+                ENDIF
                 ADD A,5
                 AND 7
                 LD B,A
@@ -295,17 +295,17 @@ PUT_SPR5        LD A,B,C,B
                 LD (PUT_SPRCL0),HL
                 JP PUT_SPR15
 
-;по горизонтали (правая половина экрана)
+;РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё (РїСЂР°РІР°СЏ РїРѕР»РѕРІРёРЅР° СЌРєСЂР°РЅР°)
 PUT_SPR10       LD A,D
                 IF0 EDITOR
                   CP 28
                   JR C,PUT_SPR11
-                ELSE 
+                ELSE
                   CP 24
                   JP NC,PUT_SPRE
                   CP 20
                   JR C,PUT_SPR11
-                ENDIF 
+                ENDIF
                 LD A,32
                 SUB D
                 AND 7
@@ -331,7 +331,7 @@ PUT_SPR12       LD C,B
                 JR Z,PUT_SPR15
                 LD (PUT_SPRCL4),A
 
-;по вертикали
+;РїРѕ РІРµСЂС‚РёРєР°Р»Рё
 PUT_SPR15       LD B,32
                 LD A,E
                 CP 160
@@ -356,7 +356,7 @@ PUT_SPR20       CP 225
                 ADD HL,SP
                 LD SP,HL
 
-;отмечаем область перерисовки карты
+;РѕС‚РјРµС‡Р°РµРј РѕР±Р»Р°СЃС‚СЊ РїРµСЂРµСЂРёСЃРѕРІРєРё РєР°СЂС‚С‹
 PUT_SPR25       PUSH BC,DE,HL
 
                 LD A,(PUT_SPRHL+2)
@@ -367,7 +367,7 @@ PUT_SPR25       PUSH BC,DE,HL
                 JR NZ,PUT_SPR26
                 DEC C
 
-;маска для перерисовки
+;РјР°СЃРєР° РґР»СЏ РїРµСЂРµСЂРёСЃРѕРІРєРё
 PUT_SPR26       LD A,C
                 DEC A
                 AND 6
@@ -386,11 +386,11 @@ PUT_SPR26       LD A,C
                 LD H,(HL)
                 LD L,A
 
-;кол-во перерисовываемых линий
+;РєРѕР»-РІРѕ РїРµСЂРµСЂРёСЃРѕРІС‹РІР°РµРјС‹С… Р»РёРЅРёР№
                 LD A,16
                 CP B
                 LD A,0
-                RLA 
+                RLA
                 LD B,A
                 LD A,E
                 AND 15
@@ -398,16 +398,16 @@ PUT_SPR26       LD A,C
                 INC B
                 INC B
 
-;накладываем маску на MAP_REDRAW
+;РЅР°РєР»Р°РґС‹РІР°РµРј РјР°СЃРєСѓ РЅР° MAP_REDRAW
                 LD A,E
-                RRCA 
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
+                RRCA
                 AND #1E
                 LD E,A
                 LD A,(ACTIVE_SCREEN)
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND 32
                 ADD A,E
                 LD DE,MAP_REDRAW
@@ -425,159 +425,159 @@ PUT_SPR27       LD A,(HL)
 
                 POP HL,DE,BC
 
-;вывод спрайта
+;РІС‹РІРѕРґ СЃРїСЂР°Р№С‚Р°
                 EX DE,HL
                 SCRADRPIX HL
                 RAMPAGE 7
                 LD A,B
 
-PUT_SPRLP       EXA 
+PUT_SPRLP       EXA
 PUT_SPRSEL      JP PUT_SPRSM0
 
-;смещение 0
+;СЃРјРµС‰РµРЅРёРµ 0
 PUT_SPRSM0      POP BC,DE
-                EXX 
+                EXX
                 POP BC,DE
                 LD HL,#00FF
-                EXX 
+                EXX
                 JP PUT_SPROUT
-;смещение 1
+;СЃРјРµС‰РµРЅРёРµ 1
 PUT_SPRSM1      POP BC,DE
-                EXX 
+                EXX
                 POP BC,DE
                 LD HL,#00FF
-                EXX 
-                SCF 
+                EXX
+                SCF
                 RR C,E
-                EXX 
+                EXX
                 RR C,E,L
-                EXX 
+                EXX
                 OR A
                 RR B,D
-                EXX 
+                EXX
                 RR B,D,H
-                EXX 
+                EXX
                 JP PUT_SPROUT
-;смещение 2
+;СЃРјРµС‰РµРЅРёРµ 2
 PUT_SPRSM2      POP BC,DE
-                EXX 
+                EXX
                 POP BC,DE
                 LD HL,#00FF
-                EXX 
-                SCF 
+                EXX
+                SCF
                 DUP 2
                 RR C,E
-                EXX 
+                EXX
                 RR C,E,L
-                EXX 
-                EDUP 
+                EXX
+                EDUP
                 OR A
                 DUP 2
                 RR B,D
-                EXX 
+                EXX
                 RR B,D,H
-                EXX 
-                EDUP 
+                EXX
+                EDUP
                 JP PUT_SPROUT
-;смещение 3
+;СЃРјРµС‰РµРЅРёРµ 3
 PUT_SPRSM3      POP BC,DE
-                EXX 
+                EXX
                 POP BC,DE
                 LD HL,#00FF
-                EXX 
-                SCF 
+                EXX
+                SCF
                 DUP 3
                 RR C,E
-                EXX 
+                EXX
                 RR C,E,L
-                EXX 
-                EDUP 
+                EXX
+                EDUP
                 OR A
                 DUP 3
                 RR B,D
-                EXX 
+                EXX
                 RR B,D,H
-                EXX 
-                EDUP 
+                EXX
+                EDUP
                 JP PUT_SPROUT
-;смещение 4
+;СЃРјРµС‰РµРЅРёРµ 4
 PUT_SPRSM4      POP BC,DE
-                EXX 
+                EXX
                 POP BC,DE
                 LD HL,#00FF
-                EXX 
-                SCF 
+                EXX
+                SCF
                 DUP 4
                 RR C,E
-                EXX 
+                EXX
                 RR C,E,L
-                EXX 
-                EDUP 
+                EXX
+                EDUP
                 OR A
                 DUP 4
                 RR B,D
-                EXX 
+                EXX
                 RR B,D,H
-                EXX 
-                EDUP 
+                EXX
+                EDUP
                 JP PUT_SPROUT
-;смещение 5
+;СЃРјРµС‰РµРЅРёРµ 5
 PUT_SPRSM5      LD BC,#00FF
                 POP DE
-                EXX 
+                EXX
                 POP BC,DE,HL
-                SCF 
+                SCF
                 DUP 3
                 RL L,E,C
-                EXX 
+                EXX
                 RL E,C
-                EXX 
-                EDUP 
+                EXX
+                EDUP
                 OR A
                 DUP 3
                 RL H,D,B
-                EXX 
+                EXX
                 RL D,B
-                EXX 
-                EDUP 
-                EXX 
+                EXX
+                EDUP
+                EXX
                 JP PUT_SPROUT
-;смещение 6
+;СЃРјРµС‰РµРЅРёРµ 6
 PUT_SPRSM6      LD BC,#00FF
                 POP DE
-                EXX 
+                EXX
                 POP BC,DE,HL
-                SCF 
+                SCF
                 DUP 2
                 RL L,E,C
-                EXX 
+                EXX
                 RL E,C
-                EXX 
-                EDUP 
+                EXX
+                EDUP
                 OR A
                 DUP 2
                 RL H,D,B
-                EXX 
+                EXX
                 RL D,B
-                EXX 
-                EDUP 
-                EXX 
+                EXX
+                EDUP
+                EXX
                 JP PUT_SPROUT
-;смещение 7
+;СЃРјРµС‰РµРЅРёРµ 7
 PUT_SPRSM7      LD BC,#00FF
                 POP DE
-                EXX 
+                EXX
                 POP BC,DE,HL
-                SCF 
+                SCF
                 RL L,E,C
-                EXX 
+                EXX
                 RL E,C
-                EXX 
+                EXX
                 OR A
                 RL H,D,B
-                EXX 
+                EXX
                 RL D,B
-;вывод линии
+;РІС‹РІРѕРґ Р»РёРЅРёРё
 PUT_SPROUT      LD A,(HL)
                 AND C
                 OR B
@@ -589,38 +589,38 @@ PUT_SPRCL0      LD (HL),A
 PUT_SPRCL1      LD (HL),A
                 INC L
                 LD A,(HL)
-                EXX 
+                EXX
                 AND C
                 OR B
-                EXX 
+                EXX
 PUT_SPRCL2      LD (HL),A
                 INC L
                 LD A,(HL)
-                EXX 
+                EXX
                 AND E
                 OR D
-                EXX 
+                EXX
 PUT_SPRCL3      LD (HL),A
                 INC L
                 LD A,(HL)
-                EXX 
+                EXX
                 AND L
                 OR H
-                EXX 
+                EXX
 PUT_SPRCL4      LD (HL),A
                 LD A,L
 PUT_SPRCLN      SUB 4
                 LD L,A
                 DOWN HL
-                EXA 
+                EXA
                 DNZ A,PUT_SPRLP
 
 PUT_SPRE        LD SP,0
                 POP HL,DE,BC,AF
-                EXA 
+                EXA
                 POP HL,DE,BC,AF
-                EXA 
-                RET 
+                EXA
+                RET
 
 PUT_SPRSADR     DW PUT_SPRSM0,PUT_SPRSM1
                 DW PUT_SPRSM2,PUT_SPRSM3
@@ -628,26 +628,26 @@ PUT_SPRSADR     DW PUT_SPRSM0,PUT_SPRSM1
                 DW PUT_SPRSM6,PUT_SPRSM7
 
 
-;полная перерисовка карты
-;вх  - нет
-;вых - нет
+;РїРѕР»РЅР°СЏ РїРµСЂРµСЂРёСЃРѕРІРєР° РєР°СЂС‚С‹
+;РІС…  - РЅРµС‚
+;РІС‹С… - РЅРµС‚
 
 REDRAW_ALL      PUSH BC,DE,HL
                 LD HL,MAP_REDRAW
                 LD DE,MAP_REDRAW+1
                 LD BC,63
                 LD (HL),255
-                LDIR 
+                LDIR
                 POP HL,DE,BC
-                RET 
+                RET
 
 
-;вывод карты на экран
-;вх  - HL - позиция на карте
+;РІС‹РІРѕРґ РєР°СЂС‚С‹ РЅР° СЌРєСЂР°РЅ
+;РІС…  - HL - РїРѕР·РёС†РёСЏ РЅР° РєР°СЂС‚Рµ
 
 MAP_DRAW        PUSH AF,BC,DE,HL
 
-;копируем фрагмент карты в буфер
+;РєРѕРїРёСЂСѓРµРј С„СЂР°РіРјРµРЅС‚ РєР°СЂС‚С‹ РІ Р±СѓС„РµСЂ
                 RAMPAGE 0
                 GETMAPADR HLC
                 LD DE,MAP_BUFFER
@@ -655,19 +655,19 @@ MAP_DRAW        PUSH AF,BC,DE,HL
 
                 IF0 EDITOR
 MAP_DRW1          DUP 16
-                  LDI 
-                  EDUP 
+                  LDI
+                  EDUP
                   LD BC,128-16
                   ADD HL,BC
                   DNZ A,MAP_DRW1
-                ELSE 
+                ELSE
 MAP_DRW1          DUP 12
-                  LDI 
-                  EDUP 
+                  LDI
+                  EDUP
                   LD BC,128-12
                   ADD HL,BC
                   DNZ A,MAP_DRW1
-                ENDIF 
+                ENDIF
 
                 RAMPAGE 7
                 LD A,(ACTIVE_SCREEN)
@@ -678,7 +678,7 @@ MAP_DRW1          DUP 12
                 LD H,A
                 LD (MAP_DRW9+1),HL
 
-;режим вывода карты
+;СЂРµР¶РёРј РІС‹РІРѕРґР° РєР°СЂС‚С‹
 
                 IFN EDITOR
                   LD HL,MAP_DRW5
@@ -687,13 +687,13 @@ MAP_DRW1          DUP 12
                   JR Z,$+5
                   LD HL,MAP_DRW4
                   LD (MAP_DRW3+1),HL
-                ENDIF 
+                ENDIF
 
-                EXX 
+                EXX
                 LD DE,MAP_BUFFER
                 LD A,(ACTIVE_SCREEN)
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND 32
                 LD HL,MAP_REDRAW
                 ADDA HL
@@ -701,15 +701,15 @@ MAP_DRW1          DUP 12
                 INC L
                 LD C,(HL)
                 INC L
-                EXX 
+                EXX
 
                 IF0 EDITOR
                   LD B,1
                   LD C,14
                   CALL MAP_DRW3
-                  EXX 
+                  EXX
                   INC E,E
-                  EXX 
+                  EXX
                   LD A,64
                   LD (MAP_DRW8+1),A
                   LD (MAP_DRW9+1),A
@@ -722,18 +722,18 @@ MAP_DRW1          DUP 12
                   LD A,(MAP_DRAWTM)
                   ADD A,B
                   LD (MAP_DRAWTM),A
-                ELSE 
+                ELSE
                   LD B,12
                   CALL MAP_DRW2
 
                   LD A,(MAP_DRAWTM)
                   INC A
                   LD (MAP_DRAWTM),A
-                ENDIF 
+                ENDIF
 
                 LD A,(ACTIVE_SCREEN)
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND 32
                 LD HL,MAP_REDRAW
                 ADDA HL
@@ -741,25 +741,25 @@ MAP_DRW1          DUP 12
                 INC DE
                 LD BC,31
                 LD (HL),0
-                LDIR 
+                LDIR
 
                 POP HL,DE,BC,AF
-                RET 
+                RET
 
-;подпрограмма вывода массива тайлов
+;РїРѕРґРїСЂРѕРіСЂР°РјРјР° РІС‹РІРѕРґР° РјР°СЃСЃРёРІР° С‚Р°Р№Р»РѕРІ
 
-;расчет адреса спец-тайлов
+;СЂР°СЃС‡РµС‚ Р°РґСЂРµСЃР° СЃРїРµС†-С‚Р°Р№Р»РѕРІ
                 IF0 EDITOR
 MAP_DRW2          LD C,16
 
-;проверка на пустую строку
-                  EXX 
+;РїСЂРѕРІРµСЂРєР° РЅР° РїСѓСЃС‚СѓСЋ СЃС‚СЂРѕРєСѓ
+                  EXX
                   LD A,B
                   OR C
-                  EXX 
+                  EXX
                   JP NZ,MAP_DRW3
 
-                  EXX 
+                  EXX
                   PUSH BC,DE,HL
                   EX DE,HL
                   LD BC,#030E
@@ -772,16 +772,16 @@ MAP_DRW2          LD C,16
                   JP Z,MAP_DRW21
                   CP C
                   JP Z,MAP_DRW21
-                  EDUP 
+                  EDUP
 MAP_DRW21         POP HL,DE,BC
-                  EXX 
+                  EXX
                   JP Z,MAP_DRW3
 
-                  EXX 
+                  EXX
                   LD A,E
                   ADD A,16
                   LD E,A
-                  EXX 
+                  EXX
                   LD HL,MAP_DRW9+1
                   LD A,(HL)
                   ADD A,64
@@ -801,22 +801,22 @@ MAP_DRW21         POP HL,DE,BC
                   LD (HL),A
                   JP MAP_DRW13
 MAP_DRW3
-                ELSE 
+                ELSE
 MAP_DRW2          LD C,12
 MAP_DRW3          JP 0
-MAP_DRW4          EXX 
+MAP_DRW4          EXX
                   LD A,(DE)
                   INC E
-                  EXX 
+                  EXX
                   LD E,A
                   LD D,'TILE_TYPE
                   LD A,(DE)
-                  RLCA 
-                  RLCA 
+                  RLCA
+                  RLCA
                   LD E,A
-                  RLCA 
-                  RLCA 
-                  RLCA 
+                  RLCA
+                  RLCA
+                  RLCA
                   LD L,A
                   AND #1F
                   ADD A,'TRACE_TAB
@@ -832,13 +832,13 @@ MAP_DRW4          EXX
                   LD E,A
                   ADD HL,DE
                   JP MAP_DRW7
-                ENDIF 
+                ENDIF
 
-;расчет адреса тайла
-MAP_DRW5        EXX 
+;СЂР°СЃС‡РµС‚ Р°РґСЂРµСЃР° С‚Р°Р№Р»Р°
+MAP_DRW5        EXX
                 LD A,(DE)
                 INC E
-                EXX 
+                EXX
                 LD H,'TILE_TYPE
                 LD L,A
                 LD A,(HL)
@@ -847,30 +847,30 @@ MAP_DRW5        EXX
                 CP 14
                 JP NZ,MAP_DRW52
 
-;анимированные тайлы
+;Р°РЅРёРјРёСЂРѕРІР°РЅРЅС‹Рµ С‚Р°Р№Р»С‹
 MAP_DRW51       LD A,(MAP_DRAWTM)
-                RRCA 
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
+                RRCA
                 AND 3
                 ADD A,L
                 LD L,A
-                EXX 
+                EXX
                 RL C,B
-                EXX 
+                EXX
                 JP MAP_DRW6
 
-MAP_DRW52       EXX 
+MAP_DRW52       EXX
                 RL C,B
-                EXX 
+                EXX
                 JP NC,MAP_DRW11
 MAP_DRW6        LD A,L
-                RLCA 
-                RLCA 
+                RLCA
+                RLCA
                 LD E,A
-                RLCA 
-                RLCA 
-                RLCA 
+                RLCA
+                RLCA
+                RLCA
                 LD L,A
                 AND #1F
                 ADD A,'TILE_SPRITE+1
@@ -894,7 +894,7 @@ MAP_DRW7        DEC HL
                 LD (MAP_DRW10+1),SP
                 LD SP,HL
 
-;вывод тайла
+;РІС‹РІРѕРґ С‚Р°Р№Р»Р°
 MAP_DRW8        LD HL,0
                 DUP 4
                 POP DE
@@ -907,7 +907,7 @@ MAP_DRW8        LD HL,0
                 DEC L
                 LD (HL),E
                 INC H
-                EDUP 
+                EDUP
                 LD A,H
                 SUB 8
                 LD H,A
@@ -925,9 +925,9 @@ MAP_DRW8        LD HL,0
                 DEC L
                 LD (HL),E
                 INC H
-                EDUP 
+                EDUP
 
-;аттрибуты тайла
+;Р°С‚С‚СЂРёР±СѓС‚С‹ С‚Р°Р№Р»Р°
 MAP_DRW9        LD HL,0
                 POP DE
                 LD (HL),E
@@ -951,9 +951,9 @@ MAP_DRW11       LD HL,MAP_DRW9+1
 
                 IF0 EDITOR
                   ADD A,64-32
-                ELSE 
+                ELSE
                   ADD A,64-24
-                ENDIF 
+                ENDIF
 
                 LD (HL),A
                 JP NC,MAP_DRW12
@@ -965,59 +965,59 @@ MAP_DRW12       LD HL,(MAP_DRW9+1)
 
                 IF0 EDITOR
                   LD DE,64-32
-                ELSE 
+                ELSE
                   LD DE,64-24
-                ENDIF 
+                ENDIF
 
                 ADD HL,DE
                 LD (MAP_DRW9+1),HL
 
-MAP_DRW13       EXX 
+MAP_DRW13       EXX
                 LD B,(HL)
                 INC L
                 LD C,(HL)
                 INC L
-                EXX 
+                EXX
 
                 DNZ B,MAP_DRW2
-                RET 
+                RET
 MAP_DRAWTM      DB 0
 MAP_DRAWMODE    DB 0
 
 
-;деление H/L=B (C - остаток)
+;РґРµР»РµРЅРёРµ H/L=B (C - РѕСЃС‚Р°С‚РѕРє)
 DIV_BYTE        PUSH AF,DE,HL
                 LD BC,#0800
                 LD D,0
 DIV_BYTE_1      RL H
                 LD A,C
-                RLA 
+                RLA
                 SUB L
                 JR NC,DIV_BYTE_2
                 ADD A,L
 DIV_BYTE_2      LD C,A
-                CCF 
+                CCF
                 RL D
                 DJNZ DIV_BYTE_1
                 LD B,D
                 POP HL,DE,AF
-                RET 
+                RET
 
-;деление HL/C=HL
+;РґРµР»РµРЅРёРµ HL/C=HL
 DIV_WORD        PUSH AF
                 XOR A
                 DUP 16
                 ADD HL,HL
-                RLA 
+                RLA
                 CP C
                 JR C,$+4
                 SUB C
                 INC L
-                EDUP 
+                EDUP
                 POP AF
-                RET 
+                RET
 
-;случайное число в A
+;СЃР»СѓС‡Р°Р№РЅРѕРµ С‡РёСЃР»Рѕ РІ A
 RND             PUSH BC
                 LD A,R
 RND_1           LD B,0
@@ -1029,13 +1029,13 @@ RND_1           LD B,0
                 ADD A,7
                 LD (RND_1+1),A
                 POP BC
-                RET 
+                RET
 
-;печать символа 6х8 (через XOR)
-;вх  - HL - адрес на экране
-;      C - смещение (0,2,4,6)
-;      A - код символа
-;вых - нет
+;РїРµС‡Р°С‚СЊ СЃРёРјРІРѕР»Р° 6С…8 (С‡РµСЂРµР· XOR)
+;РІС…  - HL - Р°РґСЂРµСЃ РЅР° СЌРєСЂР°РЅРµ
+;      C - СЃРјРµС‰РµРЅРёРµ (0,2,4,6)
+;      A - РєРѕРґ СЃРёРјРІРѕР»Р°
+;РІС‹С… - РЅРµС‚
 
 PRINT_SYM       PUSH AF,BC,DE,HL
 
@@ -1049,7 +1049,7 @@ PRINT_SYM       PUSH AF,BC,DE,HL
                 LD E,(HL)
                 DEC H
                 PUSH DE
-                EDUP 
+                EDUP
                 LD D,(HL)
                 DEC H
                 LD E,(HL)
@@ -1061,14 +1061,14 @@ PRINT_SYMC      LD HL,0
 
                 DUP 4
                 POP DE
-;смещение E
+;СЃРјРµС‰РµРЅРёРµ E
                 XOR A
                 DEC C
                 JR Z,$+8
                 RR E
-                RRA 
+                RRA
                 JP $-6
-;вывод E
+;РІС‹РІРѕРґ E
                 XOR (HL)
                 LD (HL),A
                 DEC L
@@ -1076,15 +1076,15 @@ PRINT_SYMC      LD HL,0
                 XOR E
                 LD (HL),A
                 INC H,L
-;смещение D
+;СЃРјРµС‰РµРЅРёРµ D
                 LD C,B
                 XOR A
                 DEC C
                 JR Z,$+8
                 RR D
-                RRA 
+                RRA
                 JP $-6
-;вывод D
+;РІС‹РІРѕРґ D
                 XOR (HL)
                 LD (HL),A
                 DEC L
@@ -1093,15 +1093,15 @@ PRINT_SYMC      LD HL,0
                 LD (HL),A
                 INC H,L
                 LD C,B
-                EDUP 
+                EDUP
 
 PRINT_SYME      POP HL,DE,BC,AF
-                RET 
+                RET
 
-;печать строки
-;вх  - HL - адрес на экране
-;      DE - адрес строки (#00 - конец)
-;вых - DE - адрес следующей строки
+;РїРµС‡Р°С‚СЊ СЃС‚СЂРѕРєРё
+;РІС…  - HL - Р°РґСЂРµСЃ РЅР° СЌРєСЂР°РЅРµ
+;      DE - Р°РґСЂРµСЃ СЃС‚СЂРѕРєРё (#00 - РєРѕРЅРµС†)
+;РІС‹С… - DE - Р°РґСЂРµСЃ СЃР»РµРґСѓСЋС‰РµР№ СЃС‚СЂРѕРєРё
 
 PRINT_STR       PUSH AF,BC,HL
 
@@ -1121,11 +1121,11 @@ PRINT_STR1      LD A,(DE)
                 JP PRINT_STR1
 
 PRINT_STRE      POP HL,BC,AF
-                RET 
+                RET
 
-;печать текста
-;вх  - HL - адрес текста (#FF - конец)
-;вых - нет
+;РїРµС‡Р°С‚СЊ С‚РµРєСЃС‚Р°
+;РІС…  - HL - Р°РґСЂРµСЃ С‚РµРєСЃС‚Р° (#FF - РєРѕРЅРµС†)
+;РІС‹С… - РЅРµС‚
 
 PRINT_TEXT      PUSH AF,BC,DE,HL
                 EX DE,HL
@@ -1141,17 +1141,17 @@ PRINT_TEXT1     EX DE,HL
                 CP #FF
                 JR NZ,PRINT_TEXT1
                 POP HL,DE,BC,AF
-                RET 
+                RET
 
-;печать шестнадцатиричного числа
-;HL - координаты в символах
-;A - число
+;РїРµС‡Р°С‚СЊ С€РµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅРѕРіРѕ С‡РёСЃР»Р°
+;HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ РІ СЃРёРјРІРѕР»Р°С…
+;A - С‡РёСЃР»Рѕ
 
 PRINT_HEX       PUSH AF,DE,HL
                 LD D,A
                 DUP 4
-                RRCA 
-                EDUP 
+                RRCA
+                EDUP
                 AND #0F
                 ADD A,#30
                 CP #3A
@@ -1169,20 +1169,20 @@ PRINT_HEX       PUSH AF,DE,HL
                 LD DE,PRINT_HEXB
                 CALL PRINT_STR
                 POP HL,DE,AF
-                RET 
+                RET
 PRINT_HEXB      DB 0,0,0
 
 
-;вывод рамки на экран
-;вх  - HL - координаты на экране
-;      BC - размеры рамки
-;      A - #FF - непрерывная
-;          #00 - пунктирная
-;вых - нет
+;РІС‹РІРѕРґ СЂР°РјРєРё РЅР° СЌРєСЂР°РЅ
+;РІС…  - HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° СЌРєСЂР°РЅРµ
+;      BC - СЂР°Р·РјРµСЂС‹ СЂР°РјРєРё
+;      A - #FF - РЅРµРїСЂРµСЂС‹РІРЅР°СЏ
+;          #00 - РїСѓРЅРєС‚РёСЂРЅР°СЏ
+;РІС‹С… - РЅРµС‚
 
 DRW_FRAME       PUSH AF,BC,DE,HL
 
-;настрайка рамки
+;РЅР°СЃС‚СЂР°Р№РєР° СЂР°РјРєРё
                 LD D,A
                 LD A,#CC
                 OR D
@@ -1206,7 +1206,7 @@ DRW_FRAME       PUSH AF,BC,DE,HL
                 SUB 2
                 LD C,A
 
-;верхняя сторона
+;РІРµСЂС…РЅСЏСЏ СЃС‚РѕСЂРѕРЅР°
                 PUSH BC,HL
 DRW_FRAME1      LD A,(HL)
 DRW_FRAME2      XOR #FF;#CC
@@ -1215,14 +1215,14 @@ DRW_FRAME2      XOR #FF;#CC
                 DJNZ DRW_FRAME1
                 POP HL,BC
 
-;левая сторона
+;Р»РµРІР°СЏ СЃС‚РѕСЂРѕРЅР°
                 PUSH HL,BC
                 INC H
                 PUSH BC
                 LD B,C
 DRW_FRAME3      LD A,B
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND #80
 DRW_FRAME5      OR #80
                 XOR (HL)
@@ -1233,7 +1233,7 @@ DRW_FRAME5      OR #80
                 DOWN HL
                 POP BC
 
-;нижняя сторона
+;РЅРёР¶РЅСЏСЏ СЃС‚РѕСЂРѕРЅР°
                 DEC H
                 LD A,L
                 SUB 32
@@ -1250,7 +1250,7 @@ DRW_FRAME9      XOR #FF;#33
                 DJNZ DRW_FRAME8
                 POP BC,HL
 
-;правая сторона
+;РїСЂР°РІР°СЏ СЃС‚РѕСЂРѕРЅР°
                 LD A,L
                 ADD A,B
                 DEC A
@@ -1258,7 +1258,7 @@ DRW_FRAME9      XOR #FF;#33
                 INC H
                 LD B,C
 DRW_FRAME11     LD A,B
-                RRCA 
+                RRCA
                 AND #01
 DRW_FRAME12     OR #01
                 XOR (HL)
@@ -1267,10 +1267,10 @@ DRW_FRAME12     OR #01
                 DJNZ DRW_FRAME11
 
                 POP HL,DE,BC,AF
-                RET 
+                RET
 
-;драйвер памяти
-;A - номер станицы памяти
+;РґСЂР°Р№РІРµСЂ РїР°РјСЏС‚Рё
+;A - РЅРѕРјРµСЂ СЃС‚Р°РЅРёС†С‹ РїР°РјСЏС‚Рё
 RAM_SEL         PUSH AF,BC
                 AND 7
                 LD B,A
@@ -1281,19 +1281,19 @@ RAM_SEL         PUSH AF,BC
                 LD BC,#7FFD
                 OUT (C),A
                 POP BC,AF
-                RET 
+                RET
 RAM_SAVE        DB #10
 
-;сделать видимым активный экран и обменять
+;СЃРґРµР»Р°С‚СЊ РІРёРґРёРјС‹Рј Р°РєС‚РёРІРЅС‹Р№ СЌРєСЂР°РЅ Рё РѕР±РјРµРЅСЏС‚СЊ
 CHANGE_SCREEN   PUSH AF,BC
                 LD A,(ACTIVE_SCREEN)
                 XOR #80
                 LD (ACTIVE_SCREEN),A
                 XOR #80
-                RRCA 
-                RRCA 
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
+                RRCA
+                RRCA
                 AND #08
                 LD B,A
                 LD A,(RAM_SAVE)
@@ -1303,7 +1303,4 @@ CHANGE_SCREEN   PUSH AF,BC
                 LD BC,#7FFD
                 OUT (C),A
                 POP BC,AF
-                RET 
-
-
-
+                RET

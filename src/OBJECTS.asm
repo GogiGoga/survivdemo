@@ -1,16 +1,16 @@
 ;++++++++++++++++ OBJECTS.H ++++++++++++++
-;подпрограммы для работы с объектами
+;РїРѕРґРїСЂРѕРіСЂР°РјРјС‹ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ РѕР±СЉРµРєС‚Р°РјРё
 
                 MAIN "GAME.H",#C0
 
-;найти описатель объекта по номеру
-;вх  - A - номер
-;вых - IY - описатель
+;РЅР°Р№С‚Рё РѕРїРёСЃР°С‚РµР»СЊ РѕР±СЉРµРєС‚Р° РїРѕ РЅРѕРјРµСЂСѓ
+;РІС…  - A - РЅРѕРјРµСЂ
+;РІС‹С… - IY - РѕРїРёСЃР°С‚РµР»СЊ
 
 GET_DISCRIPTOR  PUSH AF,BC,HL
-                RRCA 
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
+                RRCA
                 LD B,A
                 AND #1F
                 ADD A,'DISCRIPTORS
@@ -21,14 +21,14 @@ GET_DISCRIPTOR  PUSH AF,BC,HL
                 PUSH HL
                 POP IY
                 POP HL,BC,AF
-                RET 
+                RET
 
 
-;проверить направление на объект
-;вх  - HL - координаты на карте
-;      A - направление
-;вых - NZ - объект ненайден, Z - найден
-;      IY - описатель найденого объекта
+;РїСЂРѕРІРµСЂРёС‚СЊ РЅР°РїСЂР°РІР»РµРЅРёРµ РЅР° РѕР±СЉРµРєС‚
+;РІС…  - HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° РєР°СЂС‚Рµ
+;      A - РЅР°РїСЂР°РІР»РµРЅРёРµ
+;РІС‹С… - NZ - РѕР±СЉРµРєС‚ РЅРµРЅР°Р№РґРµРЅ, Z - РЅР°Р№РґРµРЅ
+;      IY - РѕРїРёСЃР°С‚РµР»СЊ РЅР°Р№РґРµРЅРѕРіРѕ РѕР±СЉРµРєС‚Р°
 
 SEACH_DIRECT    PUSH BC,DE,HL
                 LD C,A
@@ -54,13 +54,13 @@ SEACH_DIR2      ADD IY,DE
                 CP B
 SEACH_DIRE      LD A,C
                 POP HL,DE,BC
-                RET 
+                RET
 
 
-;проверить координаты на объект
-;вх  - HL - координаты на карте
-;вых - NZ - объект ненайден, Z - найден
-;      IY - описатель найденого объекта
+;РїСЂРѕРІРµСЂРёС‚СЊ РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° РѕР±СЉРµРєС‚
+;РІС…  - HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° РєР°СЂС‚Рµ
+;РІС‹С… - NZ - РѕР±СЉРµРєС‚ РЅРµРЅР°Р№РґРµРЅ, Z - РЅР°Р№РґРµРЅ
+;      IY - РѕРїРёСЃР°С‚РµР»СЊ РЅР°Р№РґРµРЅРѕРіРѕ РѕР±СЉРµРєС‚Р°
 
 SEARCH_CRD      PUSH BC,DE,HL
 
@@ -89,12 +89,12 @@ SEARCH_CRD2     INC L
                 LD A,(HL);        LIFE
                 OR A
                 JR Z,SEARCH_CRD3
-;нашли объект
+;РЅР°С€Р»Рё РѕР±СЉРµРєС‚
                 POP IY
                 XOR A
                 JP SEARCH_CRDE
 
-;продолжение поиска
+;РїСЂРѕРґРѕР»Р¶РµРЅРёРµ РїРѕРёСЃРєР°
 SEARCH_CRD3     POP HL
                 LD A,L
                 ADD A,DISCR_LEN
@@ -103,18 +103,18 @@ SEARCH_CRD3     POP HL
                 ADC A,0
                 LD H,A
                 DJNZ SEARCH_CRD1
-;ненашли объект
+;РЅРµРЅР°С€Р»Рё РѕР±СЉРµРєС‚
                 CP B
 
 SEARCH_CRDE     LD A,0
                 POP HL,DE,BC
-                RET 
+                RET
 
 
-;найти направление до цели
-;вх  - HL - текущие координаты
-;      DE - координаты цели
-;вых - A - направление
+;РЅР°Р№С‚Рё РЅР°РїСЂР°РІР»РµРЅРёРµ РґРѕ С†РµР»Рё
+;РІС…  - HL - С‚РµРєСѓС‰РёРµ РєРѕРѕСЂРґРёРЅР°С‚С‹
+;      DE - РєРѕРѕСЂРґРёРЅР°С‚С‹ С†РµР»Рё
+;РІС‹С… - A - РЅР°РїСЂР°РІР»РµРЅРёРµ
 
 FIND_DIRECT     LD A,L
                 CP E
@@ -124,10 +124,10 @@ FIND_DIRECT     LD A,L
                 CP D
                 JR NZ,FIND_DIR1
                 XOR A
-                RET 
+                RET
 FIND_DIR1       JR NC,FIND_DIR5
 
-;правая верхняя четверть
+;РїСЂР°РІР°СЏ РІРµСЂС…РЅСЏСЏ С‡РµС‚РІРµСЂС‚СЊ
                 PUSH BC,HL
                 LD A,D
                 SUB H
@@ -143,19 +143,19 @@ FIND_DIR1       JR NC,FIND_DIR5
                 CP 2
                 JR NC,FIND_DIR2
                 XOR A
-                RET 
+                RET
 FIND_DIR2       CP 4
                 JR NC,FIND_DIR3
                 LD A,1
-                RET 
+                RET
 FIND_DIR3       CP 8
                 JR C,FIND_DIR4
                 LD A,2
-                RET 
+                RET
 FIND_DIR4       LD A,1
-                RET 
+                RET
 
-;левая верхняя четверть
+;Р»РµРІР°СЏ РІРµСЂС…РЅСЏСЏ С‡РµС‚РІРµСЂС‚СЊ
 FIND_DIR5       PUSH BC,HL
                 LD A,H
                 SUB D
@@ -171,26 +171,26 @@ FIND_DIR5       PUSH BC,HL
                 CP 2
                 JR NC,FIND_DIR6
                 XOR A
-                RET 
+                RET
 FIND_DIR6       CP 4
                 JR NC,FIND_DIR7
                 LD A,7
-                RET 
+                RET
 FIND_DIR7       CP 8
                 JR C,FIND_DIR8
                 LD A,6
-                RET 
+                RET
 FIND_DIR8       LD A,7
-                RET 
+                RET
 
 FIND_DIR9       LD A,H
                 CP D
                 JR NZ,FIND_DIR10
                 LD A,4
-                RET 
+                RET
 FIND_DIR10      JR NC,FIND_DIR14
 
-;правая нижняя четверть
+;РїСЂР°РІР°СЏ РЅРёР¶РЅСЏСЏ С‡РµС‚РІРµСЂС‚СЊ
                 PUSH BC,HL
                 LD A,D
                 SUB H
@@ -206,19 +206,19 @@ FIND_DIR10      JR NC,FIND_DIR14
                 CP 2
                 JR NC,FIND_DIR11
                 LD A,4
-                RET 
+                RET
 FIND_DIR11      CP 4
                 JR NC,FIND_DIR12
                 LD A,3
-                RET 
+                RET
 FIND_DIR12      CP 8
                 JR C,FIND_DIR13
                 LD A,2
-                RET 
+                RET
 FIND_DIR13      LD A,3
-                RET 
+                RET
 
-;левая нижняя четверть
+;Р»РµРІР°СЏ РЅРёР¶РЅСЏСЏ С‡РµС‚РІРµСЂС‚СЊ
 FIND_DIR14      PUSH BC,HL
                 LD A,H
                 SUB D
@@ -234,45 +234,45 @@ FIND_DIR14      PUSH BC,HL
                 CP 2
                 JR NC,FIND_DIR15
                 LD A,4
-                RET 
+                RET
 FIND_DIR15      CP 4
                 JR NC,FIND_DIR16
                 LD A,5
-                RET 
+                RET
 FIND_DIR16      CP 8
                 JR C,FIND_DIR17
                 LD A,6
-                RET 
+                RET
 FIND_DIR17      LD A,5
-                RET 
+                RET
 
 
 FIND_DIR18      LD A,H
                 CP D
                 JR NC,FIND_DIR19
                 LD A,2
-                RET 
+                RET
 FIND_DIR19      LD A,6
-                RET 
+                RET
 
 
-;проверить проходимость по направлению
-;вх  - HL - начальные координаты
-;      A - направление
-;вых - Z - можно пройти, NZ - нельзя
+;РїСЂРѕРІРµСЂРёС‚СЊ РїСЂРѕС…РѕРґРёРјРѕСЃС‚СЊ РїРѕ РЅР°РїСЂР°РІР»РµРЅРёСЋ
+;РІС…  - HL - РЅР°С‡Р°Р»СЊРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
+;      A - РЅР°РїСЂР°РІР»РµРЅРёРµ
+;РІС‹С… - Z - РјРѕР¶РЅРѕ РїСЂРѕР№С‚Рё, NZ - РЅРµР»СЊР·СЏ
 
 TEST_DIRECT     PUSH BC,DE,HL
 
                 LD (TEST_DIRE+1),A
-                RLCA 
-                RLCA 
-                RLCA 
+                RLCA
+                RLCA
+                RLCA
                 OR #47
                 LD (TEST_DIROUT+1),A
                 LD (TEST_DIRIN+1),A
                 LD (TEST_DIRXY+1),HL
 
-;проверка на выход из тайла
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ РёР· С‚Р°Р№Р»Р°
                 GETMAPADR HLC
                 LD B,2
 TEST_DIR1       LD D,'TILE_TYPE
@@ -286,7 +286,7 @@ TEST_DIROUT     BIT 0,A
                 INC L
                 DJNZ TEST_DIR1
 
-;проверка на выход за пределы карты
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ Р·Р° РїСЂРµРґРµР»С‹ РєР°СЂС‚С‹
 TEST_DIRXY      LD HL,0
                 LD A,(TEST_DIRE+1)
                 CALL GET_CORD
@@ -297,7 +297,7 @@ TEST_DIRXY      LD HL,0
                 CP 124
                 JR NC,TEST_DIRNZ
 
-;проверка на вход в тайл
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС…РѕРґ РІ С‚Р°Р№Р»
                 CALL TEST_CORD
                 JR NZ,TEST_DIRE
 
@@ -325,115 +325,115 @@ TEST_DIRNZ      XOR A
                 CP D
 TEST_DIRE       LD A,0
                 POP HL,DE,BC
-                RET 
+                RET
 
 
-;новые координаты из текущих по направл.
-;вх  - HL - текущие координаты
-;      A - направление
-;вых - HL - новые координаты
+;РЅРѕРІС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РёР· С‚РµРєСѓС‰РёС… РїРѕ РЅР°РїСЂР°РІР».
+;РІС…  - HL - С‚РµРєСѓС‰РёРµ РєРѕРѕСЂРґРёРЅР°С‚С‹
+;      A - РЅР°РїСЂР°РІР»РµРЅРёРµ
+;РІС‹С… - HL - РЅРѕРІС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
 
 GET_CORD        AND 7
-                RLCA 
-                RLCA 
+                RLCA
+                RLCA
                 LD (GET_CORD1+1),A
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
 GET_CORD1       JR $
 ;0
                 DEC L
-                RET 
-                NOP 
-                NOP 
+                RET
+                NOP
+                NOP
 ;1
                 DEC L
                 INC H
-                RET 
-                NOP 
+                RET
+                NOP
 ;2
                 INC H
-                RET 
-                NOP 
-                NOP 
+                RET
+                NOP
+                NOP
 ;3
                 INC L
                 INC H
-                RET 
-                NOP 
+                RET
+                NOP
 ;4
                 INC L
-                RET 
-                NOP 
-                NOP 
+                RET
+                NOP
+                NOP
 ;5
                 INC L
                 DEC H
-                RET 
-                NOP 
+                RET
+                NOP
 ;6
                 DEC H
-                RET 
-                NOP 
-                NOP 
+                RET
+                NOP
+                NOP
 ;7
                 DEC L
                 DEC H
-                RET 
+                RET
 
-;новый адрес для таблицы трассера
-;вх  - L - текущий адрес
-;      A - направление
-;вых - L - новый адрес
+;РЅРѕРІС‹Р№ Р°РґСЂРµСЃ РґР»СЏ С‚Р°Р±Р»РёС†С‹ С‚СЂР°СЃСЃРµСЂР°
+;РІС…  - L - С‚РµРєСѓС‰РёР№ Р°РґСЂРµСЃ
+;      A - РЅР°РїСЂР°РІР»РµРЅРёРµ
+;РІС‹С… - L - РЅРѕРІС‹Р№ Р°РґСЂРµСЃ
 
 GET_TRACE       AND 7
-                RLCA 
-                RLCA 
+                RLCA
+                RLCA
                 LD (GET_TRACE1+1),A
                 LD A,L
 GET_TRACE1      JR $
 ;0
                 SUB 18
                 LD L,A
-                RET 
+                RET
 ;1
                 SUB 17
                 LD L,A
-                RET 
+                RET
 ;2
                 INC L
-                RET 
-                NOP 
-                NOP 
+                RET
+                NOP
+                NOP
 ;3
                 ADD A,19
                 LD L,A
-                RET 
+                RET
 ;4
                 ADD A,18
                 LD L,A
-                RET 
+                RET
 ;5
                 ADD A,17
                 LD L,A
-                RET 
+                RET
 ;6
                 DEC L
-                RET 
-                NOP 
-                NOP 
+                RET
+                NOP
+                NOP
 ;7
                 SUB 19
                 LD L,A
-                RET 
+                RET
 
 
-;проверить, является ли координата пустой
-;вх  - HL - начальные координаты
-;вых - Z - пусто, NZ - препятствие
+;РїСЂРѕРІРµСЂРёС‚СЊ, СЏРІР»СЏРµС‚СЃСЏ Р»Рё РєРѕРѕСЂРґРёРЅР°С‚Р° РїСѓСЃС‚РѕР№
+;РІС…  - HL - РЅР°С‡Р°Р»СЊРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
+;РІС‹С… - Z - РїСѓСЃС‚Рѕ, NZ - РїСЂРµРїСЏС‚СЃС‚РІРёРµ
 
 TEST_CORD       PUSH BC,DE,HL
 
-;адрес в карте
+;Р°РґСЂРµСЃ РІ РєР°СЂС‚Рµ
                 LD D,A
                 GETMAPADR HLC
                 LD C,D
@@ -441,7 +441,7 @@ TEST_CORD       PUSH BC,DE,HL
 
                 LD E,(HL)
                 LD A,(DE)
-;пусто
+;РїСѓСЃС‚Рѕ
                 CP 5
                 JR Z,TEST_CORDNZ
                 JR NC,TEST_CORD30
@@ -464,13 +464,13 @@ TEST_CORD       PUSH BC,DE,HL
                 CP 13
                 JR Z,TEST_CORDNZ
                 JR TEST_CORDZ
-;подъем
+;РїРѕРґСЉРµРј
 TEST_CORD20     INC L
                 LD E,(HL)
                 LD A,(DE)
                 CP 2
                 JR TEST_CORD50
-;препятствия
+;РїСЂРµРїСЏС‚СЃС‚РІРёСЏ
 TEST_CORD30
                 CP 14
                 JR NC,TEST_CORDNZ
@@ -498,11 +498,11 @@ TEST_CORDNZ     XOR A
                 DEC A
 TEST_CORD50     LD A,C
                 POP HL,DE,BC
-                RET 
+                RET
 
-;движение по направлению
-;вх  - IX - описатель объекта
-;вых - NZ - завершен, Z - незавершен
+;РґРІРёР¶РµРЅРёРµ РїРѕ РЅР°РїСЂР°РІР»РµРЅРёСЋ
+;РІС…  - IX - РѕРїРёСЃР°С‚РµР»СЊ РѕР±СЉРµРєС‚Р°
+;РІС‹С… - NZ - Р·Р°РІРµСЂС€РµРЅ, Z - РЅРµР·Р°РІРµСЂС€РµРЅ
 
 GOTO_DIRECT     PUSH BC,DE,HL
                 LD E,A
@@ -518,7 +518,7 @@ GOTO_DIRECT     PUSH BC,DE,HL
                 LD (IX+XCRD),H
                 LD (IX+YCRD),L
 
-;по гор. и верт. - X4 , диаг. - X6
+;РїРѕ РіРѕСЂ. Рё РІРµСЂС‚. - X4 , РґРёР°Рі. - X6
                 LD A,16
                 BIT 0,(IX+DIRECT)
                 JR Z,$+4
@@ -530,7 +530,7 @@ GOTO_DIR9       LD H,(IX+XSM)
                 LD D,(IX+SPRT)
                 LD B,(IX+CNTR)
                 LD C,(IX+DIRECT)
-;направление 0
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 0
                 LD A,C
                 OR A
                 JP NZ,GOTO_DIR10
@@ -542,8 +542,8 @@ GOTO_DIR9       LD H,(IX+XSM)
 
                 LD A,16
                 SUB B
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND 3
                 INC A
                 ADD A,A
@@ -551,7 +551,7 @@ GOTO_DIR9       LD H,(IX+XSM)
                 ADD A,A
                 LD D,A
                 JP GOTO_DIR80
-;направление 1
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 1
 GOTO_DIR10      CP 1
                 JP NZ,GOTO_DIR20
 ;A=B*192/256
@@ -568,13 +568,13 @@ GOTO_DIR10      CP 1
                 POP HL,DE,BC
 
                 LD L,A
-                NEG 
+                NEG
                 LD H,A
 
                 LD A,20
                 SUB B
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 LD B,A
                 LD A,(IX+XCRD)
                 ADD A,A
@@ -588,20 +588,20 @@ GOTO_DIR10      CP 1
                 INC A
                 LD D,A
                 JP GOTO_DIR80
-;направление 2
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 2
 GOTO_DIR20      CP 2
                 JP NZ,GOTO_DIR30
                 LD A,B
                 DEC A
                 AND #0F
-                NEG 
+                NEG
                 LD H,A
                 LD L,0
 
                 LD A,16
                 SUB B
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND 3
                 INC A
                 ADD A,A
@@ -610,7 +610,7 @@ GOTO_DIR20      CP 2
                 ADD A,2
                 LD D,A
                 JP GOTO_DIR80
-;направление 3
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 3
 GOTO_DIR30      CP 3
                 JP NZ,GOTO_DIR40
 ;A=B*192/256
@@ -626,14 +626,14 @@ GOTO_DIR30      CP 3
                 LD A,H
                 POP HL,DE,BC
 
-                NEG 
+                NEG
                 LD L,A
                 LD H,A
 
                 LD A,20
                 SUB B
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 LD B,A
                 LD A,(IX+XCRD)
                 ADD A,A
@@ -648,20 +648,20 @@ GOTO_DIR30      CP 3
                 LD D,A
                 JP GOTO_DIR80
 
-;направление 4
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 4
 GOTO_DIR40      CP 4
                 JP NZ,GOTO_DIR50
                 LD A,B
                 DEC A
                 AND #0F
-                NEG 
+                NEG
                 LD L,A
                 LD H,0
 
                 LD A,16
                 SUB B
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND 3
                 INC A
                 ADD A,A
@@ -670,7 +670,7 @@ GOTO_DIR40      CP 4
                 ADD A,4
                 LD D,A
                 JP GOTO_DIR80
-;направление 5
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 5
 GOTO_DIR50      CP 5
                 JR NZ,GOTO_DIR60
 ;A=B*192/256
@@ -687,13 +687,13 @@ GOTO_DIR50      CP 5
                 POP HL,DE,BC
 
                 LD H,A
-                NEG 
+                NEG
                 LD L,A
 
                 LD A,20
                 SUB B
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 LD B,A
                 LD A,(IX+XCRD)
                 ADD A,A
@@ -708,7 +708,7 @@ GOTO_DIR50      CP 5
                 LD D,A
                 JR GOTO_DIR80
 
-;направление 6
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 6
 GOTO_DIR60      CP 6
                 JR NZ,GOTO_DIR70
                 LD A,B
@@ -719,8 +719,8 @@ GOTO_DIR60      CP 6
 
                 LD A,16
                 SUB B
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND 3
                 INC A
                 ADD A,A
@@ -730,7 +730,7 @@ GOTO_DIR60      CP 6
                 LD D,A
                 JP GOTO_DIR80
 
-;направление 7
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 7
 GOTO_DIR70
 ;A=B*192/256
                 PUSH BC,DE,HL
@@ -750,8 +750,8 @@ GOTO_DIR70
 
                 LD A,20
                 SUB B
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 LD B,A
                 LD A,(IX+XCRD)
                 ADD A,A
@@ -785,20 +785,20 @@ GOTO_DIRNZ      XOR A
 
 GOTO_DIRE       LD A,E
                 POP HL,DE,BC
-                RET 
+                RET
 
 
 ;-----------------------------------------
-;высокоуровневые подпрограммы для объектов
+;РІС‹СЃРѕРєРѕСѓСЂРѕРІРЅРµРІС‹Рµ РїРѕРґРїСЂРѕРіСЂР°РјРјС‹ РґР»СЏ РѕР±СЉРµРєС‚РѕРІ
 ;-----------------------------------------
 
-;трассировка маршрута
-;вх  - IX - описатель объекта
-;вых - A - 0 - маршут не может быть найден
-;          1 - маршрут найден
-;          2 - цель недоступна
+;С‚СЂР°СЃСЃРёСЂРѕРІРєР° РјР°СЂС€СЂСѓС‚Р°
+;РІС…  - IX - РѕРїРёСЃР°С‚РµР»СЊ РѕР±СЉРµРєС‚Р°
+;РІС‹С… - A - 0 - РјР°СЂС€СѓС‚ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅР°Р№РґРµРЅ
+;          1 - РјР°СЂС€СЂСѓС‚ РЅР°Р№РґРµРЅ
+;          2 - С†РµР»СЊ РЅРµРґРѕСЃС‚СѓРїРЅР°
 
-;находим адрес финиша в таблице, H'
+;РЅР°С…РѕРґРёРј Р°РґСЂРµСЃ С„РёРЅРёС€Р° РІ С‚Р°Р±Р»РёС†Рµ, H'
 TRACE_MAP       LD HL,(MAP_XY)
                 ;INC L
                 LD A,(IX+XCRD)
@@ -821,11 +821,11 @@ TRACE_MAP       LD HL,(MAP_XY)
                 ADD A,A
                 ADD A,B
                 ADD A,H
-                EXX 
+                EXX
                 LD H,A
-                EXX 
+                EXX
 
-;находим адрес старта в таблице, L'
+;РЅР°С…РѕРґРёРј Р°РґСЂРµСЃ СЃС‚Р°СЂС‚Р° РІ С‚Р°Р±Р»РёС†Рµ, L'
                 LD HL,(MAP_XY)
                 ;INC L
                 LD A,(IX+XTAG)
@@ -848,11 +848,11 @@ TRACE_MAP       LD HL,(MAP_XY)
                 ADD A,A
                 ADD A,B
                 ADD A,H
-                EXX 
+                EXX
                 LD L,A
-                EXX 
+                EXX
 
-;создаем фрагмент карты
+;СЃРѕР·РґР°РµРј С„СЂР°РіРјРµРЅС‚ РєР°СЂС‚С‹
                 LD HL,(MAP_XY)
                 ;INC L
                 GETMAPADR HLB
@@ -880,13 +880,13 @@ TRACE_MAP2      PUSH BC
                 LD E,A
                 DJNZ TRACE_MAP1
 
-;загружаем адрес старта в буфер
-                EXX 
+;Р·Р°РіСЂСѓР¶Р°РµРј Р°РґСЂРµСЃ СЃС‚Р°СЂС‚Р° РІ Р±СѓС„РµСЂ
+                EXX
                 LD A,L
                 LD BC,TEMP_TAB
                 LD DE,TEMP_TAB+1
                 LD (BC),A
-                EXX 
+                EXX
                 LD H,'TRACE_TAB
                 LD D,'TAB_TILEPASS
                 LD L,A
@@ -894,156 +894,156 @@ TRACE_MAP2      PUSH BC
                 OR #F0
                 LD (HL),A
 
-;начинаем трассировку
-TRACE_MAP10     EXX 
+;РЅР°С‡РёРЅР°РµРј С‚СЂР°СЃСЃРёСЂРѕРІРєСѓ
+TRACE_MAP10     EXX
                 LD A,(BC)
-                EXX 
+                EXX
                 LD C,A
 
-;направление 0
-;проверка на выход
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 0
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ
                 LD B,1
                 CALL TRACE_MAPOUT
                 JR NZ,TRACE_MAP11
-;проверка на вход
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС…РѕРґ
                 LD A,L
                 SUB 19
                 LD L,A
                 CALL TRACE_MAPIN
                 JR NZ,TRACE_MAP11
-;занимаем клетку
+;Р·Р°РЅРёРјР°РµРј РєР»РµС‚РєСѓ
                 LD B,#10
                 CALL TRACE_MAPFILL
                 JP Z,TRACE_MAPZ
 
-;направление 2
-;проверка на выход
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 2
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ
 TRACE_MAP11     LD B,4
                 CALL TRACE_MAPOUT
                 JR NZ,TRACE_MAP12
-;проверка на вход
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС…РѕРґ
                 CALL TRACE_MAPIN
                 JR NZ,TRACE_MAP12
-;занимаем клетку
+;Р·Р°РЅРёРјР°РµРј РєР»РµС‚РєСѓ
                 LD B,#30
                 CALL TRACE_MAPFILL
                 JP Z,TRACE_MAPZ
 
-;направление 4
-;проверка на выход
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 4
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ
 TRACE_MAP12     LD B,16
                 CALL TRACE_MAPOUT
                 JR NZ,TRACE_MAP13
-;проверка на вход
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС…РѕРґ
                 LD A,L
                 ADD A,17
                 LD L,A
                 CALL TRACE_MAPIN
                 JR NZ,TRACE_MAP13
-;занимаем клетку
+;Р·Р°РЅРёРјР°РµРј РєР»РµС‚РєСѓ
                 LD B,#50
                 CALL TRACE_MAPFILL
                 JP Z,TRACE_MAPZ
 
-;направление 6
-;проверка на выход
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 6
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ
 TRACE_MAP13     LD B,64
                 CALL TRACE_MAPOUT
                 JR NZ,TRACE_MAP14
-;проверка на вход
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС…РѕРґ
                 DEC L,L
                 CALL TRACE_MAPIN
                 JR NZ,TRACE_MAP14
-;занимаем клетку
+;Р·Р°РЅРёРјР°РµРј РєР»РµС‚РєСѓ
                 LD B,#70
                 CALL TRACE_MAPFILL
                 JP Z,TRACE_MAPZ
 
-;направление 1
-;проверка на выход
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 1
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ
 TRACE_MAP14     LD B,2
                 CALL TRACE_MAPOUT
                 JR NZ,TRACE_MAP15
-;проверка на вход
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС…РѕРґ
                 LD A,L
                 SUB 18
                 LD L,A
                 CALL TRACE_MAPIN
                 JR NZ,TRACE_MAP15
-;занимаем клетку
+;Р·Р°РЅРёРјР°РµРј РєР»РµС‚РєСѓ
                 LD B,#20
                 CALL TRACE_MAPFILL
                 JP Z,TRACE_MAPZ
 
-;направление 3
-;проверка на выход
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 3
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ
 TRACE_MAP15     LD B,8
                 CALL TRACE_MAPOUT
                 JR NZ,TRACE_MAP16
-;проверка на вход
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС…РѕРґ
                 LD A,L
                 ADD A,18
                 LD L,A
                 CALL TRACE_MAPIN
                 JR NZ,TRACE_MAP16
-;занимаем клетку
+;Р·Р°РЅРёРјР°РµРј РєР»РµС‚РєСѓ
                 LD B,#40
                 CALL TRACE_MAPFILL
                 JP Z,TRACE_MAPZ
 
-;направление 5
-;проверка на выход
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 5
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ
 TRACE_MAP16     LD B,32
                 CALL TRACE_MAPOUT
                 JR NZ,TRACE_MAP17
-;проверка на вход
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС…РѕРґ
                 LD A,L
                 ADD A,16
                 LD L,A
                 CALL TRACE_MAPIN
                 JR NZ,TRACE_MAP17
-;занимаем клетку
+;Р·Р°РЅРёРјР°РµРј РєР»РµС‚РєСѓ
                 LD B,#60
                 CALL TRACE_MAPFILL
                 JP Z,TRACE_MAPZ
 
-;направление 7
-;проверка на выход
+;РЅР°РїСЂР°РІР»РµРЅРёРµ 7
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ
 TRACE_MAP17     LD B,128
                 CALL TRACE_MAPOUT
                 JR NZ,TRACE_MAPE
-;проверка на вход
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС…РѕРґ
                 LD A,L
                 SUB 20
                 LD L,A
                 CALL TRACE_MAPIN
                 JR NZ,TRACE_MAPE
-;занимаем клетку
+;Р·Р°РЅРёРјР°РµРј РєР»РµС‚РєСѓ
                 LD B,#80
                 CALL TRACE_MAPFILL
                 JP Z,TRACE_MAPZ
 
-TRACE_MAPE      EXX 
+TRACE_MAPE      EXX
                 INC C
                 LD A,C
                 CP E
-                EXX 
+                EXX
                 JR Z,TRACE_MAPNZ
                 JP TRACE_MAP10
 
 TRACE_MAPNZ     XOR A
-                RET 
+                RET
 
 TRACE_MAPZ      LD (IX+TRACEADR),A
                 LD A,1
-                RET 
+                RET
 
 TRACE_MAPEX     LD A,2
-                RET 
+                RET
 
-;проверка на выход
-;вх  - B - маска проверки
-;вых - Z - выход есть, NZ - нет
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ
+;РІС…  - B - РјР°СЃРєР° РїСЂРѕРІРµСЂРєРё
+;РІС‹С… - Z - РІС‹С…РѕРґ РµСЃС‚СЊ, NZ - РЅРµС‚
 
 TRACE_MAPOUT    LD L,C
                 LD A,(HL)
@@ -1058,11 +1058,11 @@ TRACE_MAPOUT    LD L,C
                 LD E,A
                 LD A,(DE)
                 AND B
-                RET 
+                RET
 
-;проверка на вход и свободное место
-;вх  - B - маска проверки
-;вых - Z - вход есть, NZ - нет
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС…РѕРґ Рё СЃРІРѕР±РѕРґРЅРѕРµ РјРµСЃС‚Рѕ
+;РІС…  - B - РјР°СЃРєР° РїСЂРѕРІРµСЂРєРё
+;РІС‹С… - Z - РІС…РѕРґ РµСЃС‚СЊ, NZ - РЅРµС‚
 
 TRACE_MAPIN     LD A,(HL)
                 AND #F0
@@ -1083,14 +1083,14 @@ TRACE_MAPIN     LD A,(HL)
                 AND B
                 RET NZ
 
-;проверка на свободное место
+;РїСЂРѕРІРµСЂРєР° РЅР° СЃРІРѕР±РѕРґРЅРѕРµ РјРµСЃС‚Рѕ
                 DEC L
                 LD A,(HL)
                 AND #0F
                 LD E,A
                 LD A,(DE)
 
-;проверка на подъем
+;РїСЂРѕРІРµСЂРєР° РЅР° РїРѕРґСЉРµРј
                 CP #EE
                 RET Z
 
@@ -1104,40 +1104,40 @@ TRACE_MAPIN     LD A,(HL)
                 LD A,(DE)
                 DEC L
                 AND 4
-                RET 
+                RET
 
-;занимаем клетку
-;вх  - B - байт направления
-;вых - Z - достигут финиш, NZ - недост.
+;Р·Р°РЅРёРјР°РµРј РєР»РµС‚РєСѓ
+;РІС…  - B - Р±Р°Р№С‚ РЅР°РїСЂР°РІР»РµРЅРёСЏ
+;РІС‹С… - Z - РґРѕСЃС‚РёРіСѓС‚ С„РёРЅРёС€, NZ - РЅРµРґРѕСЃС‚.
 
 TRACE_MAPFILL   LD A,L
-                EXX 
+                EXX
                 LD (DE),A
                 INC E
-                EXX 
+                EXX
                 LD A,(HL)
                 OR B
                 LD (HL),A
                 LD A,L
-                EXX 
+                EXX
                 CP H
-                EXX 
-                RET 
+                EXX
+                RET
 
-;проверка результативности выстрела
-;вх  - IX - описатель стреляющего объекта
-;      IY - описатель цели
-;вых - Z - достиг цели, NZ - недостиг
-;      IY - описатель найденого объекта
+;РїСЂРѕРІРµСЂРєР° СЂРµР·СѓР»СЊС‚Р°С‚РёРІРЅРѕСЃС‚Рё РІС‹СЃС‚СЂРµР»Р°
+;РІС…  - IX - РѕРїРёСЃР°С‚РµР»СЊ СЃС‚СЂРµР»СЏСЋС‰РµРіРѕ РѕР±СЉРµРєС‚Р°
+;      IY - РѕРїРёСЃР°С‚РµР»СЊ С†РµР»Рё
+;РІС‹С… - Z - РґРѕСЃС‚РёРі С†РµР»Рё, NZ - РЅРµРґРѕСЃС‚РёРі
+;      IY - РѕРїРёСЃР°С‚РµР»СЊ РЅР°Р№РґРµРЅРѕРіРѕ РѕР±СЉРµРєС‚Р°
 
 TRACE_SHOT      PUSH BC,DE,HL
-                EXX 
+                EXX
                 PUSH BC,DE,HL
 
                 LD (TRACE_SHOTA+1),A
                 LD (TRACE_SHOTIY),IY
 
-;находим начальную координату выстрела
+;РЅР°С…РѕРґРёРј РЅР°С‡Р°Р»СЊРЅСѓСЋ РєРѕРѕСЂРґРёРЅР°С‚Сѓ РІС‹СЃС‚СЂРµР»Р°
                 LD H,(IX+XCRD)
                 LD L,(IX+YCRD)
                 SLA H,L
@@ -1151,43 +1151,43 @@ TRACE_SHOT1     JR $
                 INC H,H
                 DEC L,L
                 JR TRACE_SHOT2
-                NOP 
-                NOP 
+                NOP
+                NOP
                 INC H,H,H
                 DEC L,L
                 JR TRACE_SHOT2
-                NOP 
+                NOP
                 INC H,H,H
                 JR TRACE_SHOT2
-                NOP 
-                NOP 
-                NOP 
+                NOP
+                NOP
+                NOP
                 INC H,H,H,L
                 JR TRACE_SHOT2
-                NOP 
-                NOP 
+                NOP
+                NOP
                 INC H,H,L
                 JR TRACE_SHOT2
-                NOP 
-                NOP 
-                NOP 
+                NOP
+                NOP
+                NOP
                 INC L
                 JR TRACE_SHOT2
-                NOP 
-                NOP 
-                NOP 
-                NOP 
-                NOP 
+                NOP
+                NOP
+                NOP
+                NOP
+                NOP
                 JR TRACE_SHOT2
-                NOP 
-                NOP 
-                NOP 
-                NOP 
-                NOP 
-                NOP 
+                NOP
+                NOP
+                NOP
+                NOP
+                NOP
+                NOP
                 DEC L,L
 
-;находим конечную координату выстрела
+;РЅР°С…РѕРґРёРј РєРѕРЅРµС‡РЅСѓСЋ РєРѕРѕСЂРґРёРЅР°С‚Сѓ РІС‹СЃС‚СЂРµР»Р°
 TRACE_SHOT2     LD D,(IY+XCRD)
                 LD E,(IY+YCRD)
                 SLA D,E
@@ -1201,19 +1201,19 @@ TRACE_SHOT2     LD D,(IY+XCRD)
 TRACE_SHOT3     JR $
                 INC D,D
                 JR TRACE_SHOT4
-                NOP 
+                NOP
                 INC D
                 JR TRACE_SHOT4
-                NOP 
-                NOP 
+                NOP
+                NOP
                 INC D
                 JR TRACE_SHOT4
-                NOP 
-                NOP 
+                NOP
+                NOP
                 INC D
                 DEC E
                 JR TRACE_SHOT4
-                NOP 
+                NOP
                 INC D,D
                 DEC E
                 JR TRACE_SHOT4
@@ -1222,23 +1222,23 @@ TRACE_SHOT3     JR $
                 JR TRACE_SHOT4
                 INC D,D
                 JR TRACE_SHOT4
-                NOP 
+                NOP
                 INC D,D
 
-;расчитываем коэффициенты
+;СЂР°СЃС‡РёС‚С‹РІР°РµРј РєРѕСЌС„С„РёС†РёРµРЅС‚С‹
 TRACE_SHOT4     LD B,0
                 EX DE,HL
                 LD A,H
                 SUB D
                 JR NC,TRACE_SHOT5
                 SET 0,B
-                NEG 
+                NEG
 TRACE_SHOT5     LD H,A
                 LD A,L
                 SUB E
                 JR NC,TRACE_SHOT6
                 SET 1,B
-                NEG 
+                NEG
 TRACE_SHOT6     LD L,A
                 CP H
                 JR C,TRACE_SHOT10
@@ -1254,24 +1254,24 @@ TRACE_SHOT7     LD C,L
                 BIT 0,B
                 JR Z,TRACE_SHOT8
                 LD A,L
-                CPL 
+                CPL
                 LD L,A
                 LD A,H
-                CPL 
+                CPL
                 LD H,A
                 INC HL
 TRACE_SHOT8     BIT 1,B
                 PUSH HL
-                EXX 
+                EXX
                 POP BC
                 LD A,1
                 JR Z,TRACE_SHOT9
-                NEG 
+                NEG
 TRACE_SHOT9     LD D,A
                 LD E,0
                 LD H,E
                 LD L,E
-                EXX 
+                EXX
                 JR TRACE_SHOT14
 ;Y/X
 TRACE_SHOT10    LD A,H
@@ -1286,33 +1286,33 @@ TRACE_SHOT11    LD C,H
                 BIT 1,B
                 JR Z,TRACE_SHOT12
                 LD A,L
-                CPL 
+                CPL
                 LD L,A
                 LD A,H
-                CPL 
+                CPL
                 LD H,A
                 INC HL
 TRACE_SHOT12    BIT 0,B
                 PUSH HL
-                EXX 
+                EXX
                 POP DE
                 LD A,1
                 JR Z,TRACE_SHOT13
-                NEG 
+                NEG
 TRACE_SHOT13    LD B,A
                 LD C,0
                 LD H,C
                 LD L,C
-                EXX 
+                EXX
 
 TRACE_SHOT14    EX DE,HL
-                XOR A   ;уровень над морем
+                XOR A   ;СѓСЂРѕРІРµРЅСЊ РЅР°Рґ РјРѕСЂРµРј
                 LD (TRACE_SHOTLV),A
 
-;цикл трассировки выстрела
+;С†РёРєР» С‚СЂР°СЃСЃРёСЂРѕРІРєРё РІС‹СЃС‚СЂРµР»Р°
 TRACE_SHOT20
 
-;проверка на выход за пределы карты
+;РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ Р·Р° РїСЂРµРґРµР»С‹ РєР°СЂС‚С‹
                 LD A,H
                 OR A
                 JP Z,TRACE_SHOTNZ
@@ -1328,25 +1328,25 @@ TRACE_SHOT20
                 LD E,L
                 SRL D,E
 
-;новые координаты
-                EXX 
+;РЅРѕРІС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
+                EXX
                 LD A,H
                 ADD A,C
                 LD H,A
                 LD A,B
-                EXX 
+                EXX
                 ADC A,H
                 LD H,A
-                EXX 
+                EXX
                 LD A,L
                 ADD A,E
                 LD L,A
                 LD A,D
-                EXX 
+                EXX
                 ADC A,L
                 LD L,A
 
-;проверка, перешли-ли в новую клетку
+;РїСЂРѕРІРµСЂРєР°, РїРµСЂРµС€Р»Рё-Р»Рё РІ РЅРѕРІСѓСЋ РєР»РµС‚РєСѓ
                 PUSH HL
                 SRL H,L
                 OR A
@@ -1354,7 +1354,7 @@ TRACE_SHOT20
                 POP HL
                 JR Z,TRACE_SHOT20
 
-;проверка на объекты
+;РїСЂРѕРІРµСЂРєР° РЅР° РѕР±СЉРµРєС‚С‹
                 PUSH HL
                 SRL H,L
                 CALL SEARCH_CRD
@@ -1367,7 +1367,7 @@ TRACE_SHOT20
                 XOR A
                 JP TRACE_SHOTA
 
-;проверка поверхности
+;РїСЂРѕРІРµСЂРєР° РїРѕРІРµСЂС…РЅРѕСЃС‚Рё
 TRACE_SHOT30    LD A,(TRACE_SHOTLV)
                 OR A
                 JR NZ,TRACE_SHOT31
@@ -1381,7 +1381,7 @@ TRACE_SHOT30    LD A,(TRACE_SHOTLV)
                 CP 5
                 JP Z,TRACE_SHOTNZ
 
-;находим текущее направление
+;РЅР°С…РѕРґРёРј С‚РµРєСѓС‰РµРµ РЅР°РїСЂР°РІР»РµРЅРёРµ
 TRACE_SHOT31    PUSH DE,HL
                 SRL H,L
                 EX DE,HL
@@ -1389,12 +1389,12 @@ TRACE_SHOT31    PUSH DE,HL
                 LD B,A
                 INC B
                 LD A,#80
-TRACE_SHOT32    RLCA 
+TRACE_SHOT32    RLCA
                 DJNZ TRACE_SHOT32
                 LD B,A
                 POP HL,DE
 
-;выход из клетки
+;РІС‹С…РѕРґ РёР· РєР»РµС‚РєРё
                 PUSH BC,HL
                 LD H,D
                 LD L,E
@@ -1416,7 +1416,7 @@ TRACE_SHOT32    RLCA
                 LD (TRACE_SHOTLV),A
 TRACE_SHOT33    POP HL,BC
 
-;вход в клетку
+;РІС…РѕРґ РІ РєР»РµС‚РєСѓ
                 PUSH BC,HL
                 SRL H,L
                 GETMAPADR HLC
@@ -1450,16 +1450,16 @@ TRACE_SHOTA     LD A,0
                 LD IY,(TRACE_SHOTIY)
                 CALL ADD_CLUSTER
                 POP HL,DE,BC
-                EXX 
+                EXX
                 POP HL,DE,BC
-                RET 
+                RET
 TRACE_SHOTIY    DW 0
 TRACE_SHOTLV    DB 0
 
 
-;добавить осколки
-;вх  - HL - координаты на карте в симв.
-;вых - нет
+;РґРѕР±Р°РІРёС‚СЊ РѕСЃРєРѕР»РєРё
+;РІС…  - HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° РєР°СЂС‚Рµ РІ СЃРёРјРІ.
+;РІС‹С… - РЅРµС‚
 
 ADD_CLUSTER     PUSH AF,BC,DE,HL
                 EX DE,HL
@@ -1479,19 +1479,19 @@ ADD_CLUST2      DEC L
                 INC L
                 LD (HL),12
 ADD_CLUST3      POP HL,DE,BC,AF
-                RET 
+                RET
 
 
-;тест проходимости участка пути
-;вх  - HL - координаты старта
-;      DE - координаты финиша
-;вых - Z - есть путь, NZ - нет
+;С‚РµСЃС‚ РїСЂРѕС…РѕРґРёРјРѕСЃС‚Рё СѓС‡Р°СЃС‚РєР° РїСѓС‚Рё
+;РІС…  - HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ СЃС‚Р°СЂС‚Р°
+;      DE - РєРѕРѕСЂРґРёРЅР°С‚С‹ С„РёРЅРёС€Р°
+;РІС‹С… - Z - РµСЃС‚СЊ РїСѓС‚СЊ, NZ - РЅРµС‚
 
 TEST_WAY        PUSH BC,DE,HL
 
                 LD C,A
 
-;проверяем на достижение цели
+;РїСЂРѕРІРµСЂСЏРµРј РЅР° РґРѕСЃС‚РёР¶РµРЅРёРµ С†РµР»Рё
 TEST_WAY10      CALL FIND_DIRECT
                 PUSH HL
                 CALL GET_CORD
@@ -1511,12 +1511,10 @@ TEST_WAY10      CALL FIND_DIRECT
                 CALL TEST_DIRECT
                 JR NZ,TEST_WAY30
 
-;продолжаем сканирование
+;РїСЂРѕРґРѕР»Р¶Р°РµРј СЃРєР°РЅРёСЂРѕРІР°РЅРёРµ
 TEST_WAY20      CALL GET_CORD
                 JR TEST_WAY10
 
 TEST_WAY30      LD A,C
                 POP HL,DE,BC
-                RET 
-
-
+                RET

@@ -1,5 +1,5 @@
 ;+++++++++++++++ SOUND ENGINE ++++++++++++
-;Звуковой движок на основе
+;Р—РІСѓРєРѕРІРѕР№ РґРІРёР¶РѕРє РЅР° РѕСЃРЅРѕРІРµ
 ;Vortex Tracker II v1.0 PT3 player
 ;for ZX Spectrum
 ;(c)2004,2007 S.V.Bulba
@@ -11,8 +11,8 @@
 
 TEST_MUSIC      LD HL,MUSIC
                 CALL INIT_MUSIC
-                EI 
-TEST_M1         HALT 
+                EI
+TEST_M1         HALT
                 CALL PLAY_MUSIC
                 CALL PLAY_SFX
                 XOR A
@@ -38,7 +38,7 @@ TEST_M3         LD A,B
 TEST_M4         CALL AY_OUT
                 JR TEST_M1
 
-;--------------- Константы ---------------
+;--------------- РљРѕРЅСЃС‚Р°РЅС‚С‹ ---------------
 TonA=0
 TonB=2
 TonC=4
@@ -104,8 +104,8 @@ MUTE_MUSIC
                 JP AY_OUT
 
 
-;инициализация музыки
-;вх  - A - номер музыки
+;РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјСѓР·С‹РєРё
+;РІС…  - A - РЅРѕРјРµСЂ РјСѓР·С‹РєРё
 
 INIT_MUSIC      PUSH AF
                 RAMPAGE 4
@@ -119,17 +119,17 @@ INIT_MUSIC      PUSH AF
                 CP C
                 JP NZ,INIT_MUS1
 
-;повторное использование
+;РїРѕРІС‚РѕСЂРЅРѕРµ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ
                 LD A,(MUSIC_EXIST)
                 OR A
                 JR NZ,INIT_MUS3
-                RET 
-;загрузка
+                RET
+;Р·Р°РіСЂСѓР·РєР°
 INIT_MUS1       LD A,C
                 LD (CURRENT_MUSIC),A
                 DUP 4
-                RRCA 
-                EDUP 
+                RRCA
+                EDUP
                 AND #0F
                 ADD A,#30
                 CP #3A
@@ -150,13 +150,13 @@ INIT_MUS1       LD A,C
                 CALL LOAD_FILE
                 CALL EXIST_FILE
                 JR NZ,INIT_MUS2
-;файл ненайден
+;С„Р°Р№Р» РЅРµРЅР°Р№РґРµРЅ
                 XOR A
                 LD (MUSIC_EXIST),A
                 LD (MUSIC_READY),A
-                RET 
+                RET
 
-;инициализация
+;РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
 INIT_MUS2       LD A,#FF
                 LD (MUSIC_EXIST),A
 INIT_MUS3       LD HL,MUSIC
@@ -221,7 +221,7 @@ TP_2            LD A,H
                 LD (HL),A
                 LD DE,VARS+1
                 LD BC,VAR0END-VARS-1
-                LDIR 
+                LDIR
                 INC A
                 LD (DelyCnt),A
                 LD HL,#F001 ;H - Volume, L - NtSkCn
@@ -249,7 +249,7 @@ L21             LD (Version),A
                 PUSH AF
                 CP 4
                 LD A,(IX+99-100) ;TONE TABLE NUMBER
-                RLA 
+                RLA
                 AND 7
 
 ;NoteTableCreator (c) Ivan Roshin
@@ -327,7 +327,7 @@ L3              DB #19 ;AND A or NOP
 CORR_1          LD A,(DE)
                 AND A
                 JR Z,TC_EXIT
-                RRA 
+                RRA
                 PUSH AF
                 ADD A,A
                 LD C,A
@@ -390,17 +390,17 @@ M3              LD A,C
                 AND A
                 JR NZ,INITV2
 
-;инициализирована
+;РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅР°
                 LD A,#FF
                 LD (MUSIC_READY),A
-                RET 
+                RET
 
 ;pattern decoder
 PD_OrSm         LD (IX-12+Env_En),0
                 CALL SETORN
                 LD A,(BC)
                 INC BC
-                RRCA 
+                RRCA
 
 PD_SAM          ADD A,A
 PD_SAM_         LD E,A
@@ -418,10 +418,10 @@ MODADDR=$+1
                 LD (IX-12+SamPtr+1),H
                 JR PD_LOOP
 
-PD_VOL          RLCA 
-                RLCA 
-                RLCA 
-                RLCA 
+PD_VOL          RLCA
+                RLCA
+                RLCA
+                RLCA
                 LD (IX-12+Volume),A
                 JR PD_LP2
 
@@ -511,7 +511,7 @@ PDSP_           LD SP,#3131
 
 PD_FIN          LD A,(IX-12+NNtSkp)
                 LD (IX-12+NtSkCn),A
-                RET 
+                RET
 
 C_PORTM         RES 2,(IX-12+Flags)
                 LD A,(BC)
@@ -558,7 +558,7 @@ PrSlide         LD DE,#1111
                 LD (IX-12+CrTnSl+1),D
 OLDPRTM         LD A,(BC) ;SIGNED TONE STEP
                 INC BC
-                EXA 
+                EXA
                 LD A,(BC)
                 INC BC
                 AND A
@@ -566,15 +566,15 @@ OLDPRTM         LD A,(BC) ;SIGNED TONE STEP
                 EX DE,HL
 NOSIG           SBC HL,DE
                 JP P,SET_STP
-                CPL 
-                EXA 
-                NEG 
-                EXA 
+                CPL
+                EXA
+                NEG
+                EXA
 SET_STP         LD (IX-12+TSlStp+1),A
-                EXA 
+                EXA
                 LD (IX-12+TSlStp),A
                 LD (IX-12+COnOff),0
-                RET 
+                RET
 
 C_GLISS         SET 2,(IX-12+Flags)
                 LD A,(BC)
@@ -589,7 +589,7 @@ C_GLISS         SET 2,(IX-12+Flags)
 GL36            LD (IX-12+TSlCnt),A
                 LD A,(BC)
                 INC BC
-                EXA 
+                EXA
                 LD A,(BC)
                 INC BC
                 JR SET_STP
@@ -597,12 +597,12 @@ GL36            LD (IX-12+TSlCnt),A
 C_SMPOS         LD A,(BC)
                 INC BC
                 LD (IX-12+PsInSm),A
-                RET 
+                RET
 
 C_ORPOS         LD A,(BC)
                 INC BC
                 LD (IX-12+PsInOr),A
-                RET 
+                RET
 
 C_VIBRT         LD A,(BC)
                 INC BC
@@ -615,7 +615,7 @@ C_VIBRT         LD A,(BC)
                 LD (IX-12+TSlCnt),A
                 LD (IX-12+CrTnSl),A
                 LD (IX-12+CrTnSl+1),A
-                RET 
+                RET
 
 C_ENGLS         LD A,(BC)
                 INC BC
@@ -628,12 +628,12 @@ C_ENGLS         LD A,(BC)
                 INC BC
                 LD H,A
                 LD (ESldAdd),HL
-                RET 
+                RET
 
 C_DELAY         LD A,(BC)
                 INC BC
                 LD (Delay),A
-                RET 
+                RET
 
 SETENV          LD (IX-12+Env_En),E
                 LD (AYREGS+EnvTp),A
@@ -650,7 +650,7 @@ SETENV          LD (IX-12+Env_En),E
                 LD H,A
                 LD L,A
                 LD (CurESld),HL
-C_NOP           RET 
+C_NOP           RET
 
 SETORN          ADD A,A
                 LD E,A
@@ -667,7 +667,7 @@ MDADDR2=$+1
                 ADD HL,DE
                 LD (IX-12+OrnPtr),L
                 LD (IX-12+OrnPtr+1),H
-                RET 
+                RET
 
 ;ALL 16 ADDRESSES TO PROTECT FROM BROKEN PT3 MODULES
 SPCCOMS         DW C_NOP
@@ -714,7 +714,7 @@ CH_NTP          CP 96
                 JR C,CH_NOK
                 LD A,95
 CH_NOK          ADD A,A
-                EXA 
+                EXA
                 LD L,(IX+SamPtr)
                 LD H,(IX+SamPtr+1)
                 LD SP,HL
@@ -743,7 +743,7 @@ CH_SMPS         LD (IX+PsInSm),A
                 LD (IX+TnAcc),L
                 LD (IX+TnAcc+1),H
 CH_NOAC         EX DE,HL
-                EXA 
+                EXA
                 LD L,A
                 LD H,0
                 LD SP,NT_
@@ -819,8 +819,8 @@ CH_NOEN         LD (Ampl),A
                 BIT 7,B
                 LD A,C
                 JR Z,NO_ENSL
-                RLA 
-                RLA 
+                RLA
+                RLA
                 SRA A
                 SRA A
                 SRA A
@@ -833,18 +833,18 @@ NO_ENAC         LD HL,AddToEn
 ;FIX IT IN NEXT VERSION?
                 LD (HL),A
                 JR CH_MIX
-NO_ENSL         RRA 
+NO_ENSL         RRA
                 ADD A,(IX+CrNsSl)
                 LD (AddToNs),A
                 BIT 5,B
                 JR Z,CH_MIX
                 LD (IX+CrNsSl),A
 CH_MIX          LD A,B
-                RRA 
+                RRA
                 AND #48
 CH_EXIT         LD HL,AYREGS+Mixer
                 OR (HL)
-                RRCA 
+                RRCA
                 LD (HL),A
                 POP HL
                 XOR A
@@ -854,14 +854,14 @@ CH_EXIT         LD HL,AYREGS+Mixer
                 RET NZ
                 XOR (IX+Flags)
                 LD (IX+Flags),A
-                RRA 
+                RRA
                 LD A,(IX+OnOffD)
                 JR C,CH_ONDL
                 LD A,(IX+OffOnD)
 CH_ONDL         LD (IX+COnOff),A
-                RET 
+                RET
 
-;проигрыватель музыки
+;РїСЂРѕРёРіСЂС‹РІР°С‚РµР»СЊ РјСѓР·С‹РєРё
 PLAY_MUSIC      XOR A
                 LD (AddToEn),A
                 LD (AYREGS+Mixer),A
@@ -987,18 +987,18 @@ ESldAdd=$+1
                 LD HL,#2121
                 ADD HL,DE
                 LD (CurESld),HL
-                RET 
+                RET
 
 
-;вывод на AY из буфера
+;РІС‹РІРѕРґ РЅР° AY РёР· Р±СѓС„РµСЂР°
 AY_OUT
 
-;обработка FADEOUT
+;РѕР±СЂР°Р±РѕС‚РєР° FADEOUT
                 LD A,(FADEOUT_MCONT)
                 OR A
                 JR Z,AY_OUT1
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND #0F
                 LD D,A
 
@@ -1044,16 +1044,16 @@ AY_OUT
                 JR NZ,AY_OUT1
                 LD (MUSIC_READY),A
                 CALL MUTE_MUSIC
-                RET 
+                RET
 
-;вывод переменных в порты AY
+;РІС‹РІРѕРґ РїРµСЂРµРјРµРЅРЅС‹С… РІ РїРѕСЂС‚С‹ AY
 AY_OUT1         XOR A
                 LD DE,#FFBF
                 LD BC,#FFFD
                 LD HL,AYREGS
 AY_OUT2         OUT (C),A
                 LD B,E
-                OUTI 
+                OUTI
                 LD B,D
                 INC A
                 CP 13
@@ -1064,7 +1064,7 @@ AY_OUT2         OUT (C),A
                 RET M
                 LD B,E
                 OUT (C),A
-                RET 
+                RET
 
 ;Stupid ALASM limitations
 NT_DATA DB 50*2 ;(T_NEW_0-T1_)*2
@@ -1189,9 +1189,9 @@ VAR0END=VT_+16 ;INIT zeroes from VARS to VAR0END-1
 VARSEND=$
 
 
-;инициализация эфектов
-;меняет текущую страницу на 4
-;вх  - A - номер эфекта (0..42)
+;РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЌС„РµРєС‚РѕРІ
+;РјРµРЅСЏРµС‚ С‚РµРєСѓС‰СѓСЋ СЃС‚СЂР°РЅРёС†Сѓ РЅР° 4
+;РІС…  - A - РЅРѕРјРµСЂ СЌС„РµРєС‚Р° (0..42)
 
 INIT_SFX        LD HL,SFX_TAB
                 ADD A,A
@@ -1214,32 +1214,32 @@ INIT_SFX        LD HL,SFX_TAB
                 LD (SFX_LOOP),HL
                 XOR A
                 LD (SFX_END),A
-                RET 
+                RET
 
-;проигрыватель эфекта
+;РїСЂРѕРёРіСЂС‹РІР°С‚РµР»СЊ СЌС„РµРєС‚Р°
 
 PLAY_SFX        LD HL,(SFX_POS)
                 LD A,H
                 OR L
                 JR NZ,PLAY_SFX1
-;заглушка
+;Р·Р°РіР»СѓС€РєР°
                 LD A,(SFX_END)
                 OR A
                 RET NZ
                 LD (AYREGS+AmplB),A
                 LD A,#FF
                 LD (SFX_END),A
-                RET 
+                RET
 
 PLAY_SFX1       LD B,(HL)
                 INC HL
                 LD A,B
                 DUP 4
-                RRCA 
-                EDUP 
+                RRCA
+                EDUP
                 AND #0F
                 LD (AYREGS+AmplB),A
-;шум
+;С€СѓРј
                 BIT 0,B
                 JR Z,PLAY_SFX2
                 LD A,(HL)
@@ -1249,7 +1249,7 @@ PLAY_SFX1       LD B,(HL)
                 LD A,(AYREGS+Mixer)
                 AND %11101111
                 LD (AYREGS+Mixer),A
-;тон
+;С‚РѕРЅ
 PLAY_SFX2       BIT 1,B
                 JR Z,PLAY_SFX3
                 LD A,(HL)
@@ -1262,29 +1262,28 @@ PLAY_SFX2       BIT 1,B
                 LD A,(AYREGS+Mixer)
                 AND %11111101
                 LD (AYREGS+Mixer),A
-;закольцовка
+;Р·Р°РєРѕР»СЊС†РѕРІРєР°
 PLAY_SFX3       BIT 2,B
                 JR Z,PLAY_SFX4
                 LD HL,(SFX_LOOP)
-;конец семпла
+;РєРѕРЅРµС† СЃРµРјРїР»Р°
 PLAY_SFX4       BIT 3,B
                 JR Z,PLAY_SFX5
 MUTE_SFX        LD HL,0
 
 PLAY_SFX5       LD (SFX_POS),HL
-                RET 
+                RET
 SFX_POS         DW 0
 SFX_LOOP        DW 0
 SFX_END         DB 0
 
 
-;запуск постепенного затухания музыки
+;Р·Р°РїСѓСЃРє РїРѕСЃС‚РµРїРµРЅРЅРѕРіРѕ Р·Р°С‚СѓС…Р°РЅРёСЏ РјСѓР·С‹РєРё
 
 FADEOUT_MUSIC   LD A,63
                 LD (FADEOUT_MCONT),A
-FADEOUT_M1      EI 
-                HALT 
+FADEOUT_M1      EI
+                HALT
                 DNZ A,FADEOUT_M1
-                RET 
+                RET
 FADEOUT_MCONT   DB 0
-

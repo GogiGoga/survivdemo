@@ -1,13 +1,13 @@
 ;++++++++++++++++ ENGINE_3.H +++++++++++++
-;движок игры
+;РґРІРёР¶РѕРє РёРіСЂС‹
 
                 MAIN "GAME.H",#C0
 
-;вывод статистики на экран
+;РІС‹РІРѕРґ СЃС‚Р°С‚РёСЃС‚РёРєРё РЅР° СЌРєСЂР°РЅ
 
 SHOW_STATISTIC
 
-;аттрибуты
+;Р°С‚С‚СЂРёР±СѓС‚С‹
                 LD A,(ACTIVE_SCREEN)
                 ADD A,#18
                 LD H,A
@@ -17,14 +17,14 @@ SHOW_STATISTIC
                 DUP 3
                 INC L
                 LD (HL),A
-                EDUP 
+                EDUP
                 LD L,60
                 LD (HL),%01000111
                 DUP 3
                 INC L
                 LD (HL),A
-                EDUP 
-;жизнь
+                EDUP
+;Р¶РёР·РЅСЊ
                 LD A,(ACTIVE_SCREEN)
                 LD H,A
                 LD L,28
@@ -57,13 +57,13 @@ SHOW_STATISTIC
                 LD D,'MINI_FNT
                 LD E,13*8
 SHOW_STC1       LD A,(DE)
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 OR (HL)
                 LD (HL),A
                 INC E,H
                 DJNZ SHOW_STC1
-;патроны
+;РїР°С‚СЂРѕРЅС‹
                 LD A,(ACTIVE_SCREEN)
                 LD H,A
                 LD L,60
@@ -73,12 +73,12 @@ SHOW_STC1       LD A,(DE)
                 LD A,(DISCRIPTORS+BULLET)
                 CALL PRINT_DEC
 
-                RET 
+                RET
 
 
-;печать символа из минишрифта
-;вх  - HL - экранный адрес
-;      A - номер символа * 8
+;РїРµС‡Р°С‚СЊ СЃРёРјРІРѕР»Р° РёР· РјРёРЅРёС€СЂРёС„С‚Р°
+;РІС…  - HL - СЌРєСЂР°РЅРЅС‹Р№ Р°РґСЂРµСЃ
+;      A - РЅРѕРјРµСЂ СЃРёРјРІРѕР»Р° * 8
 
 PRINT_SMF       PUSH HL
                 LD B,8
@@ -89,60 +89,60 @@ PRINT_SMF1      LD A,(DE)
                 INC E,H
                 DJNZ PRINT_SMF1
                 POP HL
-                RET 
+                RET
 
-;печать десятичного числа (3 знакоместа)
-;вх  - HL - экранный адрес
-;    - A - число
+;РїРµС‡Р°С‚СЊ РґРµСЃСЏС‚РёС‡РЅРѕРіРѕ С‡РёСЃР»Р° (3 Р·РЅР°РєРѕРјРµСЃС‚Р°)
+;РІС…  - HL - СЌРєСЂР°РЅРЅС‹Р№ Р°РґСЂРµСЃ
+;    - A - С‡РёСЃР»Рѕ
 
-PRINT_DEC       EXX 
+PRINT_DEC       EXX
                 CALL DECBCD
                 LD H,'MINI_FNT
-                EXX 
+                EXX
                 LD B,8
 
-PRINT_D1        EXX 
+PRINT_D1        EXX
                 LD L,C
                 LD A,(HL)
-                RLCA 
-                RLCA 
+                RLCA
+                RLCA
                 LD E,A
                 AND #03
                 LD L,B
                 OR (HL)
-                EXX 
+                EXX
                 LD (HL),A
                 INC L
-                EXX 
+                EXX
                 LD A,E
                 AND #F0
                 LD E,A
                 LD L,D
                 LD A,(HL)
-                RLCA 
-                RLCA 
-                RLCA 
-                RLCA 
+                RLCA
+                RLCA
+                RLCA
+                RLCA
                 LD L,A
                 AND #0F
                 OR E
-                EXX 
+                EXX
                 LD (HL),A
                 INC L
-                EXX 
+                EXX
                 LD A,L
                 AND #C0
                 INC B,C,D
-                EXX 
+                EXX
                 LD (HL),A
                 DEC L,L
                 INC H
                 DJNZ PRINT_D1
-                RET 
+                RET
 
 
-;десятичное преобразование A в BCD
-;с исключением первых нулей
+;РґРµСЃСЏС‚РёС‡РЅРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ A РІ BCD
+;СЃ РёСЃРєР»СЋС‡РµРЅРёРµРј РїРµСЂРІС‹С… РЅСѓР»РµР№
 
 DECBCD          LD BC,0
 
@@ -175,23 +175,23 @@ DECBCD_4        ADD A,10
                 LD B,A
                 RET NZ
 
-                LD B,10*8 ;пробел
+                LD B,10*8 ;РїСЂРѕР±РµР»
                 LD A,C
                 OR A
                 RET NZ
 
-                LD C,10*8 ;пробел
-                RET 
+                LD C,10*8 ;РїСЂРѕР±РµР»
+                RET
 
 
-;вывод осколков на экран
-;вх  - HL - координаты на карте в символах
-;      A - номер спрайта осколков
-;вых - нет
+;РІС‹РІРѕРґ РѕСЃРєРѕР»РєРѕРІ РЅР° СЌРєСЂР°РЅ
+;РІС…  - HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° РєР°СЂС‚Рµ РІ СЃРёРјРІРѕР»Р°С…
+;      A - РЅРѕРјРµСЂ СЃРїСЂР°Р№С‚Р° РѕСЃРєРѕР»РєРѕРІ
+;РІС‹С… - РЅРµС‚
 
 DRW_CLUSTER     PUSH AF,BC,DE,HL
 
-;проверяем поподание осколков на экран
+;РїСЂРѕРІРµСЂСЏРµРј РїРѕРїРѕРґР°РЅРёРµ РѕСЃРєРѕР»РєРѕРІ РЅР° СЌРєСЂР°РЅ
                 LD C,A
                 LD DE,(MAP_XY)
                 SLA D,E
@@ -214,8 +214,8 @@ DRW_CLUSTER     PUSH AF,BC,DE,HL
                 LD DE,TAB_REDRAW
                 ADDA DE
                 LD A,(ACTIVE_SCREEN)
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND 32
                 LD H,A
                 LD A,L
@@ -233,7 +233,7 @@ DRW_CLUSTER     PUSH AF,BC,DE,HL
                 LD (HL),A
                 POP HL,DE
 
-;находим адрес спрайта осколков
+;РЅР°С…РѕРґРёРј Р°РґСЂРµСЃ СЃРїСЂР°Р№С‚Р° РѕСЃРєРѕР»РєРѕРІ
                 LD A,C
                 ADD A,A
                 ADD A,A
@@ -261,7 +261,7 @@ DRW_CLUSTER1    LD A,(DE)
                 LD (HL),A
 
 DRW_CLUSTERE    POP HL,DE,BC,AF
-                RET 
+                RET
 
 DRW_CLUSTERSPR  DB #00,#14,#00,#18
                 DB #50,#04,#00,#00
@@ -276,7 +276,7 @@ DRW_CLUSTERSPR  DB #00,#14,#00,#18
                 DB #50,#04,#00,#00
 
 
-;вывод указателя места на экран
+;РІС‹РІРѕРґ СѓРєР°Р·Р°С‚РµР»СЏ РјРµСЃС‚Р° РЅР° СЌРєСЂР°РЅ
 SHOW_PLACE      LD A,(PLACE_CNTR)
                 OR A
                 RET Z
@@ -289,13 +289,13 @@ SHOW_PLACE      LD A,(PLACE_CNTR)
                 XOR A
                 LD (PLACE_CNTR),A
                 DUP 4
-                RLCA 
-                EDUP 
+                RLCA
+                EDUP
                 AND #C0
                 LD E,A
                 LD D,'PLACE_SPRITE
 
-;выводим указатель
+;РІС‹РІРѕРґРёРј СѓРєР°Р·Р°С‚РµР»СЊ
                 RAMPAGE 7
                 LD HL,(PLACE_XY)
                 LD BC,(MAP_XY)
@@ -321,17 +321,17 @@ SHOW_PLACE2     LD A,E
                 CP 16
                 RET NC
                 CALL SHOW_PLACED
-                RET 
+                RET
 
-;прорисовка половинок указателя
+;РїСЂРѕСЂРёСЃРѕРІРєР° РїРѕР»РѕРІРёРЅРѕРє СѓРєР°Р·Р°С‚РµР»СЏ
 SHOW_PLACED     PUSH DE,HL
                 LD A,H
                 ADD A,A
                 LD DE,TAB_REDRAW+32
                 ADDA DE
                 LD A,(ACTIVE_SCREEN)
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND 32
                 LD H,A
                 LD A,L
@@ -366,10 +366,10 @@ SHOW_PLACED1    LD A,(DE)
                 DOWN HL
                 DJNZ SHOW_PLACED1
                 POP HL,DE
-                RET 
+                RET
 
 
-;вывод осколков на экран
+;РІС‹РІРѕРґ РѕСЃРєРѕР»РєРѕРІ РЅР° СЌРєСЂР°РЅ
 SHOW_CLUSTER    LD HL,CLUSTER_DISCR
                 LD B,16
 SHOW_CLUS1      LD D,(HL)
@@ -380,8 +380,8 @@ SHOW_CLUS1      LD D,(HL)
                 EX DE,HL
                 OR A
                 JR Z,SHOW_CLUS2
-                RRCA 
-                RRCA 
+                RRCA
+                RRCA
                 AND 3
                 CALL DRW_CLUSTER
                 LD A,(FRAME_CURRENT)
@@ -401,12 +401,12 @@ SHOW_CLUS1      LD D,(HL)
 SHOW_CLUS2      EX DE,HL
                 INC L
                 DJNZ SHOW_CLUS1
-                RET 
+                RET
 
 
-;вывод видимых активных объектов на экран
+;РІС‹РІРѕРґ РІРёРґРёРјС‹С… Р°РєС‚РёРІРЅС‹С… РѕР±СЉРµРєС‚РѕРІ РЅР° СЌРєСЂР°РЅ
 SHOW_OBJECT
-;находим объекты попадающие в экран
+;РЅР°С…РѕРґРёРј РѕР±СЉРµРєС‚С‹ РїРѕРїР°РґР°СЋС‰РёРµ РІ СЌРєСЂР°РЅ
                 LD IX,DISCRIPTORS
                 LD HL,(MAP_XY)
                 LD DE,TEMP_TAB
@@ -422,7 +422,7 @@ SHOW_OBJ1       LD A,(IX+XCRD)
                 JR Z,SHOW_OBJ3
 
                 LD A,(IX+XSM)
-                RLA 
+                RLA
                 LD A,(IX+XCRD)
                 SBC A,0
                 ADD A,2
@@ -430,7 +430,7 @@ SHOW_OBJ1       LD A,(IX+XCRD)
                 JR C,SHOW_OBJ3
 
                 LD A,(IX+XSM)
-                RLA 
+                RLA
                 LD A,H
                 ADC A,15
                 CP (IX+XCRD)
@@ -464,8 +464,8 @@ SHOW_OBJ1       LD A,(IX+XCRD)
                 PUSH AF
                 CP 8
                 LD A,0
-                RRA 
-                RRA 
+                RRA
+                RRA
                 XOR #40
                 OR C
                 LD C,A
@@ -497,9 +497,9 @@ SHOW_OBJ3       PUSH DE
                 DNZ B,SHOW_OBJ1
                 OR C
                 JR NZ,SHOW_OBJ4
-                RET 
+                RET
 
-;сортируем объекты по высоте на экране
+;СЃРѕСЂС‚РёСЂСѓРµРј РѕР±СЉРµРєС‚С‹ РїРѕ РІС‹СЃРѕС‚Рµ РЅР° СЌРєСЂР°РЅРµ
 SHOW_OBJ4       LD HL,TEMP_TAB
                 LD DE,TEMP_TAB+4
                 LD B,C
@@ -518,7 +518,7 @@ SHOW_OBJ6       LD A,(DE)
                 LD A,C
                 LD (DE),A
                 INC L,E
-                EDUP 
+                EDUP
                 POP HL,DE
 SHOW_OBJ7       LD A,E
                 ADD A,4
@@ -534,7 +534,7 @@ SHOW_OBJ7       LD A,E
                 DJNZ SHOW_OBJ5
 SHOW_OBJ8       POP BC
 
-;рисуем объекты
+;СЂРёСЃСѓРµРј РѕР±СЉРµРєС‚С‹
                 LD HL,TEMP_TAB
 SHOW_OBJ9       LD A,(HL)
                 SUB 32
@@ -550,10 +550,10 @@ SHOW_OBJ9       LD A,(HL)
                 CALL PUT_SPRITE
                 EX DE,HL
                 DJNZ SHOW_OBJ9
-                RET 
+                RET
 
 
-;вывод неактивных объектов на экран
+;РІС‹РІРѕРґ РЅРµР°РєС‚РёРІРЅС‹С… РѕР±СЉРµРєС‚РѕРІ РЅР° СЌРєСЂР°РЅ
 SHOW_STATIC     LD IX,DISCRIPTORS
                 LD DE,DISCR_LEN
                 LD B,OBJECT_MAX
@@ -599,7 +599,7 @@ SHOW_STATIC1    LD HL,(MAP_XY)
                 SUB H
                 JR C,SHOW_STATIC2
                 CP 8
-                CCF 
+                CCF
                 RR C,C
 SHOW_STATIC2    ADD A,A
                 ADD A,A
@@ -613,18 +613,18 @@ SHOW_STATIC2    ADD A,A
 
 SHOW_STATIC3    ADD IX,DE
                 DJNZ SHOW_STATIC1
-                RET 
+                RET
 
 
-;прорисовка огня из оружия
-;вх  - IX - описатель объекта
-;вых - нет
+;РїСЂРѕСЂРёСЃРѕРІРєР° РѕРіРЅСЏ РёР· РѕСЂСѓР¶РёСЏ
+;РІС…  - IX - РѕРїРёСЃР°С‚РµР»СЊ РѕР±СЉРµРєС‚Р°
+;РІС‹С… - РЅРµС‚
 
 FIRE_LIGHT      PUSH AF,DE,HL
 
                 RAMPAGE 7
 
-;находим координаты огня
+;РЅР°С…РѕРґРёРј РєРѕРѕСЂРґРёРЅР°С‚С‹ РѕРіРЅСЏ
                 LD H,(IX+XCRD)
                 LD L,(IX+YCRD)
                 LD DE,(MAP_XY)
@@ -639,43 +639,43 @@ FIRE_LIGHT1     JR $
                 INC H,H         ;0
                 DEC L,L
                 JR FIRE_LIGHT2
-                NOP 
-                NOP 
+                NOP
+                NOP
                 INC H,H,H       ;1
                 DEC L,L
                 JR FIRE_LIGHT2
-                NOP 
+                NOP
                 INC H,H,H       ;2
                 JR FIRE_LIGHT2
-                NOP 
-                NOP 
-                NOP 
+                NOP
+                NOP
+                NOP
                 INC H,H,H,L     ;3
                 JR FIRE_LIGHT2
-                NOP 
-                NOP 
+                NOP
+                NOP
                 INC H,H,L       ;4
                 JR FIRE_LIGHT2
-                NOP 
-                NOP 
-                NOP 
+                NOP
+                NOP
+                NOP
                 INC L           ;5
                 JR FIRE_LIGHT2
-                NOP 
-                NOP 
-                NOP 
-                NOP 
-                NOP 
+                NOP
+                NOP
+                NOP
+                NOP
+                NOP
                 JR FIRE_LIGHT2  ;6
-                NOP 
-                NOP 
-                NOP 
-                NOP 
-                NOP 
-                NOP 
+                NOP
+                NOP
+                NOP
+                NOP
+                NOP
+                NOP
                 DEC L,L         ;7
 
-;проверяем на выход за пределы экрана
+;РїСЂРѕРІРµСЂСЏРµРј РЅР° РІС‹С…РѕРґ Р·Р° РїСЂРµРґРµР»С‹ СЌРєСЂР°РЅР°
 FIRE_LIGHT2     LD A,H
                 SUB D
                 JR C,FIRE_LIGHT3
@@ -689,7 +689,7 @@ FIRE_LIGHT2     LD A,H
                 JR NC,FIRE_LIGHT3
                 LD L,A
 
-;подсвечиваем аттрибут
+;РїРѕРґСЃРІРµС‡РёРІР°РµРј Р°С‚С‚СЂРёР±СѓС‚
                 ATTRADR HL
                 LD A,(HL)
                 AND #F8
@@ -697,19 +697,19 @@ FIRE_LIGHT2     LD A,H
                 LD (HL),A
 
 FIRE_LIGHT3     POP HL,DE,AF
-                RET 
+                RET
 
 
-;проверить карту на объекты под курсором
-;вх  - нет
-;вых - NZ - объект ненайден, Z - найден
-;      IY - описатель найденого объекта
+;РїСЂРѕРІРµСЂРёС‚СЊ РєР°СЂС‚Сѓ РЅР° РѕР±СЉРµРєС‚С‹ РїРѕРґ РєСѓСЂСЃРѕСЂРѕРј
+;РІС…  - РЅРµС‚
+;РІС‹С… - NZ - РѕР±СЉРµРєС‚ РЅРµРЅР°Р№РґРµРЅ, Z - РЅР°Р№РґРµРЅ
+;      IY - РѕРїРёСЃР°С‚РµР»СЊ РЅР°Р№РґРµРЅРѕРіРѕ РѕР±СЉРµРєС‚Р°
 
-SEARCH_OBJECT   EXX 
+SEARCH_OBJECT   EXX
                 PUSH BC
                 LD C,A
                 LD B,OBJECT_MAX
-                EXX 
+                EXX
                 PUSH BC,DE,HL
 
                 LD HL,DISCRIPTORS+1
@@ -747,7 +747,7 @@ SEARCH_OBJ1     PUSH HL
                 DUP 4
                 ADD A,A
                 INC L
-                EDUP 
+                EDUP
                 ADD A,(HL);YSM
                 CP C
                 JR NC,SEARCH_OBJ2
@@ -766,7 +766,7 @@ SEARCH_OBJ1     PUSH HL
                 DUP 4
                 ADD A,A
                 INC L
-                EDUP 
+                EDUP
                 ADD A,(HL);XSM
                 CP B
                 JR NC,SEARCH_OBJ2
@@ -786,27 +786,27 @@ SEARCH_OBJ2     POP HL
                 LD A,H
                 ADC A,0
                 LD H,A
-                EXX 
+                EXX
                 DEC B
-                EXX 
+                EXX
                 JP NZ,SEARCH_OBJ1
 
 SEARCH_OBJ3     XOR A
                 DEC A
 
 SEARCH_OBJ4     POP HL,DE,BC
-                EXX 
+                EXX
                 LD A,C
                 POP BC
-                EXX 
-                RET 
+                EXX
+                RET
 
 
-;рисование тайла
-;вх  - HL - координаты на экране
-;      DE - адрес тайлсета
-;      A - номер тайла
-;вых - нет
+;СЂРёСЃРѕРІР°РЅРёРµ С‚Р°Р№Р»Р°
+;РІС…  - HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° СЌРєСЂР°РЅРµ
+;      DE - Р°РґСЂРµСЃ С‚Р°Р№Р»СЃРµС‚Р°
+;      A - РЅРѕРјРµСЂ С‚Р°Р№Р»Р°
+;РІС‹С… - РЅРµС‚
 
 DRAW_TILE       PUSH AF,BC,DE,HL
 
@@ -828,12 +828,12 @@ DRAW_TILE       PUSH AF,BC,DE,HL
                 CALL PUT_IMAGE
 
                 POP DE,BC,AF
-                RET 
+                RET
 
 
-;сделать тайл выделенным и мигающим
-;вх  - HL - координаты на экране
-;вых - нет
+;СЃРґРµР»Р°С‚СЊ С‚Р°Р№Р» РІС‹РґРµР»РµРЅРЅС‹Рј Рё РјРёРіР°СЋС‰РёРј
+;РІС…  - HL - РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° СЌРєСЂР°РЅРµ
+;РІС‹С… - РЅРµС‚
 
 FLASH_TILE      PUSH AF,BC,HL
                 XOR A
@@ -853,17 +853,17 @@ FLASH_TILE      PUSH AF,BC,HL
                 INC L
                 SET 7,(HL)
                 POP HL,BC,AF
-                RET 
+                RET
 
-;вывод типового спрайта на экран
-;вх  - H - коорд X (0..31)
-;      L - коорд Y (0..23)
-;      C - тип объекта
-;      A - номер спрайта
+;РІС‹РІРѕРґ С‚РёРїРѕРІРѕРіРѕ СЃРїСЂР°Р№С‚Р° РЅР° СЌРєСЂР°РЅ
+;РІС…  - H - РєРѕРѕСЂРґ X (0..31)
+;      L - РєРѕРѕСЂРґ Y (0..23)
+;      C - С‚РёРї РѕР±СЉРµРєС‚Р°
+;      A - РЅРѕРјРµСЂ СЃРїСЂР°Р№С‚Р°
 
 DRAW_TYPE       PUSH AF,BC,DE,HL
 
-;находим адрес спрайта
+;РЅР°С…РѕРґРёРј Р°РґСЂРµСЃ СЃРїСЂР°Р№С‚Р°
                 PUSH HL
 
                 LD D,A
@@ -881,7 +881,7 @@ DRAW_TYPE2      INC HL
                 LD HL,SPRITES
                 LD DE,TEMP_TAB
                 LD BC,256
-                LDIR 
+                LDIR
 
                 POP HL
                 RAMPAGE 7
@@ -891,5 +891,4 @@ DRAW_TYPE2      INC HL
                 CALL PUT_IMAGE
 
                 POP HL,DE,BC,AF
-                RET 
-
+                RET

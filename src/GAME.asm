@@ -1,86 +1,86 @@
-;основной модуль игры
-;начало разработки - 02.10.2010
+;РѕСЃРЅРѕРІРЅРѕР№ РјРѕРґСѓР»СЊ РёРіСЂС‹
+;РЅР°С‡Р°Р»Рѕ СЂР°Р·СЂР°Р±РѕС‚РєРё - 02.10.2010
 
-;режим компилирования
+;СЂРµР¶РёРј РєРѕРјРїРёР»РёСЂРѕРІР°РЅРёСЏ
 
-;EDITOR = 0 - игра, 1 - редактор
+;EDITOR = 0 - РёРіСЂР°, 1 - СЂРµРґР°РєС‚РѕСЂ
 EDITOR=0
-;BASIC = 0 - тестирование, 1 - BASIC
+;BASIC = 0 - С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ, 1 - BASIC
 BASIC=0
 
-;---------- распределение памяти ---------
-MINI_FNT        EQU #AB00 ;размер #100
-MAP_OBJECTS     EQU #AC00 ;размер #300
-DISCRIPTORS     EQU #AF00 ;размер #200
-INT_VECTOR      EQU #B100 ;размер #200
-INPUT_CURSPR    EQU #B300 ;размер #600
-TILE_TYPE       EQU #B900 ;размер #100
-TRACE_TAB       EQU #BA00 ;размер #100
-MAIN_TRACE      EQU #BB00 ;размер #100
-CLUSTER_DISCR   EQU #BC00 ;размер #100
-MAP_REDRAW      EQU #BCC0 ;размер #040
-TEMP_TAB        EQU #BD00 ;размер #100
-TAB_TILEPASS    EQU #BE00 ;размер #020
-MAP_BUFFER      EQU #BE20 ;размер #0C0
-MAIN_STEK       EQU #BFFF ;стек
-;-------------- по страницам -------------
-MAP             EQU #C000 ;размер #4000,0
-SPRITES         EQU #C000 ;размер #4000,v
-MUSIC           EQU #C000 ;размер #3000,4
-SFX_TAB         EQU #E700 ;размер #1900,4
-WIN_FNT         EQU #C000 ;размер #0800,6
-TILE_SPRITE     EQU #DB00 ;размер #2500,7
-PLACE_SPRITE    EQU #DB00 ;размер #0100,7
+;---------- СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё ---------
+MINI_FNT        EQU #AB00 ;СЂР°Р·РјРµСЂ #100
+MAP_OBJECTS     EQU #AC00 ;СЂР°Р·РјРµСЂ #300
+DISCRIPTORS     EQU #AF00 ;СЂР°Р·РјРµСЂ #200
+INT_VECTOR      EQU #B100 ;СЂР°Р·РјРµСЂ #200
+INPUT_CURSPR    EQU #B300 ;СЂР°Р·РјРµСЂ #600
+TILE_TYPE       EQU #B900 ;СЂР°Р·РјРµСЂ #100
+TRACE_TAB       EQU #BA00 ;СЂР°Р·РјРµСЂ #100
+MAIN_TRACE      EQU #BB00 ;СЂР°Р·РјРµСЂ #100
+CLUSTER_DISCR   EQU #BC00 ;СЂР°Р·РјРµСЂ #100
+MAP_REDRAW      EQU #BCC0 ;СЂР°Р·РјРµСЂ #040
+TEMP_TAB        EQU #BD00 ;СЂР°Р·РјРµСЂ #100
+TAB_TILEPASS    EQU #BE00 ;СЂР°Р·РјРµСЂ #020
+MAP_BUFFER      EQU #BE20 ;СЂР°Р·РјРµСЂ #0C0
+MAIN_STEK       EQU #BFFF ;СЃС‚РµРє
+;-------------- РїРѕ СЃС‚СЂР°РЅРёС†Р°Рј -------------
+MAP             EQU #C000 ;СЂР°Р·РјРµСЂ #4000,0
+SPRITES         EQU #C000 ;СЂР°Р·РјРµСЂ #4000,v
+MUSIC           EQU #C000 ;СЂР°Р·РјРµСЂ #3000,4
+SFX_TAB         EQU #E700 ;СЂР°Р·РјРµСЂ #1900,4
+WIN_FNT         EQU #C000 ;СЂР°Р·РјРµСЂ #0800,6
+TILE_SPRITE     EQU #DB00 ;СЂР°Р·РјРµСЂ #2500,7
+PLACE_SPRITE    EQU #DB00 ;СЂР°Р·РјРµСЂ #0100,7
 ;-----------------------------------------
 
 
-;--------------- константы ---------------
-DISCR_LEN       EQU 32 ;длинна дискриптора
-OBJECT_MAX      EQU 16 ;макс. колво объек.
-MAP_PROPERTY    EQU #FF80 ;свойства карты
+;--------------- РєРѕРЅСЃС‚Р°РЅС‚С‹ ---------------
+DISCR_LEN       EQU 32 ;РґР»РёРЅРЅР° РґРёСЃРєСЂРёРїС‚РѕСЂР°
+OBJECT_MAX      EQU 16 ;РјР°РєСЃ. РєРѕР»РІРѕ РѕР±СЉРµРє.
+MAP_PROPERTY    EQU #FF80 ;СЃРІРѕР№СЃС‚РІР° РєР°СЂС‚С‹
 ;-----------------------------------------
 
 
-;----------- описатель объекта -----------
-NUM             EQU 0  ;номер объекта
-XCRD            EQU 1  ;коорд. X
-YCRD            EQU 2  ;коорд. Y
-LIFE            EQU 3  ;жизнь объекта
-TYPE            EQU 4  ;тип объекта
-XSM             EQU 5  ;смещ. X в символах
-YSM             EQU 6  ;смещ. Y в пискелях
-SPRT            EQU 7  ;текущий спрайт
-DIRECT          EQU 8  ;направление
-ORDER           EQU 9  ;текущий приказ
-FAZE            EQU 10 ;текущая фаза пр.
-CNTR            EQU 11 ;счетчик
-XTAG            EQU 12 ;коорд. X цели
-YTAG            EQU 13 ;коорд. Y цели
-NEWORDER        EQU 14 ;новый приказ
-BASEORDER       EQU 15 ;базовый приказ
-TRACEADR        EQU 16 ;адрес в буфере
-XLTAG           EQU 17 ;пред. X цели
-YLTAG           EQU 18 ;пред. Y цели
-NUMINT          EQU 19 ;номер взаим. объ.
-ENEMY           EQU 20 ;признак врага
-HIT             EQU 21 ;сила удара
-DAMAGE          EQU 22 ;полученный урон
-BULLET          EQU 23 ;кол-во патронов
-MAXLIFE         EQU 24 ;макс. жизни
+;----------- РѕРїРёСЃР°С‚РµР»СЊ РѕР±СЉРµРєС‚Р° -----------
+NUM             EQU 0  ;РЅРѕРјРµСЂ РѕР±СЉРµРєС‚Р°
+XCRD            EQU 1  ;РєРѕРѕСЂРґ. X
+YCRD            EQU 2  ;РєРѕРѕСЂРґ. Y
+LIFE            EQU 3  ;Р¶РёР·РЅСЊ РѕР±СЉРµРєС‚Р°
+TYPE            EQU 4  ;С‚РёРї РѕР±СЉРµРєС‚Р°
+XSM             EQU 5  ;СЃРјРµС‰. X РІ СЃРёРјРІРѕР»Р°С…
+YSM             EQU 6  ;СЃРјРµС‰. Y РІ РїРёСЃРєРµР»СЏС…
+SPRT            EQU 7  ;С‚РµРєСѓС‰РёР№ СЃРїСЂР°Р№С‚
+DIRECT          EQU 8  ;РЅР°РїСЂР°РІР»РµРЅРёРµ
+ORDER           EQU 9  ;С‚РµРєСѓС‰РёР№ РїСЂРёРєР°Р·
+FAZE            EQU 10 ;С‚РµРєСѓС‰Р°СЏ С„Р°Р·Р° РїСЂ.
+CNTR            EQU 11 ;СЃС‡РµС‚С‡РёРє
+XTAG            EQU 12 ;РєРѕРѕСЂРґ. X С†РµР»Рё
+YTAG            EQU 13 ;РєРѕРѕСЂРґ. Y С†РµР»Рё
+NEWORDER        EQU 14 ;РЅРѕРІС‹Р№ РїСЂРёРєР°Р·
+BASEORDER       EQU 15 ;Р±Р°Р·РѕРІС‹Р№ РїСЂРёРєР°Р·
+TRACEADR        EQU 16 ;Р°РґСЂРµСЃ РІ Р±СѓС„РµСЂРµ
+XLTAG           EQU 17 ;РїСЂРµРґ. X С†РµР»Рё
+YLTAG           EQU 18 ;РїСЂРµРґ. Y С†РµР»Рё
+NUMINT          EQU 19 ;РЅРѕРјРµСЂ РІР·Р°РёРј. РѕР±СЉ.
+ENEMY           EQU 20 ;РїСЂРёР·РЅР°Рє РІСЂР°РіР°
+HIT             EQU 21 ;СЃРёР»Р° СѓРґР°СЂР°
+DAMAGE          EQU 22 ;РїРѕР»СѓС‡РµРЅРЅС‹Р№ СѓСЂРѕРЅ
+BULLET          EQU 23 ;РєРѕР»-РІРѕ РїР°С‚СЂРѕРЅРѕРІ
+MAXLIFE         EQU 24 ;РјР°РєСЃ. Р¶РёР·РЅРё
 
                 ORG #6000
-                ENT 
+                ENT
 BEGIN_PROG
 
 ;------ BASIC MONOLOADER GENERATOR -------
 ;--- (c)2001 Evg/STALL -4b 2004 Alone  ---
 
                 IFN BASIC
-BASIC_START     EQU #5C53 ;начало BASIC программы
-BASIC_VARS      EQU #5C4B ;конец программы, начало переменных
-BASIC_END       EQU #5C59 ;конец переменных
-BASIC_RUN       EQU #5CD1 ;номер строки старта
-BASIC_MSKSZ     EQU #5D06 ;Количество символов поиска имени
+BASIC_START     EQU #5C53 ;РЅР°С‡Р°Р»Рѕ BASIC РїСЂРѕРіСЂР°РјРјС‹
+BASIC_VARS      EQU #5C4B ;РєРѕРЅРµС† РїСЂРѕРіСЂР°РјРјС‹, РЅР°С‡Р°Р»Рѕ РїРµСЂРµРјРµРЅРЅС‹С…
+BASIC_END       EQU #5C59 ;РєРѕРЅРµС† РїРµСЂРµРјРµРЅРЅС‹С…
+BASIC_RUN       EQU #5CD1 ;РЅРѕРјРµСЂ СЃС‚СЂРѕРєРё СЃС‚Р°СЂС‚Р°
+BASIC_MSKSZ     EQU #5D06 ;РљРѕР»РёС‡РµСЃС‚РІРѕ СЃРёРјРІРѕР»РѕРІ РїРѕРёСЃРєР° РёРјРµРЅРё
 
                 LD HL,BASIC_NAME
                 LD C,19
@@ -114,7 +114,7 @@ BASIC_MSKSZ     EQU #5D06 ;Количество символов поиска имени
                 LD (BASIC_START),HL
                 POP HL
                 LD (BASIC_VARS),HL
-                RET 
+                RET
 
 BASIC_NAME      DB "DEMO    B"
 BASIC_TST
@@ -131,7 +131,7 @@ BASIC_STR       DB #FD ;CLEAR
                 DB "0"
                 DB #E,0,0       ;\
                 DW $+2          ;/ #5D50
-                ENDIF 
+                ENDIF
 ;-----------------------------------------
 
                 JP START
@@ -139,7 +139,7 @@ BASIC_STR       DB #FD ;CLEAR
                 ;CALL CAPTURE_SPRITE
                 ;RET
 
-                DI 
+                DI
                 LD HL,#C000
                 LD DE,CAPTURE_SPN
                 CALL LOAD_FILE
@@ -149,8 +149,8 @@ BASIC_STR       DB #FD ;CLEAR
 
                 LD HL,#0000
 
-LOOP            EI 
-                HALT 
+LOOP            EI
+                HALT
 
                 LD A,2
                 OUT (254),A
@@ -167,15 +167,15 @@ LOOP            EI
                 XOR #FF
                 AND #1F
                 JR Z,LOOP
-                RET 
+                RET
 
 ;-----------------------------------------
-MAX_SPRSETS     EQU 2;кол-во SPRSET в RAM
+MAX_SPRSETS     EQU 2;РєРѕР»-РІРѕ SPRSET РІ RAM
 
-;таблица расположения спрайтсетов
-;1-ый байт - тип объекта
-;2-ой байт - страница памяти
-SPRITE_TYPE     DB 0,1        ;глав. герой
+;С‚Р°Р±Р»РёС†Р° СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ СЃРїСЂР°Р№С‚СЃРµС‚РѕРІ
+;1-С‹Р№ Р±Р°Р№С‚ - С‚РёРї РѕР±СЉРµРєС‚Р°
+;2-РѕР№ Р±Р°Р№С‚ - СЃС‚СЂР°РЅРёС†Р° РїР°РјСЏС‚Рё
+SPRITE_TYPE     DB 0,1        ;РіР»Р°РІ. РіРµСЂРѕР№
                 DB 0,3
                 DB 0,8
                 DB 0,9
@@ -184,7 +184,7 @@ SPRITE_TYPE     DB 0,1        ;глав. герой
 ;-----------------------------------------
 
 
-;---------- таблица свойств тайлов -------
+;---------- С‚Р°Р±Р»РёС†Р° СЃРІРѕР№СЃС‚РІ С‚Р°Р№Р»РѕРІ -------
 TILEPASS        DB %00000000 ;0
                 DB %00000000 ;1
                 DB %11101110 ;2
@@ -220,7 +220,7 @@ TILEPASS        DB %00000000 ;0
                 DB %11111111 ;15
 ;-----------------------------------------
 
-;---------- таблицы для MAP_REDRAW -------
+;---------- С‚Р°Р±Р»РёС†С‹ РґР»СЏ MAP_REDRAW -------
 TAB_REDRAW      DW %1000000000000000
                 DW %0100000000000000
                 DW %0010000000000000
@@ -280,36 +280,36 @@ TAB_REDRAW      DW %1000000000000000
                 IF0 EDITOR
                   INCLUDE "OBJECTS.H",#C5
                   INCLUDE "MAINMODE.H",#C6
-                ELSE 
+                ELSE
                   INCLUDE "EDITOR_1.H",#C5
                   INCLUDE "EDITOR_2.H",#C6
-                ENDIF 
+                ENDIF
 
 START
-;переносим стек
+;РїРµСЂРµРЅРѕСЃРёРј СЃС‚РµРє
                 LD (REST_STEK+1),SP
                 LD SP,MAIN_STEK
 
-;чистим дискрипторы
+;С‡РёСЃС‚РёРј РґРёСЃРєСЂРёРїС‚РѕСЂС‹
                 LD HL,DISCRIPTORS
                 LD DE,DISCRIPTORS+1
                 LD BC,DISCR_LEN*OBJECT_MAX-1
                 LD (HL),0
-                LDIR 
+                LDIR
                 LD HL,CLUSTER_DISCR
                 LD DE,CLUSTER_DISCR+1
                 LD BC,254
                 LD (HL),0
-                LDIR 
+                LDIR
 
-;инициализируем таблицу трассировки
+;РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј С‚Р°Р±Р»РёС†Сѓ С‚СЂР°СЃСЃРёСЂРѕРІРєРё
                 LD HL,TRACE_TAB
                 LD DE,TRACE_TAB+1
                 LD BC,#FF
                 LD (HL),15
-                LDIR 
+                LDIR
 
-;инициализация глав. героя
+;РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РіР»Р°РІ. РіРµСЂРѕСЏ
                 LD IX,DISCRIPTORS
                 LD (IX+NUM),0
                 LD (IX+XCRD),#32
@@ -341,49 +341,49 @@ START
                   CALL MAIN_MODE
                   CALL MUTE_MUSIC
                   CALL MUTE_SFX
-                ELSE 
+                ELSE
                   CALL GAME_EDIT
                   CALL MUTE_MUSIC
                   CALL MUTE_SFX
-                ENDIF 
+                ENDIF
 
                 IFN BASIC
                   JP START
-                ENDIF 
+                ENDIF
 
 REST_STEK       LD SP,0
-                RET 
+                RET
 
-;--------------- переменные --------------
-GAME_MODE       DB 0     ;текущий режим
-CURSOR_TYPE     DB 0     ;тип курсора
-CURSOR_CNTR     DB 0     ;сч-к курсора
-FRAME_COUNTER   DB 0     ;счетчик фреймов
-FRAME_CURRENT   DB 0     ;текущ. FPS
-ACTION_POINT    DB 0     ;сч-к ходов
-MAP_XY          DW 0     ;координаты карты
-ACTIVE_SCREEN   DB #C0   ;активный экран
-SCREEN_READY    DB 0     ;экран готов #FF
-TIMER           DB 0     ;таймер
-PLACE_XY        DW 0     ;координаты указ.
-PLACE_CNTR      DB 0     ;счетчик указат.
-CURRENT_MAP     DB 0     ;номер тек. карты
-CURRENT_TILE    DB 0     ;номер тайлсета
-CURRENT_MUSIC   DB 0     ;номер музыки
-MUSIC_READY     DB 0     ;инициал. муз.
-MUSIC_EXIST     DB 0     ;существование
-MUSIC_ON        DB #FF   ;вкл. муз.
-SFX_ON          DB #FF   ;вкл. муз.
+;--------------- РїРµСЂРµРјРµРЅРЅС‹Рµ --------------
+GAME_MODE       DB 0     ;С‚РµРєСѓС‰РёР№ СЂРµР¶РёРј
+CURSOR_TYPE     DB 0     ;С‚РёРї РєСѓСЂСЃРѕСЂР°
+CURSOR_CNTR     DB 0     ;СЃС‡-Рє РєСѓСЂСЃРѕСЂР°
+FRAME_COUNTER   DB 0     ;СЃС‡РµС‚С‡РёРє С„СЂРµР№РјРѕРІ
+FRAME_CURRENT   DB 0     ;С‚РµРєСѓС‰. FPS
+ACTION_POINT    DB 0     ;СЃС‡-Рє С…РѕРґРѕРІ
+MAP_XY          DW 0     ;РєРѕРѕСЂРґРёРЅР°С‚С‹ РєР°СЂС‚С‹
+ACTIVE_SCREEN   DB #C0   ;Р°РєС‚РёРІРЅС‹Р№ СЌРєСЂР°РЅ
+SCREEN_READY    DB 0     ;СЌРєСЂР°РЅ РіРѕС‚РѕРІ #FF
+TIMER           DB 0     ;С‚Р°Р№РјРµСЂ
+PLACE_XY        DW 0     ;РєРѕРѕСЂРґРёРЅР°С‚С‹ СѓРєР°Р·.
+PLACE_CNTR      DB 0     ;СЃС‡РµС‚С‡РёРє СѓРєР°Р·Р°С‚.
+CURRENT_MAP     DB 0     ;РЅРѕРјРµСЂ С‚РµРє. РєР°СЂС‚С‹
+CURRENT_TILE    DB 0     ;РЅРѕРјРµСЂ С‚Р°Р№Р»СЃРµС‚Р°
+CURRENT_MUSIC   DB 0     ;РЅРѕРјРµСЂ РјСѓР·С‹РєРё
+MUSIC_READY     DB 0     ;РёРЅРёС†РёР°Р». РјСѓР·.
+MUSIC_EXIST     DB 0     ;СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёРµ
+MUSIC_ON        DB #FF   ;РІРєР». РјСѓР·.
+SFX_ON          DB #FF   ;РІРєР». РјСѓР·.
 ;-----------------------------------------
 
 
-;инициализация движка
+;РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РґРІРёР¶РєР°
 INIT_ENGINE
-                DI 
+                DI
                 IM 1
-                EI 
+                EI
 
-;загрузка шрифтов
+;Р·Р°РіСЂСѓР·РєР° С€СЂРёС„С‚РѕРІ
                 RAMPAGE 6
                 LD HL,WIN_FNT
                 LD DE,FONT_NAME
@@ -395,13 +395,13 @@ INIT_ENGINE
                 LD BC,#100
                 CALL LOAD_FILE
 
-;загрузка курсоров
+;Р·Р°РіСЂСѓР·РєР° РєСѓСЂСЃРѕСЂРѕРІ
                 LD HL,INPUT_CURSPR
                 LD DE,CURSOR_NAME
                 LD BC,#600
                 CALL LOAD_FILE
 
-;загрузка спрайтов глав. героя
+;Р·Р°РіСЂСѓР·РєР° СЃРїСЂР°Р№С‚РѕРІ РіР»Р°РІ. РіРµСЂРѕСЏ
                 LD HL,SPRITE_TYPE+1
                 LD A,(HL)
                 CALL RAM_SEL
@@ -413,15 +413,15 @@ INIT_ENGINE
                 LD BC,#4000
                 CALL LOAD_FILE
 
-;инициализация звуковых эфектов
+;РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р·РІСѓРєРѕРІС‹С… СЌС„РµРєС‚РѕРІ
                 RAMPAGE 4
                 LD HL,SFX_TAB
                 LD BC,#1900
                 LD DE,SFX_NAME
                 CALL LOAD_FILE
 
-;инициализация прерываний
-                DI 
+;РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїСЂРµСЂС‹РІР°РЅРёР№
+                DI
                 LD HL,INT_VECTOR
                 LD B,0
                 LD A,'INT_VECTOR+1
@@ -440,24 +440,24 @@ INIT_ENGINE1    LD (HL),A
                 LD A,'INT_VECTOR
                 LD I,A
                 IM 2
-                EI 
+                EI
 
-;инициализация таблицы свойств тайлов
+;РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С‚Р°Р±Р»РёС†С‹ СЃРІРѕР№СЃС‚РІ С‚Р°Р№Р»РѕРІ
                 LD HL,TILEPASS
                 LD DE,TAB_TILEPASS
                 LD BC,32
-                LDIR 
-                RET 
+                LDIR
+                RET
 
 
-;инициализация карты и загрузка ресурсов
-;вх  - A - номер карты
-;INIT_MAP_FIRST - принудительная загрузка
+;РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєР°СЂС‚С‹ Рё Р·Р°РіСЂСѓР·РєР° СЂРµСЃСѓСЂСЃРѕРІ
+;РІС…  - A - РЅРѕРјРµСЂ РєР°СЂС‚С‹
+;INIT_MAP_FIRST - РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅР°СЏ Р·Р°РіСЂСѓР·РєР°
 
-INIT_MAP        DI 
+INIT_MAP        DI
                 IM 1
 
-;загрузка карты
+;Р·Р°РіСЂСѓР·РєР° РєР°СЂС‚С‹
                 LD B,A
                 LD A,(CURRENT_MAP)
                 LD C,A
@@ -470,8 +470,8 @@ INIT_MAP        DI
                 JR Z,INIT_MAP2
 INIT_MAP1       LD (CURRENT_MAP),A
                 DUP 4
-                RRCA 
-                EDUP 
+                RRCA
+                EDUP
                 AND #0F
                 ADD A,#30
                 CP #3A
@@ -496,9 +496,9 @@ INIT_MAP1       LD (CURRENT_MAP),A
                 LD DE,MAP+1
                 LD BC,#3FFF
                 LD (HL),0
-                LDIR 
+                LDIR
 
-;загрузка тайлов
+;Р·Р°РіСЂСѓР·РєР° С‚Р°Р№Р»РѕРІ
 INIT_MAP2       LD HL,MAP_PROPERTY
                 LD A,(INIT_MAP_FIRST)
                 OR A
@@ -510,8 +510,8 @@ INIT_MAP2       LD HL,MAP_PROPERTY
 INIT_MAP3       LD A,(HL)
                 LD (CURRENT_TILE),A
                 DUP 4
-                RRCA 
-                EDUP 
+                RRCA
+                EDUP
                 AND #0F
                 ADD A,#30
                 CP #3A
@@ -538,17 +538,17 @@ INIT_MAP3       LD A,(HL)
                 LD DE,TILE_SPRITE+1
                 LD BC,#24FF
                 LD (HL),0
-                LDIR 
+                LDIR
 
-;переносим информацию о свойствах тайлов
+;РїРµСЂРµРЅРѕСЃРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ СЃРІРѕР№СЃС‚РІР°С… С‚Р°Р№Р»РѕРІ
 INIT_MAP4       LD HL,TILE_SPRITE
                 LD DE,TILE_TYPE
                 LD BC,#100
-                LDIR 
+                LDIR
                 LD HL,TILE_TYPE+255
                 LD (HL),15
 
-;загрузка спрайтов указателя трассера
+;Р·Р°РіСЂСѓР·РєР° СЃРїСЂР°Р№С‚РѕРІ СѓРєР°Р·Р°С‚РµР»СЏ С‚СЂР°СЃСЃРµСЂР°
                 LD A,(INIT_MAP_FIRST)
                 OR A
                 JR Z,INIT_MAP7
@@ -558,7 +558,7 @@ INIT_MAP4       LD HL,TILE_SPRITE
                 LD BC,#100
                 CALL LOAD_FILE
 
-;загрузка спрайтсетов объектов
+;Р·Р°РіСЂСѓР·РєР° СЃРїСЂР°Р№С‚СЃРµС‚РѕРІ РѕР±СЉРµРєС‚РѕРІ
 
 INIT_MAP7       RAMPAGE 0
                 LD DE,MAP_PROPERTY+1
@@ -604,8 +604,8 @@ INIT_MAP14      LD A,(DE)
                 LD HL,SPRITES
                 LD A,B
                 DUP 4
-                RRCA 
-                EDUP 
+                RRCA
+                EDUP
                 AND #0F
                 ADD A,#30
                 CP #3A
@@ -629,20 +629,20 @@ INIT_MAP14      LD A,(DE)
                 INC DE
                 LD BC,#3FFF
                 LD (HL),0
-                LDIR 
+                LDIR
 
 INIT_MAP15      POP HL,DE,BC
                 INC E
                 DJNZ INIT_MAP11
 
-;загрузка объектов карты
-;(в дальнейшем нужно будет исправить на
-;загрузку из профиля игрока)
+;Р·Р°РіСЂСѓР·РєР° РѕР±СЉРµРєС‚РѕРІ РєР°СЂС‚С‹
+;(РІ РґР°Р»СЊРЅРµР№С€РµРј РЅСѓР¶РЅРѕ Р±СѓРґРµС‚ РёСЃРїСЂР°РІРёС‚СЊ РЅР°
+;Р·Р°РіСЂСѓР·РєСѓ РёР· РїСЂРѕС„РёР»СЏ РёРіСЂРѕРєР°)
 
                 LD HL,MAP_NAME
                 LD DE,OBJECT_NAME
                 LD BC,2
-                LDIR 
+                LDIR
                 LD HL,MAP_OBJECTS
                 LD DE,OBJECT_NAME
                 LD BC,#300
@@ -654,17 +654,17 @@ INIT_MAP15      POP HL,DE,BC
                 INC DE
                 LD BC,#2FF
                 LD (HL),0
-                LDIR 
+                LDIR
 
-;загрузка основной музыки карты
+;Р·Р°РіСЂСѓР·РєР° РѕСЃРЅРѕРІРЅРѕР№ РјСѓР·С‹РєРё РєР°СЂС‚С‹
 INIT_MAP16      RAMPAGE 0
                 LD HL,MAP_PROPERTY+7
                 LD A,(HL)
                 CALL INIT_MUSIC
 
                 IM 2
-                EI 
-                RET 
+                EI
+                RET
 
 
 INIT_MAP_FIRST  DB 0
@@ -680,8 +680,8 @@ CURSOR_NAME     DB "cursors r"
 SFX_NAME        DB "sfxbank C"
 
 
-;обработка прерывания
-INTERRUPT       DI 
+;РѕР±СЂР°Р±РѕС‚РєР° РїСЂРµСЂС‹РІР°РЅРёСЏ
+INTERRUPT       DI
                 EX (SP),HL
                 LD (INT_END+1),HL
                 POP HL
@@ -690,8 +690,8 @@ INTERRUPT       DI
                 LD SP,INT_STEK+127
 
                 PUSH AF,BC,DE,HL,IX,IY
-                EXX 
-                EXA 
+                EXX
+                EXA
                 PUSH AF,BC,DE,HL
 
                 ;LD A,1
@@ -702,7 +702,7 @@ INTERRUPT       DI
                 LD (INT_RAM+1),A
                 RAMPAGE 7
 
-;обработка курсора
+;РѕР±СЂР°Р±РѕС‚РєР° РєСѓСЂСЃРѕСЂР°
                 CALL REST_CURSOR
                 LD A,(SCREEN_READY)
                 OR A
@@ -712,23 +712,23 @@ INTERRUPT       DI
                 LD (SCREEN_READY),A
 INT_1           CALL MOUSE
 
-;таймер
+;С‚Р°Р№РјРµСЂ
                 LD A,(TIMER)
                 INC A
                 LD (TIMER),A
-;тип курсора
+;С‚РёРї РєСѓСЂСЃРѕСЂР°
                 LD A,(CURSOR_TYPE)
-;0 - стрелка
+;0 - СЃС‚СЂРµР»РєР°
                 OR A
                 JP NZ,INT_2
                 LD A,(TIMER)
-                RRCA 
+                RRCA
                 AND 7
                 LD (INPUT_ARROWTYPE),A
                 LD HL,(INPUT_Y)
                 JP INT_10
 
-;1..8 - скролл экрана
+;1..8 - СЃРєСЂРѕР»Р» СЌРєСЂР°РЅР°
 INT_2           CP 9
                 JP NC,INT_4
                 LD HL,(INPUT_Y)
@@ -751,7 +751,7 @@ INT_3           CP 15
                 SUB 12
                 LD L,A
                 JP INT_10
-;9 - запрет
+;9 - Р·Р°РїСЂРµС‚
 INT_4           CP 9
                 JP NZ,INT_10
                 LD HL,(INPUT_Y)
@@ -762,7 +762,7 @@ INT_10          LD C,0
 
                 IF0 EDITOR
 
-;проверка на врага под стрелкой
+;РїСЂРѕРІРµСЂРєР° РЅР° РІСЂР°РіР° РїРѕРґ СЃС‚СЂРµР»РєРѕР№
 
                   CALL SEARCH_OBJECT
                   JP NZ,INT_12
@@ -770,12 +770,12 @@ INT_10          LD C,0
                   OR A
                   JP Z,INT_12
 
-;задаем фазу курсора-прицела
+;Р·Р°РґР°РµРј С„Р°Р·Сѓ РєСѓСЂСЃРѕСЂР°-РїСЂРёС†РµР»Р°
 
                   LD A,(TIMER)
                   BIT 4,A
-                  RRCA 
-                  RRCA 
+                  RRCA
+                  RRCA
                   AND 3
                   JP Z,INT_11
                   LD C,A
@@ -785,7 +785,7 @@ INT_11            ADD A,8
                   LD (INPUT_ARROWTYPE),A
                   LD C,8
 
-                ENDIF 
+                ENDIF
 
 INT_12          LD A,H
                 SUB C
@@ -800,11 +800,11 @@ INT_12          LD A,H
                 ADC A,0
                 LD (CURSOR_CNTR),A
 
-;счетчик прерываний
+;СЃС‡РµС‚С‡РёРє РїСЂРµСЂС‹РІР°РЅРёР№
                 LD HL,FRAME_COUNTER
                 INC (HL)
 
-;проигрыватель музыки и эфектов
+;РїСЂРѕРёРіСЂС‹РІР°С‚РµР»СЊ РјСѓР·С‹РєРё Рё СЌС„РµРєС‚РѕРІ
                 LD A,(MUSIC_READY)
                 OR A
                 JR Z,INT_RAM
@@ -817,25 +817,25 @@ INT_12          LD A,H
                 CALL NZ,PLAY_SFX
                 CALL AY_OUT
 
-;восстановление текущей страницы памяти
+;РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ С‚РµРєСѓС‰РµР№ СЃС‚СЂР°РЅРёС†С‹ РїР°РјСЏС‚Рё
 INT_RAM         RAMPAGE 7
 
 
                 ;XOR A
                 ;OUT (254),A
                 POP HL,DE,BC,AF
-                EXX 
-                EXA 
+                EXX
+                EXA
                 POP IY,IX,HL,DE,BC,AF
 INT_SP          LD SP,0
-                EI 
+                EI
 INT_END         JP 0
 INT_STEK        DS 128
 
-;захват спрайтов
-CAPTURE_SPRITE  DI 
+;Р·Р°С…РІР°С‚ СЃРїСЂР°Р№С‚РѕРІ
+CAPTURE_SPRITE  DI
 
-;кол-во страйтсетов
+;РєРѕР»-РІРѕ СЃС‚СЂР°Р№С‚СЃРµС‚РѕРІ
                 LD B,2
 
 CAPTURE_S1      PUSH BC
@@ -847,7 +847,7 @@ CAPTURE_S1      PUSH BC
                 LD (CAPTURE_SCN+5),A
                 LD (CAPTURE_SPN+1),A
 
-;кол-во скринов у одного спрайсета
+;РєРѕР»-РІРѕ СЃРєСЂРёРЅРѕРІ Сѓ РѕРґРЅРѕРіРѕ СЃРїСЂР°Р№СЃРµС‚Р°
                 LD DE,#C000
                 LD B,2
 
@@ -859,7 +859,7 @@ CAPTURE_S2      PUSH BC,DE
                 LD (CAPTURE_MSN+7),A
                 LD (CAPTURE_SCN+7),A
 
-;обработка одного скрина
+;РѕР±СЂР°Р±РѕС‚РєР° РѕРґРЅРѕРіРѕ СЃРєСЂРёРЅР°
                 LD B,2
 CAPTURE_S3      PUSH BC,DE
 
@@ -917,8 +917,8 @@ CAPTURE_S6      DNZ C,CAPTURE_S4
 
                 POP BC
                 DNZ B,CAPTURE_S1
-                EI 
-                RET 
+                EI
+                RET
 
 CAPTURE_SCN     DB "char_0.0C"
 CAPTURE_MSN     DB "char_0.0M"
@@ -931,12 +931,9 @@ CAPTURE_SPN     DB "00      s"
                 BASIC_VLEN=$-BASIC_CODE
                 DB #AA
                 DW 0
-                ENDIF 
+                ENDIF
 END_PROG
 
 DISPLAY "Begin adress = ",BEGIN_PROG
 DISPLAY "End   adress = ",END_PROG
 DISPLAY "Len          = ",END_PROG-BEGIN_PROG
-
-
-
